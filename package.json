@@ -1,0 +1,48 @@
+{
+  "name": "nifi-smart-contracts",
+  "version": "1.0.0",
+  "description": "Non Fungible tokens with auctions",
+  "main": "index.ts",
+  "scripts": {
+    "cp": "cp configs/config.example.ts configs/config.ts",
+    "make": "ts-node scripts/make",
+    "startup": "ts-node scripts/startup",
+
+    "artRoot": "ts-node scripts/artRoot/info",
+    "artRoot.deploy": "ts-node scripts/artRoot/deploy",
+
+    "auctionRoot": "ts-node scripts/auctionRoot/info",
+    "auctionRoot.deploy": "ts-node scripts/auctionRoot/deploy",
+
+    "offerRoot": "ts-node scripts/offerRoot/info",
+    "offerRoot.deploy": "ts-node scripts/offerRoot/deploy",
+
+    "ticketRoot.deploy": "ts-node scripts/ticketRoot/deploy",
+
+    "giver": "ts-node scripts/giver/info",
+    "giver.deploy": "ts-node scripts/giver/deploy",
+    "giver.send": "ts-node scripts/giver/send",
+
+    "wallet": "ts-node scripts/wallet/info",
+    "wallet.deploy": "ts-node scripts/wallet/deploy",
+    "wallet.send": "ts-node scripts/wallet/send",
+    "wallet.call": "ts-node scripts/wallet/call",
+
+    "test": "jest --detectOpenHandles --forceExit --runInBand --verbose"
+  },
+  "author": "Kok Kek",
+  "license": "GPL-3.0-only",
+  "private": false,
+  "devDependencies": {
+    "@tonclient/core": "^1.8.0",
+    "@tonclient/lib-node": "^1.8.0",
+    "@types/jest": "^26.0.20",
+    "@types/node": "^14.14.31",
+    "colors": "^1.4.0",
+    "jest": "^26.6.3",
+    "tondev": "^0.6.0",
+    "ts-jest": "^26.5.2",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.1.5"
+  }
+}
