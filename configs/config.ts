@@ -7,7 +7,8 @@ export default {
              *     'http://localhost'
              *     'http://0.0.0.0
              */
-            url: 'https://net.ton.dev',
+            //url: 'https://net.ton.dev',
+            url: 'http://localhost',
 
             /**
              * Network port.
@@ -15,7 +16,7 @@ export default {
              *     '8080'
              *     '80'
              */
-            port: '',
+            port: '8080',
 
             /**
              * Version of test node. Actual for testing on local node. Run `tondev se version` to view options.
@@ -56,7 +57,8 @@ export default {
              *     'http://localhost'
              *     'http://0.0.0.0
              */
-            url: 'https://net.ton.dev',
+            //url: 'https://net.ton.dev',
+            url: 'http://localhost',
 
             /**
              * Network port.
@@ -64,7 +66,7 @@ export default {
              *     '8080'
              *     '80'
              */
-            port: '',
+            port: '8080',
 
             /**
              * Giver and wallet keys
@@ -94,33 +96,53 @@ export default {
             /**
              * Contracts key files and deployment parameters.
              */
-            contracts: {
+             contracts: {
                 artRoot: {
                     keyFile: __dirname + '/../keys/ArtRoot.keys.json',
                     giverDeposit: 100_000_000,
 
-                    manager: '0:ea3bd7dede82374278c045193ff39894abea44ef1eae2a3cab85c6d07f406066',
+                    manager: '0:ab5f48c154f672d2f4c30c4473251e14a05199d1df1300263d8f5b0e80e3e387',
                     creationMinValue: 200_000_000,
                     creationFee: 50_000_000,
                     name: 'Art',
                     symbol: 'ART'
                 },
-                auctionRoot: {
-                    keyFile: __dirname + '/../keys/AuctionRoot.keys.json',
+                art2Root: {
+                    keyFile: __dirname + '/../keys/Art2Root.keys.json',
                     giverDeposit: 100_000_000,
 
                     manager: '0:ea3bd7dede82374278c045193ff39894abea44ef1eae2a3cab85c6d07f406066',
                     creationMinValue: 200_000_000,
                     creationFee: 50_000_000,
+                    name: 'Art2',
+                    symbol: 'ART2'
+                },
+                auctionRoot: {
+                    keyFile: __dirname + '/../keys/AuctionRoot.keys.json',
+                    giverDeposit: 100_000_000,
+
+                    manager: '0:ab5f48c154f672d2f4c30c4473251e14a05199d1df1300263d8f5b0e80e3e387',
+                    creationMinValue: 200_000_000,
+                    creationFee: 50_000_000,
                     name: 'Auction',
                     symbol: 'AUCTION'
                 },
+                offerRoot: {
+                    keyFile: __dirname + '/../keys/OfferRoot.keys.json',
+                    giverDeposit: 100_000_000,
 
+                    manager: '0:ab5f48c154f672d2f4c30c4473251e14a05199d1df1300263d8f5b0e80e3e387',
+                    creationMinValue: 200_000_000,
+                    creationFee: 50_000_000,
+                    creationAndStorageFee : 200_000_000,
+                    name: 'Offer',
+                    symbol: 'OFFER'
+                },
                 ticketRoot: {
                     keyFile: __dirname + '/../keys/AuctionRoot.keys.json',
                     giverDeposit: 100_000_000,
 
-                    manager: '0:ea3bd7dede82374278c045193ff39894abea44ef1eae2a3cab85c6d07f406066',
+                    manager: '0:ab5f48c154f672d2f4c30c4473251e14a05199d1df1300263d8f5b0e80e3e387',
                     creationMinValue: 100_000_000,
                     creationFee: 10_000_000,
                     limit: 100_000,

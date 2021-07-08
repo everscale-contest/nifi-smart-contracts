@@ -1,4 +1,4 @@
-pragma ton-solidity ^0.44.0;
+pragma ton-solidity ^0.47.0;
 
 import "../../abstract/extensions/tokenChangeOwnerEvent/token/TokenChangeOwnerAddressEvent.sol";
 import "../../abstract/TokenAddress.sol";

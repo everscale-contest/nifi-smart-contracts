@@ -11,6 +11,8 @@
     "artRoot": "ts-node scripts/artRoot/info",
     "artRoot.deploy": "ts-node scripts/artRoot/deploy",
 
+    "art2Root.deploy": "ts-node scripts/art2Root/deploy",
+
     "auctionRoot": "ts-node scripts/auctionRoot/info",
     "auctionRoot.deploy": "ts-node scripts/auctionRoot/deploy",
 
