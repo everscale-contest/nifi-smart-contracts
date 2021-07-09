@@ -24,6 +24,11 @@ export default class Art2Series extends Contract {
         return result.value
     }
 
+    public async getTokenAddress(value:number): Promise<string> {
+        const result: DecodedMessageBody = await this._run('getTokenAddress',{id:value})
+        return result.value['addr']
+    }
+
 }
 
 export interface Info {

@@ -70,7 +70,8 @@ contract Art2Series{
             value: value,
             pubkey: tvm.pubkey(),
             varInit: {
-                _root: address(this),
+                _root: _root,
+                _serie: address(this),
                 _id: _totalSupply
             }
         }(_manager, manager, managerUnlockTime, _manager, creatorFees, _hashes[0]);
@@ -105,7 +106,8 @@ contract Art2Series{
         TvmCell stateInit = tvm.buildStateInit({
             contr: Art2Token,
             varInit: {
-                _root: address(this),
+                _root: _root,
+                _serie: address(this),
                 _id: id
             },
             pubkey: tvm.pubkey(),

@@ -1,7 +1,7 @@
 pragma ton-solidity ^0.47.0;
 
-import "../../abstract/extensions/tokenChangeOwnerEvent/token/TokenChangeOwnerAddressEvent.sol";
-import "../../abstract/TokenAddress.sol";
+import "../../abstract/extensions/tokenChangeOwnerEvent/token/TokenChangeOwnerAddressEvent2.sol";
+import "../../abstract/TokenAddress2.sol";
 import "interfaces/IArtToken.sol";
 
 /**
@@ -16,13 +16,16 @@ import "interfaces/IArtToken.sol";
  *
  *     201 - Address can't be null
  */
-contract Art2Token is TokenAddress, TokenChangeOwnerAddressEvent, IArtToken {
+contract Art2Token is TokenAddress2, TokenChangeOwnerAddressEvent2, IArtToken {
     /*************
      * VARIABLES *
      *************/
+    address static _serie;
+
     address   private _creator;
     uint32    private _creatorFees;
     uint256[] private _hashes;
+ 
 
 
 
@@ -46,7 +49,7 @@ contract Art2Token is TokenAddress, TokenChangeOwnerAddressEvent, IArtToken {
         uint256 hash
     )
         public
-        TokenAddress(
+        TokenAddress2(
             owner,
             manager,
             managerUnlockTime

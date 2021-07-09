@@ -26,7 +26,7 @@ it('Valid', async done => {
     const rootKeys: KeyPair = await Ton.keys.random(kit.client)
     const art2Root: Art2Root = new Art2Root(kit, rootKeys)
     const art2Series: Art2Series = new Art2Series(kit, await art2Root.calculateAddress(), 0, rootKeys)
-    const art2Token: Art2Token = new Art2Token(kit, await art2Series.calculateAddress(), 0, rootKeys)
+    const art2Token: Art2Token = new Art2Token(kit, await art2Root.calculateAddress(), await art2Series.calculateAddress(), 0, rootKeys)
 
     await giverContract.sendTransaction(await multisig.calculateAddress(), 10_000_000_000)
     await multisig.deploy([Ton.hex.x0(multisigKeys.public)], 1)

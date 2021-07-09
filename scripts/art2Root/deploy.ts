@@ -27,6 +27,7 @@ async function run(): Promise<void> {
     const art2Root: Art2Root = new Art2Root(kit, artRootKeys)
     const giver: GiverV2 = new GiverV2(kit, giverKeys)
 
+
     await TerminalContractInfo.logNetwork(config.net.deploy)
     await TerminalContractInfo.log()
     await TerminalContractInfo.logAccount('Giver', giver, config.net.deploy.locale)

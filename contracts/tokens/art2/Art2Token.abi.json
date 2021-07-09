@@ -119,7 +119,8 @@
 	],
 	"data": [
 		{"key":1,"name":"_root","type":"address"},
-		{"key":2,"name":"_id","type":"uint128"}
+		{"key":2,"name":"_id","type":"uint128"},
+		{"key":3,"name":"_serie","type":"address"}
 	],
 	"events": [
 		{
