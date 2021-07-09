@@ -66,6 +66,7 @@
 			"inputs": [
 			],
 			"outputs": [
+				{"name":"id","type":"uint128"},
 				{"name":"name","type":"bytes"},
 				{"name":"symbol","type":"bytes"},
 				{"name":"totalSupply","type":"uint128"},

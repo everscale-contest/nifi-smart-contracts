@@ -7,8 +7,8 @@ export default {
              *     'http://localhost'
              *     'http://0.0.0.0
              */
-            //url: 'https://net.ton.dev',
-            url: 'http://localhost',
+            url: 'https://net.ton.dev',
+            //url: 'http://localhost',
 
             /**
              * Network port.
@@ -16,8 +16,8 @@ export default {
              *     '8080'
              *     '80'
              */
-            //port: '',
-            port: '8080',
+            port: '',
+            //port: '8080',
             
 
             /**
@@ -59,8 +59,8 @@ export default {
              *     'http://localhost'
              *     'http://0.0.0.0
              */
-            //url: 'https://net.ton.dev',
-            url: 'http://localhost',
+            url: 'https://net.ton.dev',
+            //url: 'http://localhost',
 
             /**
              * Network port.
@@ -68,8 +68,8 @@ export default {
              *     '8080'
              *     '80'
              */
-            //port: '',
-            port: '8080',
+            port: '',
+            //port: '8080',
 
             /**
              * Giver and wallet keys

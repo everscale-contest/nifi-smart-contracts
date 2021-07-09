@@ -126,7 +126,8 @@ contract Art2Series{
         _manager = newManager;
     }
 
-    function getInfo() public view returns(string  name, string  symbol, uint128 totalSupply, uint128 limit, uint256 hash){
+    function getInfo() public view returns(uint128 id, string  name, string  symbol, uint128 totalSupply, uint128 limit, uint256 hash){
+        id = _id;
         name = _name;
         symbol = _symbol;
         totalSupply = _totalSupply;

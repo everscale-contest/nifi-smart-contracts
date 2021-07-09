@@ -32,7 +32,7 @@ async function run(): Promise<void> {
     await TerminalContractInfo.log()
     await TerminalContractInfo.logAccount('Giver', giver, config.net.deploy.locale)
     await TerminalContractInfo.log()
-    await TerminalContractInfo.logAccount('ArtRoot', art2Root, config.net.deploy.locale)
+    await TerminalContractInfo.logAccount('Art2Root', art2Root, config.net.deploy.locale)
     await TerminalContractInfo.log()
     //process.exit()
     const balance: number = parseInt(await art2Root.getBalance())
@@ -64,7 +64,7 @@ async function run(): Promise<void> {
     await TerminalContractInfo.log()
     await TerminalContractInfo.logAccount('Giver', giver, config.net.deploy.locale)
     await TerminalContractInfo.log()
-    await TerminalContractInfo.logAccount('ArtRoot', art2Root, config.net.deploy.locale)
+    await TerminalContractInfo.logAccount('Art2Root', art2Root, config.net.deploy.locale)
     await TerminalContractInfo.log()
     process.exit()
 }

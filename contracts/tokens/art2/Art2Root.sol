@@ -5,9 +5,9 @@ import "Art2Series.sol";
 
 contract Art2Root {
 
-    address _manager;
-    uint128 _creationMinValue;
+    address _manager;    
     uint128 _creationFee;
+    uint128 _creationMinValue;
     string _name;
     string _symbol;
     TvmCell _tokenCode;
