@@ -86,5 +86,14 @@
 	"data": [
 	],
 	"events": [
+		{
+			"name": "newSerie",
+			"inputs": [
+				{"name":"id","type":"uint128"},
+				{"name":"serie","type":"address"}
+			],
+			"outputs": [
+			]
+		}
 	]
 }

@@ -13,7 +13,11 @@ contract Art2Series{
     TvmCell _tokenCode;
     uint128 _totalSupply;
     uint128 _limit;
-    uint256[] private _hashes;
+    uint256 private _hash;
+
+
+    event mint(uint128 id, address token);
+
     /***************
      * CONSTRUCTOR *
      ***************/
@@ -32,7 +36,8 @@ contract Art2Series{
         _symbol = symbol;
         _tokenCode = tokenCode;
         _limit = limit;
-        _hashes.push(hash);
+        _hash = hash;
+        _totalSupply = 1;
     }
 
 
@@ -74,7 +79,8 @@ contract Art2Series{
                 _serie: address(this),
                 _id: _totalSupply
             }
-        }(_manager, manager, managerUnlockTime, _manager, creatorFees, _hashes[0]);
+        }(_manager, manager, managerUnlockTime, _manager, creatorFees, _hash);
+        emit mint(_totalSupply, addr);
         _totalSupply++;
     }
 
@@ -132,7 +138,7 @@ contract Art2Series{
         symbol = _symbol;
         totalSupply = _totalSupply;
         limit = _limit;
-        hash = _hashes[0];
+        hash = _hash;
     }
 
     function withdraw(address addr, uint128 value, bool bounce) public view {

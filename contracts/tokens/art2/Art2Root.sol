@@ -14,6 +14,8 @@ contract Art2Root {
     TvmCell _seriesCode;
     uint128 _totalSupply;
 
+    event newSerie(uint128 id, address serie);
+
     /***************
      * CONSTRUCTOR *
      ***************/
@@ -37,6 +39,7 @@ contract Art2Root {
         _symbol = symbol;
         _seriesCode = seriesCode;
         _tokenCode = tokenCode;
+        _totalSupply = 1;
     }
 
     function getManager() public view returns(address){
@@ -72,6 +75,7 @@ contract Art2Root {
                 _id: _totalSupply
             }
         }(manager, _name, _symbol, limit, _tokenCode, hash);
+        emit newSerie(_totalSupply, addr);
         _totalSupply++;
     }
         

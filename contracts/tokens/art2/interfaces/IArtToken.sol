@@ -14,18 +14,7 @@ interface IArtToken {
     function receiveArtInfo() external view responsible returns(
             address creator,
             uint32  creatorFees,
-            uint256 hash,
-            uint32  hashesCount
+            uint256 hash
         );
 
-
-
-    /*******************************************************
-     * EXTERNAL * ONLY OWNER IF UNLOCKED OR LOCKED MANAGER *
-     *******************************************************/
-    /**
-     * Owner or manager can add new hash.
-     * hash ... Hash of data that associated with token.
-     */
-    function addHash(uint256 hash) external;
 }

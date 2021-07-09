@@ -23,16 +23,7 @@
 			"outputs": [
 				{"name":"creator","type":"address"},
 				{"name":"creatorFees","type":"uint32"},
-				{"name":"hash","type":"uint256"},
-				{"name":"hashesCount","type":"uint32"}
-			]
-		},
-		{
-			"name": "addHash",
-			"inputs": [
 				{"name":"hash","type":"uint256"}
-			],
-			"outputs": [
 			]
 		},
 		{
@@ -42,19 +33,7 @@
 			"outputs": [
 				{"name":"creator","type":"address"},
 				{"name":"creatorFees","type":"uint32"},
-				{"name":"hash","type":"uint256"},
-				{"name":"hashesCount","type":"uint32"}
-			]
-		},
-		{
-			"name": "getHashes",
-			"inputs": [
-				{"name":"offset","type":"uint32"},
-				{"name":"length","type":"uint32"}
-			],
-			"outputs": [
-				{"name":"hashes","type":"uint256[]"},
-				{"name":"hashesCount","type":"uint32"}
+				{"name":"hash","type":"uint256"}
 			]
 		},
 		{
