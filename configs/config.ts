@@ -8,6 +8,7 @@ export default {
              *     'http://0.0.0.0
              */
             url: 'https://net.ton.dev',
+            //url: 'https://main.ton.dev',
             //url: 'http://localhost',
 
             /**
@@ -60,6 +61,7 @@ export default {
              *     'http://0.0.0.0
              */
             url: 'https://net.ton.dev',
+            //url: 'https://main.ton.dev',
             //url: 'http://localhost',
 
             /**
@@ -105,7 +107,7 @@ export default {
                     giverDeposit: 100_000_000,
 
                     manager: '0:ab5f48c154f672d2f4c30c4473251e14a05199d1df1300263d8f5b0e80e3e387',
-                    creationMinValue: 200_000_000,
+                    creationMinValue: 100_000_000,
                     creationFee: 50_000_000,
                     name: 'Art',
                     symbol: 'ART'
@@ -114,8 +116,8 @@ export default {
                     keyFile: __dirname + '/../keys/Art2Root.keys.json',
                     giverDeposit: 100_000_000,
 
-                    manager: '0:ea3bd7dede82374278c045193ff39894abea44ef1eae2a3cab85c6d07f406066',
-                    creationMinValue: 200_000_000,
+                    manager: '0:ab5f48c154f672d2f4c30c4473251e14a05199d1df1300263d8f5b0e80e3e387',
+                    creationMinValue: 100_000_000,
                     creationFee: 50_000_000,
                     name: 'Art2',
                     symbol: 'ART2'
@@ -125,21 +127,21 @@ export default {
                     giverDeposit: 100_000_000,
 
                     manager: '0:ab5f48c154f672d2f4c30c4473251e14a05199d1df1300263d8f5b0e80e3e387',
-                    creationMinValue: 200_000_000,
+                    creationMinValue: 100_000_000,
                     creationFee: 50_000_000,
                     name: 'Auction',
                     symbol: 'AUCTION'
                 },
-                offerRoot: {
+                bidRoot: {
                     keyFile: __dirname + '/../keys/OfferRoot.keys.json',
                     giverDeposit: 100_000_000,
 
                     manager: '0:ab5f48c154f672d2f4c30c4473251e14a05199d1df1300263d8f5b0e80e3e387',
-                    creationMinValue: 200_000_000,
+                    creationMinValue: 100_000_000,
                     creationFee: 50_000_000,
-                    creationAndStorageFee : 200_000_000,
-                    name: 'Offer',
-                    symbol: 'OFFER'
+                    creationAndStorageFee : 100_000_000,
+                    name: 'Bid',
+                    symbol: 'BID'
                 },
                 ticketRoot: {
                     keyFile: __dirname + '/../keys/AuctionRoot.keys.json',
