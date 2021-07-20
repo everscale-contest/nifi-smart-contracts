@@ -8,6 +8,7 @@ contract Art2Series{
     address static _root;
     uint128 static _id;
     address _manager;
+    address _creator;
     string _name;
     string _symbol;
     TvmCell _tokenCode;
@@ -31,6 +32,7 @@ contract Art2Series{
     )
         public
     {
+        _creator = manager;
         _manager = manager;
         _name = name;
         _symbol = symbol;
@@ -132,13 +134,14 @@ contract Art2Series{
         _manager = newManager;
     }
 
-    function getInfo() public view returns(uint128 id, string  name, string  symbol, uint128 totalSupply, uint128 limit, uint256 hash){
+    function getInfo() public view returns(uint128 id, string  name, string  symbol, uint128 totalSupply, uint128 limit, uint256 hash, address creator){
         id = _id;
         name = _name;
         symbol = _symbol;
         totalSupply = _totalSupply;
         limit = _limit;
         hash = _hash;
+        creator = _creator;
     }
 
     function withdraw(address addr, uint128 value, bool bounce) public view {

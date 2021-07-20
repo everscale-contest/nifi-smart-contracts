@@ -71,7 +71,8 @@
 				{"name":"symbol","type":"bytes"},
 				{"name":"totalSupply","type":"uint128"},
 				{"name":"limit","type":"uint128"},
-				{"name":"hash","type":"uint256"}
+				{"name":"hash","type":"uint256"},
+				{"name":"creator","type":"address"}
 			]
 		},
 		{
