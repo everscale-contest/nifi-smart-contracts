@@ -81,7 +81,7 @@ contract Art2Series{
                 _serie: address(this),
                 _id: _totalSupply
             }
-        }(_manager, manager, managerUnlockTime, _manager, creatorFees, _hash);
+        }(_manager, manager, managerUnlockTime, _creator, creatorFees, _hash);
         emit mint(_totalSupply, addr);
         _totalSupply++;
     }
