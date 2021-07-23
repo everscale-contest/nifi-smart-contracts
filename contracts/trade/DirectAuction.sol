@@ -44,7 +44,7 @@ contract DirectAuction is Accept {
     address private _creator;
     address private _token;
 
-    uint32  private _starTime;
+    uint32  private _startTime;
     uint32  private _endTime;
 
     uint128 private _startBid;
@@ -72,7 +72,7 @@ contract DirectAuction is Accept {
     }
 
     modifier validTime() {
-        require((now >= _starTime) && (now < _endTime), 102, "Auction not still started or already finished");
+        require((now >= _startTime) && (now < _endTime), 102, "Auction not still started or already finished");
         _;
     }
 
@@ -111,7 +111,7 @@ contract DirectAuction is Accept {
         _startBid = startBid;
         _stepBid = stepBid;
         _feeBid = feeBid;
-        _starTime = startTime;
+        _startTime = startTime;
         _endTime = endTime;
     }
 
@@ -173,7 +173,7 @@ contract DirectAuction is Accept {
             uint128 startBid,
             uint128 stepBid,
             uint128 feeBid,
-            uint32  starTime,
+            uint32  startTime,
             uint32  endTime,
             Bid     curBid
         )
@@ -182,7 +182,7 @@ contract DirectAuction is Accept {
         id = _id;
         creator = _creator;
         token = _token;
-        starTime = _starTime;
+        startTime = _startTime;
         endTime = _endTime;
         startBid = _startBid;
         stepBid = _stepBid;
