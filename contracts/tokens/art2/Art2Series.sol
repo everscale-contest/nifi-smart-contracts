@@ -39,7 +39,6 @@ contract Art2Series{
         _tokenCode = tokenCode;
         _limit = limit;
         _hash = hash;
-        _totalSupply = 1;
     }
 
 
@@ -71,6 +70,7 @@ contract Art2Series{
     {
         require(_totalSupply<_limit,103);
         require(msg.sender == _manager,102);
+        _totalSupply++;
         uint128 value = msg.value;
         addr = new Art2Token{
             code: _tokenCode,
@@ -83,7 +83,7 @@ contract Art2Series{
             }
         }(_manager, manager, managerUnlockTime, _creator, creatorFees, _hash);
         emit mint(_totalSupply, addr);
-        _totalSupply++;
+        
     }
 
 

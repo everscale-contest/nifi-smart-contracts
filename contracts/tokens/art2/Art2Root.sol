@@ -39,7 +39,6 @@ contract Art2Root {
         _symbol = symbol;
         _seriesCode = seriesCode;
         _tokenCode = tokenCode;
-        _totalSupply = 1;
     }
 
     function getManager() public view returns(address){
@@ -66,6 +65,7 @@ contract Art2Root {
 
     function createSerie(address manager, uint128 limit, uint256 hash) public internalMsg returns(address addr){
         uint128 value = msg.value - _creationFee;
+        _totalSupply++;
         addr = new Art2Series{
             code: _seriesCode,
             value: value,
@@ -76,7 +76,7 @@ contract Art2Root {
             }
         }(manager, _name, _symbol, limit, _tokenCode, hash);
         emit newSerie(_totalSupply, addr);
-        _totalSupply++;
+        
     }
         
 
