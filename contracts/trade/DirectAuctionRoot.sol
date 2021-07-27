@@ -44,7 +44,8 @@ contract ArtRoot is Root, RootManaged, RootManagedCreationFee, RootManagedWithdr
         uint128 stepBid,
         uint128 feeBid,
         uint32 startTime,
-        uint32 endTime
+        uint32 endTime,
+        uint32 showcaseFees
     )
         external
         returns(
@@ -60,7 +61,7 @@ contract ArtRoot is Root, RootManaged, RootManagedCreationFee, RootManagedWithdr
                 _root: address(this),
                 _id: _totalSupply
             }
-        }( creator, token, startBid, stepBid, feeBid, startTime, endTime);
+        }( creator, token, startBid, stepBid, feeBid, startTime, endTime, showcaseFees);
         _totalSupply++;
     }
 

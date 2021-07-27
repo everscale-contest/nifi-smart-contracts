@@ -63,6 +63,8 @@ contract DirectAuction is Accept {
     uint128 private _feeBid;
     Bid     private _curBid;
 
+    uint32  _showcaseFees;
+
 
 
     /*************
@@ -123,7 +125,8 @@ contract DirectAuction is Accept {
         uint128 stepBid,
         uint128 feeBid,
         uint32  startTime,
-        uint32  endTime
+        uint32  endTime,
+        uint32 showcaseFees
     )
         public onlyRoot accept
     {
@@ -135,6 +138,7 @@ contract DirectAuction is Accept {
         _startTime = startTime;
         _endTime = endTime;
         _askFinish = endTime;
+        _showcaseFees = showcaseFees;
     }
 
 
@@ -183,6 +187,12 @@ contract DirectAuction is Accept {
                     creator.transfer({value: fee, flag: 1, bounce: true});
             }
 
+            if (_showcaseFees>0) {
+                uint128 sfee = math.muldiv(balance,_showcaseFees,10000);
+                if (sfee>0)
+                    _root.transfer({value: sfee, flag: 1, bounce: true});
+            }
+
             if (_curBid.bider != address(0)) {
                 ITokenAddress(_token).changeOwner(_curBid.bider);
             }
@@ -191,7 +201,7 @@ contract DirectAuction is Accept {
 
             _root.transfer({value: address(this).balance/20, flag: 1, bounce: true});
             emit FinishEvent(_id, _creator, _token, _curBid.bider, _curBid.value);
-            selfdestruct(_creator);
+            selfdestruct(owner);
         }else{
             if (_curBid.bider != address(0)) {
                 _curBid.bider.transfer({value: _curBid.value, flag: 1, bounce: true});
