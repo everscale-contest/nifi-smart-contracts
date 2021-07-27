@@ -31,6 +31,18 @@
 			]
 		},
 		{
+			"name": "onReceiveTradeInfo",
+			"inputs": [
+				{"name":"owner","type":"address"},
+				{"name":"creator","type":"address"},
+				{"name":"creatorFees","type":"uint32"},
+				{"name":"manager","type":"address"},
+				{"name":"managerUnlockTime","type":"uint32"}
+			],
+			"outputs": [
+			]
+		},
+		{
 			"name": "getInfo",
 			"inputs": [
 			],

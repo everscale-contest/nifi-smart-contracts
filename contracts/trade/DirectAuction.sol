@@ -4,6 +4,16 @@ import "../abstract/interfaces/IToken.sol";
 import "../abstract/interfaces/ITokenAddress.sol";
 import "../abstract/modifiers/Accept.sol";
 
+interface ITradeToken {    
+    function receiveTradeInfo() external view responsible returns(
+            address owner,
+            address creator,
+            uint32  creatorFees,
+            address manager,
+            uint32  managerUnlockTime
+        );
+}
+
 /**
  * Error codes
  *     100 - Method for the root only
@@ -46,6 +56,7 @@ contract DirectAuction is Accept {
 
     uint32  private _startTime;
     uint32  private _endTime;
+    uint32  private _askFinish;
 
     uint128 private _startBid;
     uint128 private _stepBid;
@@ -81,6 +92,16 @@ contract DirectAuction is Accept {
         _;
     }
 
+    modifier onlyToken() {
+        require(msg.sender == _token, 104, "Method for the token only");
+        _;
+    }
+
+    modifier canAskFinish() {
+        require(now >= _askFinish, 105, "Try it in two minutes");
+        _;
+    }
+
 
 
     /***************
@@ -113,6 +134,7 @@ contract DirectAuction is Accept {
         _feeBid = feeBid;
         _startTime = startTime;
         _endTime = endTime;
+        _askFinish = endTime;
     }
 
 
@@ -135,15 +157,50 @@ contract DirectAuction is Accept {
     /**
      * Everyone can call this method by external message.
      */
-    function finish() public auctionFinished accept {
-        if (_curBid.bider != address(0)) {
-            ITokenAddress(_token).changeOwner(_curBid.bider);
+    function finish() public auctionFinished canAskFinish accept {   
+        _askFinish = now+120;
+        ITradeToken(_token).receiveTradeInfo{value: 0.5 ton, bounce: false, flag: 0, callback: DirectAuction.onReceiveTradeInfo}();        
+    }
+
+    /**
+     * Only token can call this method by internal message.
+     */
+    function onReceiveTradeInfo(
+            address owner,
+            address creator,
+            uint32  creatorFees,
+            address manager,
+            uint32  managerUnlockTime
+    ) public onlyToken {
+        require(manager == address(this), 106, "Wrong manager");
+        //require(managerUnlockTime > now+60, 107, "Wrong manager unlock time");
+        if (managerUnlockTime > now+60){
+            uint128 balance = address(this).balance;
+
+            if (creatorFees>0) {
+                uint128 fee = math.muldiv(balance,creatorFees,10000);
+                if (fee>0)
+                    creator.transfer({value: fee, flag: 1, bounce: true});
+            }
+
+            if (_curBid.bider != address(0)) {
+                ITokenAddress(_token).changeOwner(_curBid.bider);
+            }
+
+            IToken(_token).unlock();
+
+            _root.transfer({value: address(this).balance/20, flag: 1, bounce: true});
+            emit FinishEvent(_id, _creator, _token, _curBid.bider, _curBid.value);
+            selfdestruct(_creator);
+        }else{
+            if (_curBid.bider != address(0)) {
+                _curBid.bider.transfer({value: _curBid.value, flag: 1, bounce: true});
+            }
+            IToken(_token).unlock();
+            emit FinishEvent(_id, _creator, _token, address(0), 0);
+            selfdestruct(owner);
         }
 
-        IToken(_token).unlock();
-        _root.transfer({value: address(this).balance/20, flag: 1, bounce: true});
-        emit FinishEvent(_id, _creator, _token, _curBid.bider, _curBid.value);
-        selfdestruct(_creator);
     }
 
 
