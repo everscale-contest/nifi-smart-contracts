@@ -123,7 +123,7 @@ contract Bid is Accept {
     /**
      * Everyone can call this method by internal message.
      */
-    function acceptOffer() public view onlyInnerMsg validTime checkValue {        
+    function acceptBid() public view onlyInnerMsg validTime checkValue {        
         ITradeToken(_token).receiveTradeInfo{value: 0, bounce: false, flag: 64, callback: Bid.onReceiveTradeInfo}();        
     }
 
