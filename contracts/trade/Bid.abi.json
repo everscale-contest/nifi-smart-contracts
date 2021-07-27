@@ -21,12 +21,11 @@
 			]
 		},
 		{
-			"name": "onReceiveInfo",
+			"name": "onReceiveTradeInfo",
 			"inputs": [
-				{"name":"root","type":"address"},
-				{"name":"id","type":"uint128"},
-				{"name":"publicKey","type":"uint256"},
 				{"name":"owner","type":"address"},
+				{"name":"creator","type":"address"},
+				{"name":"creatorFees","type":"uint32"},
 				{"name":"manager","type":"address"},
 				{"name":"managerUnlockTime","type":"uint32"}
 			],

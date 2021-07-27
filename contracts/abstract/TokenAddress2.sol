@@ -27,7 +27,7 @@ abstract contract TokenAddress2 is Token2, ITokenAddress {
     /*************
      * VARIABLES *
      *************/
-    address private _owner;
+    address _owner;
 
 
 

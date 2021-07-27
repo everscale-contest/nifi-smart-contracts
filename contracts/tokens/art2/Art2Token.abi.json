@@ -37,6 +37,31 @@
 			]
 		},
 		{
+			"name": "receiveTradeInfo",
+			"inputs": [
+				{"name":"_answer_id","type":"uint32"}
+			],
+			"outputs": [
+				{"name":"owner","type":"address"},
+				{"name":"creator","type":"address"},
+				{"name":"creatorFees","type":"uint32"},
+				{"name":"manager","type":"address"},
+				{"name":"managerUnlockTime","type":"uint32"}
+			]
+		},
+		{
+			"name": "getTradeInfo",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"owner","type":"address"},
+				{"name":"creator","type":"address"},
+				{"name":"creatorFees","type":"uint32"},
+				{"name":"manager","type":"address"},
+				{"name":"managerUnlockTime","type":"uint32"}
+			]
+		},
+		{
 			"name": "changeOwner",
 			"inputs": [
 				{"name":"owner","type":"address"}

@@ -4,6 +4,17 @@ import "../abstract/interfaces/IToken.sol";
 import "../abstract/interfaces/ITokenAddress.sol";
 import "../abstract/modifiers/Accept.sol";
 
+interface ITradeToken {
+    
+    function receiveTradeInfo() external view responsible returns(
+            address owner,
+            address creator,
+            uint32  creatorFees,
+            address manager,
+            uint32  managerUnlockTime
+        );
+}
+
 /**
  * Error codes
  *     100 - Method for the root only
@@ -113,26 +124,34 @@ contract Bid is Accept {
      * Everyone can call this method by internal message.
      */
     function acceptOffer() public view onlyInnerMsg validTime checkValue {        
-        ITokenAddress(_token).receiveInfo{value: 0, bounce: false, flag: 64, callback: Bid.onReceiveInfo}();        
+        ITradeToken(_token).receiveTradeInfo{value: 0, bounce: false, flag: 64, callback: Bid.onReceiveTradeInfo}();        
     }
 
     /**
      * Only token can call this method by internal message.
      */
-    function onReceiveInfo(address root,
-            uint128 id,
-            uint256 publicKey,
+    function onReceiveTradeInfo(
             address owner,
+            address creator,
+            uint32  creatorFees,
             address manager,
             uint32  managerUnlockTime
     ) public onlyToken {
         require(manager == address(this), 106, "Wrong manager");
         require(managerUnlockTime > _endTime+3600, 107, "Wrong manager unlock time");
 
+        uint128 balance = address(this).balance;
+
+        if (creatorFees>0) {
+            uint128 fee = math.muldiv(balance,creatorFees,10000);
+            if (fee>0)
+                creator.transfer({value: fee, flag: 1, bounce: true});
+        }
+
         ITokenAddress(_token).changeOwner(_creator);
         IToken(_token).unlock();
 
-        _root.transfer({value: address(this).balance/20, flag: 1, bounce: true});
+        _root.transfer({value: balance/20, flag: 1, bounce: true});
         emit BidAccepted(_id, _creator, _token, _price);
         selfdestruct(owner);
     }

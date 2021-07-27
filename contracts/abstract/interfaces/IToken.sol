@@ -29,4 +29,5 @@ interface IToken {
      * If manager is already unlocked, call revert().
      */
     function unlock() external;
+
 }

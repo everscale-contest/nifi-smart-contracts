@@ -135,4 +135,23 @@ contract ArtToken is TokenAddress, TokenChangeOwnerAddressEvent, IArtToken {
      * Revert() if owner or manager can't change owner address.
      */
     function _canChangeOwner() override internal {}
+
+    function receiveTradeInfo() external view responsible returns(
+            address owner,
+            address creator,
+            uint32  creatorFees,
+            address manager,
+            uint32  managerUnlockTime
+        )
+    {
+        return{value: 0, bounce: false, flag: 64} getTradeInfo();
+    }
+
+    function getTradeInfo() public view returns(address owner, address creator, uint32 creatorFees, address manager, uint32 managerUnlockTime) {
+        owner = _owner;
+        creator = _creator;
+        creatorFees = _creatorFees;
+        manager = _manager;
+        managerUnlockTime = _managerUnlockTime;
+    }
 }
