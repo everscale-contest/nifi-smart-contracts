@@ -14,7 +14,7 @@
 			]
 		},
 		{
-			"name": "acceptOffer",
+			"name": "acceptBid",
 			"inputs": [
 			],
 			"outputs": [
