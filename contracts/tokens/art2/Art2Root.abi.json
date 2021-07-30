@@ -57,7 +57,8 @@
 			"inputs": [
 				{"name":"manager","type":"address"},
 				{"name":"limit","type":"uint128"},
-				{"name":"hash","type":"uint256"}
+				{"name":"hash","type":"uint256"},
+				{"name":"creatorFees","type":"uint32"}
 			],
 			"outputs": [
 				{"name":"addr","type":"address"}

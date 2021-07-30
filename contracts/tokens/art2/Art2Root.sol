@@ -63,7 +63,7 @@ contract Art2Root {
         addr.transfer(value, bounce);
     }
 
-    function createSerie(address manager, uint128 limit, uint256 hash) public internalMsg returns(address addr){
+    function createSerie(address manager, uint128 limit, uint256 hash, uint32 creatorFees) public internalMsg returns(address addr){
         uint128 value = msg.value - _creationFee;
         _totalSupply++;
         addr = new Art2Series{
@@ -74,7 +74,7 @@ contract Art2Root {
                 _root: address(this),
                 _id: _totalSupply
             }
-        }(manager, _name, _symbol, limit, _tokenCode, hash);
+        }(manager, _name, _symbol, limit, _tokenCode, hash, creatorFees);
         emit newSerie(_totalSupply, addr);
         
     }

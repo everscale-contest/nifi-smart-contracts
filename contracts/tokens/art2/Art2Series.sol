@@ -14,7 +14,8 @@ contract Art2Series{
     TvmCell _tokenCode;
     uint128 _totalSupply;
     uint128 _limit;
-    uint256 private _hash;
+    uint256 _hash;
+    uint32 _creatorFees;
 
 
     event mint(uint128 id, address token);
@@ -28,7 +29,8 @@ contract Art2Series{
         string  symbol,
         uint128 limit,
         TvmCell tokenCode,
-        uint256 hash
+        uint256 hash,
+        uint32 creatorFees
     )
         public
     {
@@ -39,6 +41,7 @@ contract Art2Series{
         _tokenCode = tokenCode;
         _limit = limit;
         _hash = hash;
+        _creatorFees = creatorFees;
     }
 
 
@@ -60,8 +63,7 @@ contract Art2Series{
      */
     function create(
         address manager,
-        uint32  managerUnlockTime,
-        uint32  creatorFees
+        uint32  managerUnlockTime
     )
         public internalMsg      
         returns(
@@ -81,7 +83,7 @@ contract Art2Series{
                 _serie: address(this),
                 _id: _totalSupply
             }
-        }(_manager, manager, managerUnlockTime, _creator, creatorFees, _hash);
+        }(_manager, manager, managerUnlockTime, _creator, _creatorFees, _hash);
         emit mint(_totalSupply, addr);
         
     }
@@ -134,7 +136,7 @@ contract Art2Series{
         _manager = newManager;
     }
 
-    function getInfo() public view returns(uint128 id, string  name, string  symbol, uint128 totalSupply, uint128 limit, uint256 hash, address creator){
+    function getInfo() public view returns(uint128 id, string  name, string  symbol, uint128 totalSupply, uint128 limit, uint256 hash, address creator, uint32 creatorFees){
         id = _id;
         name = _name;
         symbol = _symbol;
@@ -142,6 +144,7 @@ contract Art2Series{
         limit = _limit;
         hash = _hash;
         creator = _creator;
+        creatorFees = _creatorFees;
     }
 
     function withdraw(address addr, uint128 value, bool bounce) public view {

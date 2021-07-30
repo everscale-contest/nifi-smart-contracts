@@ -10,7 +10,8 @@
 				{"name":"symbol","type":"bytes"},
 				{"name":"limit","type":"uint128"},
 				{"name":"tokenCode","type":"cell"},
-				{"name":"hash","type":"uint256"}
+				{"name":"hash","type":"uint256"},
+				{"name":"creatorFees","type":"uint32"}
 			],
 			"outputs": [
 			]
@@ -19,8 +20,7 @@
 			"name": "create",
 			"inputs": [
 				{"name":"manager","type":"address"},
-				{"name":"managerUnlockTime","type":"uint32"},
-				{"name":"creatorFees","type":"uint32"}
+				{"name":"managerUnlockTime","type":"uint32"}
 			],
 			"outputs": [
 				{"name":"addr","type":"address"}
@@ -72,7 +72,8 @@
 				{"name":"totalSupply","type":"uint128"},
 				{"name":"limit","type":"uint128"},
 				{"name":"hash","type":"uint256"},
-				{"name":"creator","type":"address"}
+				{"name":"creator","type":"address"},
+				{"name":"creatorFees","type":"uint32"}
 			]
 		},
 		{
