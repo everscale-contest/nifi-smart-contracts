@@ -107,8 +107,8 @@ export default {
                     giverDeposit: 100_000_000,
 
                     manager: '0:ab5f48c154f672d2f4c30c4473251e14a05199d1df1300263d8f5b0e80e3e387',
-                    creationMinValue: 100_000_000,
-                    creationFee: 50_000_000,
+                    creationMinValue: 300_000_000,
+                    creationFee: 200_000_000,
                     name: 'Art',
                     symbol: 'ART'
                 },
@@ -117,8 +117,8 @@ export default {
                     giverDeposit: 100_000_000,
 
                     manager: '0:ab5f48c154f672d2f4c30c4473251e14a05199d1df1300263d8f5b0e80e3e387',
-                    creationMinValue: 100_000_000,
-                    creationFee: 50_000_000,
+                    creationMinValue: 300_000_000,
+                    creationFee: 200_000_000,
                     name: 'Art2',
                     symbol: 'ART2'
                 },
@@ -127,8 +127,8 @@ export default {
                     giverDeposit: 100_000_000,
 
                     manager: '0:ab5f48c154f672d2f4c30c4473251e14a05199d1df1300263d8f5b0e80e3e387',
-                    creationMinValue: 100_000_000,
-                    creationFee: 50_000_000,
+                    creationMinValue: 500_000_000,
+                    creationFee: 400_000_000,
                     name: 'Auction',
                     symbol: 'AUCTION'
                 },
@@ -137,9 +137,9 @@ export default {
                     giverDeposit: 100_000_000,
 
                     manager: '0:ab5f48c154f672d2f4c30c4473251e14a05199d1df1300263d8f5b0e80e3e387',
-                    creationMinValue: 100_000_000,
-                    creationFee: 50_000_000,
-                    creationAndStorageFee : 100_000_000,
+                    creationMinValue: 200_000_000,
+                    creationFee: 100_000_000,
+                    creationAndStorageFee : 0,
                     name: 'Bid',
                     symbol: 'BID'
                 },

@@ -163,7 +163,7 @@ contract DirectAuction is Accept {
      */
     function finish() public auctionFinished canAskFinish accept {   
         _askFinish = now+120;
-        ITradeToken(_token).receiveTradeInfo{value: 0.5 ton, bounce: false, flag: 0, callback: DirectAuction.onReceiveTradeInfo}();        
+        ITradeToken(_token).receiveTradeInfo{value: 0.06 ton, bounce: false, flag: 0, callback: DirectAuction.onReceiveTradeInfo}();        
     }
 
     /**

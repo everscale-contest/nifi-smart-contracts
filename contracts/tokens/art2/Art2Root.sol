@@ -69,6 +69,7 @@ contract Art2Root {
     }
 
     function createSerie(address manager, uint128 limit, uint256 hash, uint32 creatorFees) public validCreatorFees(creatorFees) internalMsg returns(address addr){
+        require(msg.value >= _creationMinValue,278);
         uint128 value = msg.value - _creationFee;
         _totalSupply++;
         addr = new Art2Series{

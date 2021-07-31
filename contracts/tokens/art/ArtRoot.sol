@@ -68,6 +68,7 @@ contract ArtRoot is Root, RootManaged, RootManagedCreationFee, RootManagedWithdr
             address addr
         )
     {
+        require(msg.value >= _creationMinValue,278);
         uint128 value = msg.value - _creationFee;
         _totalSupply++;
         addr = new ArtToken{

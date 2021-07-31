@@ -52,6 +52,7 @@ contract ArtRoot is Root, RootManaged, RootManagedCreationFee, RootManagedWithdr
             address addr
         )
     {
+        require(msg.value >= _creationMinValue,278);
         uint128 value = msg.value - _creationFee;
         addr = new DirectAuction{
             code: _tokenCode,

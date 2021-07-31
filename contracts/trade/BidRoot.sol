@@ -31,7 +31,6 @@ contract BidRoot is Root, RootManaged, RootManagedCreationAndStorageFee, RootMan
         RootManaged(manager)
         RootManagedCreationAndStorageFee(creationMinValue, creationFee, creationAndStorageFee)
     {
-        _totalSupply = 1;
     }
 
 
@@ -48,12 +47,13 @@ contract BidRoot is Root, RootManaged, RootManagedCreationAndStorageFee, RootMan
         uint128 price,
         uint32  endTime
     )
-        external creationPaymentIsEnoughPrice(price)
+        external creationPaymentIsEnough
         returns(
             address addr
         )
     {
         uint128 value = msg.value - _creationFee;
+        _totalSupply++;
         addr = new Bid{
             code: _tokenCode,
             value: value,
@@ -63,7 +63,7 @@ contract BidRoot is Root, RootManaged, RootManagedCreationAndStorageFee, RootMan
                 _id: _totalSupply
             }
         }( creator, token, price, endTime);
-        _totalSupply++;
+        
     }
 
 
