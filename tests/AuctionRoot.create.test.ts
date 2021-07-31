@@ -52,7 +52,6 @@ it('Valid', async done => {
             feeBid: 100_000_000,
             startTime: Math.round(new Date().getTime() / 1000) + 60,
             endTime: Math.round(new Date().getTime() / 1000) + 120,
-            showcaseFees: 0,
         },
         multisigKeys
     )

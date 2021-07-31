@@ -23,15 +23,14 @@ export default class BidToken extends Contract {
     /***********
      * GETTERS *
      ***********/
-    public async getInfo(): Promise<OfferInfo> {
+    public async getInfo(): Promise<BidInfo> {
         const result: DecodedMessageBody = await this._run('getInfo')
         return result.value
     }
 }
 
-export interface OfferInfo {
+export interface BidInfo {
     endTime: string
-    fee: string
     price: string
     token: string
     creator: string

@@ -1,12 +1,10 @@
 import config from '../configs/config'
-import Art2Root from '../contracts/Art2Root'
-import Art2RootData from '../contracts/tokens/art2/Art2Root'
+import BidRoot from '../contracts/BidRoot'
 import {KeyPair} from '@tonclient/core/dist/modules'
+import bidRootData from '../contracts/trade/BidRoot'
 import {TonClient} from '@tonclient/core'
 import {libNode} from '@tonclient/lib-node'
-import Art2Series from '../contracts/Art2Series'
-import Art2SeriesData from '../contracts/tokens/art2/Art2Series'
-import Art2Token from '../contracts/Art2Token'
+import BidToken from '../contracts/Bid'
 import {Ton} from '../library'
 import KitInterface from '../library/ton/utils/interfaces/KitInterface'
 import SafeMultisigWallet from '../library/ton/contracts/SafeMultisigWallet'
@@ -24,56 +22,45 @@ it('Valid', async done => {
     const giverKeys: KeyPair = TonKeysFile.read(config.net.test.keys.giver)
     const giverContract: GiverV2 = new GiverV2(kit, giverKeys)
     const rootKeys: KeyPair = await Ton.keys.random(kit.client)
-    const art2Root: Art2Root = new Art2Root(kit, rootKeys)
-    const art2Series: Art2Series = new Art2Series(kit, await art2Root.calculateAddress(), 0, rootKeys)
-    const art2Token: Art2Token = new Art2Token(kit, await art2Root.calculateAddress(), await art2Series.calculateAddress(), 0, rootKeys)
+    const bidRoot: BidRoot = new BidRoot(kit, rootKeys)
+    const bidToken: BidToken = new BidToken(kit, await bidRoot.calculateAddress(), 1, rootKeys)
 
     await giverContract.sendTransaction(await multisig.calculateAddress(), 10_000_000_000)
     await multisig.deploy([Ton.hex.x0(multisigKeys.public)], 1)
 
-    await giverContract.sendTransaction(await art2Root.calculateAddress(), 10_000_000_000)
-    await art2Root.deploy(
+    console.log('bidRoot',await bidRoot.calculateAddress())
+    console.log('bidToken',await bidToken.calculateAddress())
+
+    await giverContract.sendTransaction(await bidRoot.calculateAddress(), 10_000_000_000)
+    await bidRoot.deploy(
         '0:0000000000000000000000000000000000000000000000000000000000000001',
         1_000_000_000,
         100_000_000,
-        Ton.hex.string('Art2'),
-        Ton.hex.string('ART2')
+        100_000_000,
+        Ton.hex.string('Bid'),
+        Ton.hex.string('BID')
     )
 
-    expect(await art2Root.getManager()).toBe('0:0000000000000000000000000000000000000000000000000000000000000001')
-
     await multisig.callAnotherContract(
-        await art2Root.calculateAddress(),
+        await bidRoot.calculateAddress(),
         1_000_000_000,
         true,
         0,
-        Art2RootData.abi,
-        'createSerie',
-        {
-            manager: await multisig.calculateAddress(),
-            limit: 10,
-            hash: hash
-        },
-        multisigKeys
-    )
-
-    expect((await art2Series.getInfo()).hash).toBe(hash)
-
-    await multisig.callAnotherContract(
-        await art2Series.calculateAddress(),
-        1_000_000_000,
-        true,
-        0,
-        Art2SeriesData.abi,
+        bidRootData.abi,
         'create',
         {
-            manager: await multisig.calculateAddress(),
-            managerUnlockTime: 0,
-            creatorFees: 1
+            creator:  await multisig.calculateAddress(),
+            token: '0:0000000000000000000000000000000000000000000000000000000000012345',
+            price: 100_000_000,
+            endTime: Math.round(new Date().getTime() / 1000) + 120,
         },
         multisigKeys
     )
-    expect((await art2Token.getArtInfo()).hash).toBe(hash)
+    await bidToken.waitForTransaction()
+    
+
+    expect((await bidToken.getInfo()).token).toBe('0:0000000000000000000000000000000000000000000000000000000000012345')
+    //expect(1).toBe(1)
 
     done()
 }, 30000)
