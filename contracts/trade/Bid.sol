@@ -70,7 +70,7 @@ contract Bid is Accept {
     }
 
     modifier onlyInnerMsg() {
-        require(msg.sender.value != 0, 102, "Recive only inner message");
+        require(msg.value != 0, 102, "Recive only inner message");
         _;
     }
 

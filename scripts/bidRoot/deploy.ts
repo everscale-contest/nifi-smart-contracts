@@ -17,10 +17,12 @@ async function run(): Promise<void> {
     /*const rootKeys: KeyPair = await TonKeysFile.createRandomIfNotExist(
         config.net.deploy.contracts.bidRoot.keyFile,
         kit.client
-    )*/
+    )
+    console.log(rootKeys.public)
+    console.log(rootKeys.secret)*/
     const rootKeys: KeyPair = 
-        {public: 'd8183cb2a9e774f1a383f82680d9447cd7203690a06f48472d91aa8e2d7a4118',
-         secret: 'd46bedccb780e761f4ab26cf329f1a73f620bf0b75ee1c29c55a4acc08130ba5'}
+        {public: 'bb1080f7951262ebc58e6c0ad5c191c583e08a1f2456c7c0871ca8836322d4cd',
+         secret: '4fa3037a5419e1d4742b758b6d5252c020d4197bf5ae59b386044ba8c0a3d867'}
     const giverKeys: KeyPair = await TonKeysFile.createRandomIfNotExist(config.net.deploy.keys.giver, kit.client)
     const offerRoot: BidRoot = new BidRoot(kit, rootKeys)
     const giver: GiverV2 = new GiverV2(kit, giverKeys)
