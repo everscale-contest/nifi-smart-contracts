@@ -36,8 +36,8 @@ it('Valid', async done => {
     const artRoot: ArtRoot = new ArtRoot(kit, rootKeys)
     const artToken: ArtToken = new ArtToken(kit, await artRoot.calculateAddress(), 1, rootKeys)
 
-    //console.log('artRoot',await artRoot.calculateAddress());
-    //console.log('artToken',await artToken.calculateAddress());
+    console.log('artRoot',await artRoot.calculateAddress());
+    console.log('artToken',await artToken.calculateAddress());
 
     await giverContract.sendTransaction(await tip3Seller_multisig.calculateAddress(), 10_000_000_000)
     await tip3Seller_multisig.deploy([Ton.hex.x0(tip3Seller_multisigKeys.public)], 1)
@@ -56,7 +56,7 @@ it('Valid', async done => {
         await artRoot.calculateAddress(),
         1_000_000_000,
         true,
-        0,
+        1,
         artRootData.abi,
         'create',
         {
@@ -76,7 +76,7 @@ it('Valid', async done => {
         await artToken.calculateAddress(),
         1_000_000_000,
         true,
-        0,
+        1,
         artTokenData.abi,
         'addHash',
         {
@@ -116,7 +116,7 @@ it('Valid', async done => {
         await bidRoot.calculateAddress(),
         1_500_000_000,
         true,
-        0,
+        1,
         bidRootData.abi,
         'create',
         {
@@ -137,7 +137,7 @@ it('Valid', async done => {
         await artToken.calculateAddress(),
         1_000_000_000,
         true,
-        0,
+        1,
         artTokenData.abi,
         'lockManager',
         {
@@ -157,7 +157,7 @@ it('Valid', async done => {
         bid_address,
         510_000_000,
         true,
-        0,
+        1,
         bidData.abi,
         'acceptBid',
         {
