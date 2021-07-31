@@ -22,9 +22,7 @@ contract ArtToken is TokenAddress, TokenChangeOwnerAddressEvent, IArtToken {
      *************/
     address   private _creator;
     uint32    private _creatorFees;
-    uint256[] private _hashes;
-
-
+    uint256 private _hash;
 
     /***************
      * CONSTRUCTOR *
@@ -54,7 +52,7 @@ contract ArtToken is TokenAddress, TokenChangeOwnerAddressEvent, IArtToken {
     {
         _creator = creator;
         _creatorFees = creatorFees;
-        _hashes.push(hash);
+        _hash = hash;
     }
 
 
@@ -72,8 +70,7 @@ contract ArtToken is TokenAddress, TokenChangeOwnerAddressEvent, IArtToken {
     function receiveArtInfo() override external view responsible returns(
             address creator,
             uint32  creatorFees,
-            uint256 hash,
-            uint32  hashesCount
+            uint256 hash
         )
     {
         return{value: 0, bounce: false, flag: 64} getArtInfo();
@@ -88,9 +85,9 @@ contract ArtToken is TokenAddress, TokenChangeOwnerAddressEvent, IArtToken {
      * Owner or manager can add new hash.
      * hash ... Hash of data that associated with token.
      */
-    function addHash(uint256 hash) override external onlyUnlockedOwnerOrLockedManager accept {
+    /*function addHash(uint256 hash) override external onlyUnlockedOwnerOrLockedManager accept {
         _hashes.push(hash);
-    }
+    }*/
 
 
 
@@ -104,11 +101,10 @@ contract ArtToken is TokenAddress, TokenChangeOwnerAddressEvent, IArtToken {
      * hash ................ Hash of data that associated with token.
      * hashesCount ......... Total count of hashes.
      */
-    function getArtInfo() public view returns(address creator, uint32 creatorFees, uint256 hash, uint32 hashesCount) {
+    function getArtInfo() public view returns(address creator, uint32 creatorFees, uint256 hash) {
         creator = _creator;
         creatorFees = _creatorFees;
-        hashesCount = uint32(_hashes.length);
-        hash = _hashes[hashesCount - 1];
+        hash = _hash;
     }
 
     /**
@@ -117,14 +113,14 @@ contract ArtToken is TokenAddress, TokenChangeOwnerAddressEvent, IArtToken {
      * hashes ........ Array of hashes of data that associated with token.
      * hashesCount ... Total count of hashes.
      */
-    function getHashes(uint32 offset, uint32 length) public view returns(uint256[] hashes, uint32 hashesCount) {
+    /*function getHashes(uint32 offset, uint32 length) public view returns(uint256[] hashes, uint32 hashesCount) {
         uint256[] hashesMemory = _hashes;
         hashesCount = uint32(hashesMemory.length);
 
         uint32 maxIndex = math.max(offset + length, hashesCount);
         for (uint32 i = offset; i < maxIndex; i++)
             hashes.push(hashesMemory[i]);
-    }
+    }*/
 
 
 

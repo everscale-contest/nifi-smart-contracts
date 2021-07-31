@@ -44,6 +44,5 @@ export interface ArtInfo {
     creator: string
     creatorFees: string
     hash: string
-    hashesCount: string
 }
 

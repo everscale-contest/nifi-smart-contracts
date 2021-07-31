@@ -7,9 +7,9 @@ export default {
              *     'http://localhost'
              *     'http://0.0.0.0
              */
-            url: 'https://net.ton.dev',
+            //url: 'https://net.ton.dev',
             //url: 'https://main.ton.dev',
-            //url: 'http://localhost',
+            url: 'http://localhost',
 
             /**
              * Network port.
@@ -17,8 +17,8 @@ export default {
              *     '8080'
              *     '80'
              */
-            port: '',
-            //port: '8080',
+            //port: '',
+            port: '8080',
             
 
             /**

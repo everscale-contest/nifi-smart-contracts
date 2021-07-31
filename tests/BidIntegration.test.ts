@@ -34,7 +34,10 @@ it('Valid', async done => {
     const giverContract: GiverV2 = new GiverV2(kit, giverKeys)
     const rootKeys: KeyPair = await Ton.keys.random(kit.client)
     const artRoot: ArtRoot = new ArtRoot(kit, rootKeys)
-    const artToken: ArtToken = new ArtToken(kit, await artRoot.calculateAddress(), 0, rootKeys)
+    const artToken: ArtToken = new ArtToken(kit, await artRoot.calculateAddress(), 1, rootKeys)
+
+    //console.log('artRoot',await artRoot.calculateAddress());
+    //console.log('artToken',await artToken.calculateAddress());
 
     await giverContract.sendTransaction(await tip3Seller_multisig.calculateAddress(), 10_000_000_000)
     await tip3Seller_multisig.deploy([Ton.hex.x0(tip3Seller_multisigKeys.public)], 1)
@@ -47,6 +50,7 @@ it('Valid', async done => {
         Ton.hex.string('Art'),
         Ton.hex.string('ART')
     )
+    
     //create tip3 token
     await tip3Seller_multisig.callAnotherContract(
         await artRoot.calculateAddress(),
@@ -60,7 +64,7 @@ it('Valid', async done => {
             manager: '0:0000000000000000000000000000000000000000000000000000000000000001',
             managerUnlockTime: 0,
             creator: await tip3Seller_multisig.calculateAddress(),
-            creatorFees: 5000,
+            creatorFees: 2000,
             hash: '0x0000000000000000000000000000000000000000000000000000001234567890'
         },
         tip3Seller_multisigKeys

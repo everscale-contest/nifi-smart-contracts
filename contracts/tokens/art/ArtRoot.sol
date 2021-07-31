@@ -8,6 +8,12 @@ import "ArtToken.sol";
 import "interfaces/IArtRoot.sol";
 
 contract ArtRoot is Root, RootManaged, RootManagedCreationFee, RootManagedWithdraw, IArtRoot {
+
+    modifier validCreatorFees(uint32 fees) {
+        require(fees < 2401, 277);
+        _;
+    } 
+
     /***************
      * CONSTRUCTOR *
      ***************/
@@ -57,11 +63,13 @@ contract ArtRoot is Root, RootManaged, RootManagedCreationFee, RootManagedWithdr
     )
         override
         external
+        validCreatorFees(creatorFees)
         returns(
             address addr
         )
     {
         uint128 value = msg.value - _creationFee;
+        _totalSupply++;
         addr = new ArtToken{
             code: _tokenCode,
             value: value,
@@ -71,7 +79,7 @@ contract ArtRoot is Root, RootManaged, RootManagedCreationFee, RootManagedWithdr
                 _id: _totalSupply
             }
         }(owner, manager, managerUnlockTime, creator, creatorFees, hash);
-        _totalSupply++;
+        //_totalSupply++;
     }
 
 

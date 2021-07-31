@@ -16,6 +16,11 @@ contract Art2Root {
 
     event newSerie(uint128 id, address serie);
 
+    modifier validCreatorFees(uint32 fees) {
+        require(fees < 2401, 277);
+        _;
+    }
+
     /***************
      * CONSTRUCTOR *
      ***************/
@@ -63,7 +68,7 @@ contract Art2Root {
         addr.transfer(value, bounce);
     }
 
-    function createSerie(address manager, uint128 limit, uint256 hash, uint32 creatorFees) public internalMsg returns(address addr){
+    function createSerie(address manager, uint128 limit, uint256 hash, uint32 creatorFees) public validCreatorFees(creatorFees) internalMsg returns(address addr){
         uint128 value = msg.value - _creationFee;
         _totalSupply++;
         addr = new Art2Series{

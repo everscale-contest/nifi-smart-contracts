@@ -26,7 +26,10 @@ contract Art2Token is TokenAddress2, TokenChangeOwnerAddressEvent2, IArtToken {
     uint32    private _creatorFees;
     uint256   private _hash;
  
-
+    modifier validCreatorFees(uint32 fees) {
+        require(fees < 2401, 277);
+        _;
+    } 
 
 
     /***************
@@ -49,6 +52,7 @@ contract Art2Token is TokenAddress2, TokenChangeOwnerAddressEvent2, IArtToken {
         uint256 hash
     )
         public
+        validCreatorFees(creatorFees)
         TokenAddress2(
             owner,
             manager,
