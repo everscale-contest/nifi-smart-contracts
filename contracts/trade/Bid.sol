@@ -80,12 +80,12 @@ contract Bid is Accept {
     }
 
     modifier bidFinished() {
-        require(now >= _endTime+3600, 104, "Offer not finished");
+        require(now >= _endTime+900, 104, "Offer not finished");
         _;
     }
 
     modifier checkValue() {
-        require(msg.value > 0.5 ton, 105, "Need more than 0.5 ton for operation");
+        require(msg.value > 0.3 ton, 105, "Need more than 0.5 ton for operation");
         _;
     }
 
@@ -138,7 +138,7 @@ contract Bid is Accept {
             uint32  managerUnlockTime
     ) public onlyToken {
         require(manager == address(this), 106, "Wrong manager");
-        require(managerUnlockTime > _endTime+3600, 107, "Wrong manager unlock time");
+        require(managerUnlockTime > _endTime+900, 107, "Wrong manager unlock time");
 
         uint128 balance = address(this).balance;
 

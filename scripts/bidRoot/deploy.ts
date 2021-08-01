@@ -21,8 +21,8 @@ async function run(): Promise<void> {
     console.log(rootKeys.public)
     console.log(rootKeys.secret)*/
     const rootKeys: KeyPair = 
-        {public: 'bb1080f7951262ebc58e6c0ad5c191c583e08a1f2456c7c0871ca8836322d4cd',
-         secret: '4fa3037a5419e1d4742b758b6d5252c020d4197bf5ae59b386044ba8c0a3d867'}
+        {public: '34f0b17eac31374b180769474817e01e45393442e710ffadfd7888962d196830',
+         secret: 'bd320c12ff5a269d21db02c16db6e6c3663641d4fb5444d570ed11329cd83fc8'}
     const giverKeys: KeyPair = await TonKeysFile.createRandomIfNotExist(config.net.deploy.keys.giver, kit.client)
     const offerRoot: BidRoot = new BidRoot(kit, rootKeys)
     const giver: GiverV2 = new GiverV2(kit, giverKeys)
