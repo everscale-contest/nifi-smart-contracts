@@ -61,25 +61,7 @@ abstract contract TokenAddress is Token, ITokenAddress {
 
 
 
-    /*******************************************************
-     * EXTERNAL * ONLY OWNER IF UNLOCKED OR LOCKED MANAGER *
-     *******************************************************/
-    /**
-     * Owner or manager can change token owner address.
-     * owner ... Address of token owner.
-     */
-    function changeOwner(address owner)
-        override
-        external
-        onlyUnlockedOwnerOrLockedManager
-        addressIsNotNull(owner)
-        canChangeOwner
-        accept
-    {
-        address previousOwner = _owner;
-        _owner = owner;
-        _onChangeOwner(previousOwner, owner);
-    }
+    
 
 
 

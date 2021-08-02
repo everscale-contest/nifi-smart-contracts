@@ -12,8 +12,8 @@ const make: Make = new Make({
         'contracts/tokens/art2/Art2Token',
         'contracts/tokens/art2/Art2Series',
 
-        'contracts/tokens/ticket/TicketToken',
-        'contracts/tokens/ticket/TicketRoot',
+        //'contracts/tokens/ticket/TicketToken',
+        //'contracts/tokens/ticket/TicketRoot',
 
         'contracts/trade/DirectAuctionRoot',
         'contracts/trade/DirectAuction',

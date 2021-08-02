@@ -72,6 +72,8 @@ contract Art2Series{
     {
         require(_totalSupply<_limit,103);
         require(msg.sender == _manager,102);
+        require(msg.value > 0.2 ton,105);
+        _root.transfer({value: 0.1 ton, flag: 1, bounce: true});
         _totalSupply++;
         uint128 value = msg.value;
         addr = new Art2Token{

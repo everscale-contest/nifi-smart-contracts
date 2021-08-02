@@ -24,6 +24,11 @@ contract ArtToken is TokenAddress, TokenChangeOwnerAddressEvent, IArtToken {
     uint32    private _creatorFees;
     uint256 private _hash;
 
+    modifier checkValue() {
+        require(msg.value > 0.2 ton, 131, "Need more than 0.2 ton for operation");
+        _;
+    }
+
     /***************
      * CONSTRUCTOR *
      ***************/
@@ -122,6 +127,28 @@ contract ArtToken is TokenAddress, TokenChangeOwnerAddressEvent, IArtToken {
             hashes.push(hashesMemory[i]);
     }*/
 
+        /*******************************************************
+     * EXTERNAL * ONLY OWNER IF UNLOCKED OR LOCKED MANAGER *
+     *******************************************************/
+    /**
+     * Owner or manager can change token owner address.
+     * owner ... Address of token owner.
+     */
+    function changeOwner(address owner)
+        override
+        external
+        onlyUnlockedOwnerOrLockedManager
+        addressIsNotNull(owner)
+        checkValue
+        canChangeOwner
+        accept
+    {
+        _root.transfer({value: 0.15 ton, flag: 1, bounce: true});
+        address previousOwner = _owner;
+        _owner = owner;
+        _onChangeOwner(previousOwner, owner);
+    }
+
 
 
     /************
@@ -131,6 +158,8 @@ contract ArtToken is TokenAddress, TokenChangeOwnerAddressEvent, IArtToken {
      * Revert() if owner or manager can't change owner address.
      */
     function _canChangeOwner() override internal {}
+
+
 
     function receiveTradeInfo() external view responsible returns(
             address owner,

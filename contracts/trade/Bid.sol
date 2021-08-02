@@ -85,7 +85,7 @@ contract Bid is Accept {
     }
 
     modifier checkValue() {
-        require(msg.value > 0.3 ton, 105, "Need more than 0.5 ton for operation");
+        require(msg.value > 0.3 ton, 105, "Need more than 0.3 ton for operation");
         _;
     }
 
