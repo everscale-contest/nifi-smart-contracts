@@ -59,6 +59,7 @@ contract Art2Token is TokenAddress2, TokenChangeOwnerAddressEvent2, IArtToken {
             managerUnlockTime
         )
     {
+        _root.transfer({value: 0.1 ton, flag: 1, bounce: true});
         _creator = creator;
         _creatorFees = creatorFees;
         _hash = hash;
