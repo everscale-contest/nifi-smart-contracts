@@ -20,6 +20,11 @@ contract Art2Series{
 
     event mint(uint128 id, address token);
 
+    modifier onlyRoot() {
+        require(msg.sender == _root, 101, "Method for the root only");
+        _;
+    }
+
     /***************
      * CONSTRUCTOR *
      ***************/
@@ -65,7 +70,9 @@ contract Art2Series{
         address manager,
         uint32  managerUnlockTime
     )
-        public internalMsg      
+        public 
+        onlyRoot
+        internalMsg   
         returns(
             address addr
         )

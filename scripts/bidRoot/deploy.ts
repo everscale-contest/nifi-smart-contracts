@@ -14,15 +14,15 @@ import BidRoot from '../../contracts/BidRoot'
 async function run(): Promise<void> {
     TonClient.useBinaryLibrary(libNode)
     const kit: KitInterface = Ton.kit.create(config.net.deploy)
-    /*const rootKeys: KeyPair = await TonKeysFile.createRandomIfNotExist(
+   /* const rootKeys: KeyPair = await TonKeysFile.createRandomIfNotExist(
         config.net.deploy.contracts.bidRoot.keyFile,
         kit.client
     )
     console.log(rootKeys.public)
     console.log(rootKeys.secret)*/
     const rootKeys: KeyPair = 
-        {public: '34f0b17eac31374b180769474817e01e45393442e710ffadfd7888962d196830',
-         secret: 'bd320c12ff5a269d21db02c16db6e6c3663641d4fb5444d570ed11329cd83fc8'}
+        {public: 'd32ecc3142100c7ce386aee9299420085f4395c987a8f37077f44619380e999c',
+         secret: 'ffb185d4a6d1c159eeac30129e20d372c59c00f1b10d4ef2eebc571c87811403'}
     const giverKeys: KeyPair = await TonKeysFile.createRandomIfNotExist(config.net.deploy.keys.giver, kit.client)
     const offerRoot: BidRoot = new BidRoot(kit, rootKeys)
     const giver: GiverV2 = new GiverV2(kit, giverKeys)
