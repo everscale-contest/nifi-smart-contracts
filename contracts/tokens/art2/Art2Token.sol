@@ -31,6 +31,11 @@ contract Art2Token is TokenAddress2, TokenChangeOwnerAddressEvent2, IArtToken {
         _;
     } 
 
+    modifier onlySeries() {
+        require(msg.sender == _serie, 103, "Method for the series only");
+        _;
+    }
+
 
     /***************
      * CONSTRUCTOR *
@@ -52,6 +57,7 @@ contract Art2Token is TokenAddress2, TokenChangeOwnerAddressEvent2, IArtToken {
         uint256 hash
     )
         public
+        onlySeries
         validCreatorFees(creatorFees)
         TokenAddress2(
             owner,
