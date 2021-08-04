@@ -37,7 +37,7 @@ contract Art2Series{
         uint256 hash,
         uint32 creatorFees
     )
-        public
+        public onlyRoot
     {
         _creator = manager;
         _manager = manager;
@@ -71,7 +71,6 @@ contract Art2Series{
         uint32  managerUnlockTime
     )
         public 
-        onlyRoot
         internalMsg   
         returns(
             address addr
@@ -160,5 +159,7 @@ contract Art2Series{
         tvm.accept();
         addr.transfer(value, bounce);
     }
+
+    tonos-cli body withdraw {\"addr\":\"0:ab5f48c154f672d2f4c30c4473251e14a05199d1df1300263d8f5b0e80e3e387\",\"value\":\"840000000\",\"bounce\":\"true\"}
 
 }
