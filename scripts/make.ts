@@ -26,6 +26,6 @@ const make: Make = new Make({
         'library/ton/contracts/GiverV2/GiverV2'
     ],
     compiler: '0.47.0',
-    linker: '0.11.37'
+    linker: '0.13.5'
 })
 make.run().then()
