@@ -24,10 +24,6 @@ contract ArtToken is TokenAddress, TokenChangeOwnerAddressEvent, IArtToken {
     uint32    private _creatorFees;
     uint256 private _hash;
 
-    modifier checkValue() {
-        require(msg.value > 0.2 ton, 131, "Need more than 0.2 ton for operation");
-        _;
-    }
 
     /***************
      * CONSTRUCTOR *
@@ -139,11 +135,9 @@ contract ArtToken is TokenAddress, TokenChangeOwnerAddressEvent, IArtToken {
         external
         onlyUnlockedOwnerOrLockedManager
         addressIsNotNull(owner)
-        checkValue
         canChangeOwner
         accept
     {
-        _root.transfer({value: 0.15 ton, flag: 1, bounce: true});
         address previousOwner = _owner;
         _owner = owner;
         _onChangeOwner(previousOwner, owner);

@@ -14,15 +14,18 @@ import ArtRoot from '../../contracts/ArtRoot'
 async function run(): Promise<void> {
     TonClient.useBinaryLibrary(libNode)
     const kit: KitInterface = Ton.kit.create(config.net.deploy)
-   /* const artRootKeys: KeyPair = await TonKeysFile.createRandomIfNotExist(
+    /*const artRootKeys: KeyPair = await TonKeysFile.createRandomIfNotExist(
         config.net.deploy.contracts.artRoot.keyFile,
         kit.client
     )
     console.log(artRootKeys.public);
     console.log(artRootKeys.secret);*/
     const artRootKeys: KeyPair = 
+        {public: '3b4d32825953a5161f32fe973ae5bccb3f80900e58a38aeff26626100a6fab68',
+         secret: '3093a3c342e4306b929fb5056c05bf038a29a0bdf5b414a5dd5f5c4e1c31e489'}
+         /**onst artRootKeys: KeyPair = 
         {public: '34f0b17eac31374b180769474817e01e45393442e710ffadfd7888962d196830',
-         secret: 'bd320c12ff5a269d21db02c16db6e6c3663641d4fb5444d570ed11329cd83fc8'}
+         secret: 'bd320c12ff5a269d21db02c16db6e6c3663641d4fb5444d570ed11329cd83fc8'} */
     const giverKeys: KeyPair = await TonKeysFile.createRandomIfNotExist(config.net.deploy.keys.giver, kit.client)
     const artRoot: ArtRoot = new ArtRoot(kit, artRootKeys)
     const giver: GiverV2 = new GiverV2(kit, giverKeys)
