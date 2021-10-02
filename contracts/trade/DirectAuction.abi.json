@@ -75,7 +75,15 @@
 			]
 		},
 		{
-			"name": "AUC_CL_1",
+			"name": "AUC_CL_1_EXE",
+			"inputs": [
+				{"name":"id","type":"uint128"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "AUC_CL_1_EXP",
 			"inputs": [
 				{"name":"id","type":"uint128"}
 			],
