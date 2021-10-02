@@ -1,4 +1,7 @@
 pragma ton-solidity >= 0.44.0;
+pragma AbiHeader time;
+pragma AbiHeader pubkey;
+pragma AbiHeader expire;
 
 import "../abstract/interfaces/IToken.sol";
 import "../abstract/interfaces/ITokenAddress.sol";

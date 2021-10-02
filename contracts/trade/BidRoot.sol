@@ -1,4 +1,7 @@
 pragma ton-solidity ^0.47.0;
+pragma AbiHeader time;
+pragma AbiHeader pubkey;
+pragma AbiHeader expire;
 
 import "../abstract/Root.sol";
 import "../abstract/extensions/rootManaged/root/RootManaged.sol";
