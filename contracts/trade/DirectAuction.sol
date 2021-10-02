@@ -30,8 +30,8 @@ contract DirectAuction is Accept {
      * EVENTS *
      **********/
     event AUC_BS_nifi_auc_1(uint128 id);
-    event AUC_CL_nifi_auc_1_EXE(uint128 id);
-    event AUC_CL_nifi_auc_1_EXP(uint128 id);
+    event AUC_SC_nifi_auc_1(uint128 id);
+    event AUC_EX_nifi_auc_1(uint128 id);
 
 
 
@@ -199,14 +199,16 @@ contract DirectAuction is Accept {
             }
 
             if (_curBid.bider != address(0)) {
+                emit AUC_SC_nifi_auc_1{dest: SwiftAddress.value()}(_id);
                 ITokenAddress(_token).changeOwner(_curBid.bider);
+            }else {
+                emit AUC_EX_nifi_auc_1{dest: SwiftAddress.value()}(_id);
             }
 
             IToken(_token).unlock();
 
             _root.transfer({value: address(this).balance/20, flag: 1, bounce: true});
             //emit FinishEvent(_id, _creator, _token, _curBid.bider, _curBid.value);
-            emit AUC_CL_nifi_auc_1_EXE{dest: SwiftAddress.value()}(_id);
             selfdestruct(owner);
         }else{
             if (_curBid.bider != address(0)) {
@@ -214,7 +216,7 @@ contract DirectAuction is Accept {
             }
             IToken(_token).unlock();
             //emit FinishEvent(_id, _creator, _token, address(0), 0);
-            emit AUC_CL_nifi_auc_1_EXP{dest: SwiftAddress.value()}(_id);
+            emit AUC_EX_nifi_auc_1{dest: SwiftAddress.value()}(_id);
             selfdestruct(owner);
         }
 

@@ -75,7 +75,7 @@
 			]
 		},
 		{
-			"name": "AUC_CL_nifi_auc_1_EXE",
+			"name": "AUC_SC_nifi_auc_1",
 			"inputs": [
 				{"name":"id","type":"uint128"}
 			],
@@ -83,7 +83,7 @@
 			]
 		},
 		{
-			"name": "AUC_CL_nifi_auc_1_EXP",
+			"name": "AUC_EX_nifi_auc_1",
 			"inputs": [
 				{"name":"id","type":"uint128"}
 			],
