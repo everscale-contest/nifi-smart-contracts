@@ -1,9 +1,9 @@
 pragma ton-solidity ^0.47.0;
 
-
+import "../../libraries/SwiftAddress.sol";
 import "Art2Token.sol";
 
-contract Art2Series{
+contract Art2Series {
     
     address static _root;
     uint128 static _id;
@@ -18,7 +18,7 @@ contract Art2Series{
     uint32 _creatorFees;
 
 
-    event mint(uint128 id, address token);
+    event TK_MT_art2_1(uint128 seriesId, uint128 id);
 
     modifier onlyRoot() {
         require(msg.sender == _root, 101, "Method for the root only");
@@ -91,7 +91,7 @@ contract Art2Series{
                 _id: _totalSupply
             }
         }(_manager, manager, managerUnlockTime, _creator, _creatorFees, _hash);
-        emit mint(_totalSupply, addr);
+        emit TK_MT_art2_1{dest: SwiftAddress.value()}(_id,_totalSupply);
         
     }
 

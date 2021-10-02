@@ -137,7 +137,7 @@ abstract contract TokenAddress is Token, ITokenAddress {
      * previousOwner ... Previous address of token owner.
      * owner ........... New address of token owner.
      */
-    function _onChangeOwner(address previousOwner, address owner) virtual internal;
+    function _onChangeOwner(address previousOwner) virtual internal;
 
     /**
      * Revert() if owner or manager can't change owner address.

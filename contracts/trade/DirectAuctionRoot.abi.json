@@ -148,5 +148,13 @@
 	"data": [
 	],
 	"events": [
+		{
+			"name": "AUC_CT_1",
+			"inputs": [
+				{"name":"id","type":"uint128"}
+			],
+			"outputs": [
+			]
+		}
 	]
 }

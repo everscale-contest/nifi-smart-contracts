@@ -5,8 +5,11 @@ import "../abstract/extensions/rootManaged/root/RootManaged.sol";
 import "../abstract/extensions/rootManaged/root/RootManagedCreationFee.sol";
 import "../abstract/extensions/rootManaged/root/RootManagedWithdraw.sol";
 import "DirectAuction.sol";
+import "../libraries/SwiftAddress.sol";
 
 contract ArtRoot is Root, RootManaged, RootManagedCreationFee, RootManagedWithdraw {
+
+    event AUC_CT_1(uint128 id);
     /***************
      * CONSTRUCTOR *
      ***************/
@@ -54,6 +57,7 @@ contract ArtRoot is Root, RootManaged, RootManagedCreationFee, RootManagedWithdr
     {
         require(msg.value >= _creationMinValue,278);
         uint128 value = msg.value - _creationFee;
+        _totalSupply++;
         addr = new DirectAuction{
             code: _tokenCode,
             value: value,
@@ -62,8 +66,8 @@ contract ArtRoot is Root, RootManaged, RootManagedCreationFee, RootManagedWithdr
                 _root: address(this),
                 _id: _totalSupply
             }
-        }( creator, token, startBid, stepBid, feeBid, startTime, endTime, showcaseFees);
-        _totalSupply++;
+        }( creator, token, startBid, stepBid, feeBid, startTime, endTime, showcaseFees);        
+        emit AUC_CT_1{dest: SwiftAddress.value()}(_totalSupply);
     }
 
 

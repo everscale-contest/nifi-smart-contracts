@@ -146,5 +146,13 @@
 	"data": [
 	],
 	"events": [
+		{
+			"name": "TK_CT_art1_1",
+			"inputs": [
+				{"name":"id","type":"uint128"}
+			],
+			"outputs": [
+			]
+		}
 	]
 }

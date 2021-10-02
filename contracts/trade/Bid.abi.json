@@ -59,35 +59,17 @@
 	],
 	"events": [
 		{
-			"name": "BidCreated",
+			"name": "BID_AC_1",
 			"inputs": [
-				{"name":"id","type":"uint128"},
-				{"name":"creator","type":"address"},
-				{"name":"token","type":"address"},
-				{"name":"price","type":"uint128"},
-				{"name":"endTime","type":"uint32"}
+				{"name":"id","type":"uint128"}
 			],
 			"outputs": [
 			]
 		},
 		{
-			"name": "BidAccepted",
+			"name": "BID_CL_1",
 			"inputs": [
-				{"name":"id","type":"uint128"},
-				{"name":"creator","type":"address"},
-				{"name":"token","type":"address"},
-				{"name":"price","type":"uint128"}
-			],
-			"outputs": [
-			]
-		},
-		{
-			"name": "BidFinished",
-			"inputs": [
-				{"name":"id","type":"uint128"},
-				{"name":"creator","type":"address"},
-				{"name":"token","type":"address"},
-				{"name":"price","type":"uint128"}
+				{"name":"id","type":"uint128"}
 			],
 			"outputs": [
 			]

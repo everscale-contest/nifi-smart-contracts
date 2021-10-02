@@ -93,10 +93,10 @@
 	],
 	"events": [
 		{
-			"name": "mint",
+			"name": "TK_MT_art2_1",
 			"inputs": [
-				{"name":"id","type":"uint128"},
-				{"name":"token","type":"address"}
+				{"name":"seriesId","type":"uint128"},
+				{"name":"id","type":"uint128"}
 			],
 			"outputs": [
 			]

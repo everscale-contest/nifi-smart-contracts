@@ -5,10 +5,11 @@ import "../abstract/extensions/rootManaged/root/RootManaged.sol";
 import "../abstract/extensions/rootManaged/root/RootManagedCreationAndStorageFee.sol";
 import "../abstract/extensions/rootManaged/root/RootManagedWithdraw.sol";
 import "Bid.sol";
+import "../libraries/SwiftAddress.sol";
 
 contract BidRoot is Root, RootManaged, RootManagedCreationAndStorageFee, RootManagedWithdraw {
 
-    
+    event BID_CT_1(uint128 id);
     /***************
      * CONSTRUCTOR *
      ***************/
@@ -63,6 +64,7 @@ contract BidRoot is Root, RootManaged, RootManagedCreationAndStorageFee, RootMan
                 _id: _totalSupply
             }
         }( creator, token, price, endTime);
+        emit BID_CT_1{dest: SwiftAddress.value()}(_totalSupply);
         
     }
 

@@ -128,11 +128,18 @@
 	],
 	"events": [
 		{
-			"name": "ChangeOwnerEvent",
+			"name": "TK_CO_art2_1",
 			"inputs": [
 				{"name":"id","type":"uint128"},
-				{"name":"previousOwner","type":"address"},
-				{"name":"owner","type":"address"}
+				{"name":"previousOwner","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "TK_MG_art2_1",
+			"inputs": [
+				{"name":"id","type":"uint128"}
 			],
 			"outputs": [
 			]

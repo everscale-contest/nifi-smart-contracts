@@ -67,25 +67,17 @@
 	],
 	"events": [
 		{
-			"name": "BidEvent",
+			"name": "AUC_BS_1",
 			"inputs": [
-				{"name":"id","type":"uint128"},
-				{"name":"creator","type":"address"},
-				{"name":"token","type":"address"},
-				{"name":"bider","type":"address"},
-				{"name":"value","type":"uint128"}
+				{"name":"id","type":"uint128"}
 			],
 			"outputs": [
 			]
 		},
 		{
-			"name": "FinishEvent",
+			"name": "AUC_CL_1",
 			"inputs": [
-				{"name":"id","type":"uint128"},
-				{"name":"creator","type":"address"},
-				{"name":"token","type":"address"},
-				{"name":"bider","type":"address"},
-				{"name":"value","type":"uint128"}
+				{"name":"id","type":"uint128"}
 			],
 			"outputs": [
 			]

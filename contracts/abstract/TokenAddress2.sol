@@ -78,7 +78,7 @@ abstract contract TokenAddress2 is Token2, ITokenAddress {
     {
         address previousOwner = _owner;
         _owner = owner;
-        _onChangeOwner(previousOwner, owner);
+        _onChangeOwner(previousOwner);
     }
 
 
@@ -155,7 +155,7 @@ abstract contract TokenAddress2 is Token2, ITokenAddress {
      * previousOwner ... Previous address of token owner.
      * owner ........... New address of token owner.
      */
-    function _onChangeOwner(address previousOwner, address owner) virtual internal;
+    function _onChangeOwner(address previousOwner) virtual internal;
 
     /**
      * Revert() if owner or manager can't change owner address.

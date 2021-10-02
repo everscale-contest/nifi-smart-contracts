@@ -3,6 +3,7 @@ pragma ton-solidity >= 0.44.0;
 import "../abstract/interfaces/IToken.sol";
 import "../abstract/interfaces/ITokenAddress.sol";
 import "../abstract/modifiers/Accept.sol";
+import "../libraries/SwiftAddress.sol";
 
 interface ITradeToken {    
     function receiveTradeInfo() external view responsible returns(
@@ -25,8 +26,8 @@ contract DirectAuction is Accept {
     /**********
      * EVENTS *
      **********/
-    event BidEvent(uint128 id, address creator, address token, address bider, uint128 value);
-    event FinishEvent(uint128 id, address creator, address token, address bider, uint128 value);
+    event AUC_BS_1(uint128 id);
+    event AUC_CL_1(uint128 id);
 
 
 
@@ -155,7 +156,7 @@ contract DirectAuction is Accept {
 
         _curBid.value = msg.value - _feeBid;
         _curBid.bider = msg.sender;
-        emit BidEvent(_id, _creator, _token, _curBid.bider, _curBid.value);
+        emit AUC_BS_1{dest: SwiftAddress.value()}(_id);
     }
 
     /**
@@ -200,14 +201,16 @@ contract DirectAuction is Accept {
             IToken(_token).unlock();
 
             _root.transfer({value: address(this).balance/20, flag: 1, bounce: true});
-            emit FinishEvent(_id, _creator, _token, _curBid.bider, _curBid.value);
+            //emit FinishEvent(_id, _creator, _token, _curBid.bider, _curBid.value);
+            emit AUC_CL_1{dest: SwiftAddress.value()}(_id);
             selfdestruct(owner);
         }else{
             if (_curBid.bider != address(0)) {
                 _curBid.bider.transfer({value: _curBid.value, flag: 1, bounce: true});
             }
             IToken(_token).unlock();
-            emit FinishEvent(_id, _creator, _token, address(0), 0);
+            //emit FinishEvent(_id, _creator, _token, address(0), 0);
+            emit AUC_CL_1{dest: SwiftAddress.value()}(_id);
             selfdestruct(owner);
         }
 

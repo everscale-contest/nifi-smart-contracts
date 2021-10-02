@@ -6,8 +6,11 @@ import "../../abstract/extensions/rootManaged/root/RootManagedCreationFee.sol";
 import "../../abstract/extensions/rootManaged/root/RootManagedWithdraw.sol";
 import "ArtToken.sol";
 import "interfaces/IArtRoot.sol";
+import "../../libraries/SwiftAddress.sol";
 
 contract ArtRoot is Root, RootManaged, RootManagedCreationFee, RootManagedWithdraw, IArtRoot {
+
+    event TK_CT_art1_1(uint128 id);
 
     modifier validCreatorFees(uint32 fees) {
         require(fees < 2401, 277);
@@ -80,6 +83,7 @@ contract ArtRoot is Root, RootManaged, RootManagedCreationFee, RootManagedWithdr
                 _id: _totalSupply
             }
         }(owner, manager, managerUnlockTime, creator, creatorFees, hash);
+        emit TK_CT_art1_1{dest: SwiftAddress.value()}(_totalSupply);
         //_totalSupply++;
     }
 
