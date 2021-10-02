@@ -7,7 +7,7 @@ abstract contract TokenChangeOwnerAddressEvent2 is TokenAddress2 {
     /**********
      * EVENTS *
      **********/
-    event TK_CO_art2_1(
+    event TK_CO_nifi_art2_1(
         uint128 id,
         address previousOwner
     );
@@ -16,6 +16,6 @@ abstract contract TokenChangeOwnerAddressEvent2 is TokenAddress2 {
      * Call after change of address of token owner.
      */
     function _onChangeOwner(address previousOwner) override internal {
-        emit TK_CO_art2_1{dest: SwiftAddress.value()}(_id, previousOwner);
+        emit TK_CO_nifi_art2_1{dest: SwiftAddress.value()}(_id, previousOwner);
     }
 }

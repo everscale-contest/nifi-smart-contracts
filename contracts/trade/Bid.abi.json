@@ -59,7 +59,7 @@
 	],
 	"events": [
 		{
-			"name": "BID_AC_1",
+			"name": "BID_AC_nifi_bid_1",
 			"inputs": [
 				{"name":"id","type":"uint128"}
 			],
@@ -67,7 +67,7 @@
 			]
 		},
 		{
-			"name": "BID_CL_1",
+			"name": "BID_CL_nifi_bid_1",
 			"inputs": [
 				{"name":"id","type":"uint128"}
 			],

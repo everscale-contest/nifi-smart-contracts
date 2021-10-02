@@ -21,7 +21,7 @@ contract Art2Series {
     uint32 _creatorFees;
 
 
-    event TK_MT_art2_1(uint128 seriesId, uint128 id);
+    event TK_MT_nifi_art2_1(uint128 seriesId, uint128 id);
 
     modifier onlyRoot() {
         require(msg.sender == _root, 101, "Method for the root only");
@@ -94,7 +94,7 @@ contract Art2Series {
                 _id: _totalSupply
             }
         }(_manager, manager, managerUnlockTime, _creator, _creatorFees, _hash);
-        emit TK_MT_art2_1{dest: SwiftAddress.value()}(_id,_totalSupply);
+        emit TK_MT_nifi_art2_1{dest: SwiftAddress.value()}(_id,_totalSupply);
         
     }
 

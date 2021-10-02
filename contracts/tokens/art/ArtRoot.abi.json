@@ -147,7 +147,7 @@
 	],
 	"events": [
 		{
-			"name": "TK_CT_art1_1",
+			"name": "TK_CT_nifi_art1_1",
 			"inputs": [
 				{"name":"id","type":"uint128"}
 			],

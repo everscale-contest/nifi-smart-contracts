@@ -67,7 +67,7 @@
 	],
 	"events": [
 		{
-			"name": "AUC_BS_1",
+			"name": "AUC_BS_nifi_auc_1",
 			"inputs": [
 				{"name":"id","type":"uint128"}
 			],
@@ -75,7 +75,7 @@
 			]
 		},
 		{
-			"name": "AUC_CL_1_EXE",
+			"name": "AUC_CL_nifi_auc_1_EXE",
 			"inputs": [
 				{"name":"id","type":"uint128"}
 			],
@@ -83,7 +83,7 @@
 			]
 		},
 		{
-			"name": "AUC_CL_1_EXP",
+			"name": "AUC_CL_nifi_auc_1_EXP",
 			"inputs": [
 				{"name":"id","type":"uint128"}
 			],

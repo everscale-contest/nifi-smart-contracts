@@ -149,7 +149,7 @@
 	],
 	"events": [
 		{
-			"name": "BID_CT_1",
+			"name": "BID_CT_nifi_bid_1",
 			"inputs": [
 				{"name":"id","type":"uint128"}
 			],

@@ -12,7 +12,7 @@ import "../libraries/SwiftAddress.sol";
 
 contract BidRoot is Root, RootManaged, RootManagedCreationAndStorageFee, RootManagedWithdraw {
 
-    event BID_CT_1(uint128 id);
+    event BID_CT_nifi_bid_1(uint128 id);
     /***************
      * CONSTRUCTOR *
      ***************/
@@ -67,7 +67,7 @@ contract BidRoot is Root, RootManaged, RootManagedCreationAndStorageFee, RootMan
                 _id: _totalSupply
             }
         }( creator, token, price, endTime);
-        emit BID_CT_1{dest: SwiftAddress.value()}(_totalSupply);
+        emit BID_CT_nifi_bid_1{dest: SwiftAddress.value()}(_totalSupply);
         
     }
 

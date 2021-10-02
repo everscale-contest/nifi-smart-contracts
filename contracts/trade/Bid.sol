@@ -34,8 +34,8 @@ contract Bid is Accept {
     /**********
      * EVENTS *
      **********/
-    event BID_AC_1(uint128 id);
-    event BID_CL_1(uint128 id);
+    event BID_AC_nifi_bid_1(uint128 id);
+    event BID_CL_nifi_bid_1(uint128 id);
     
 
     /**********
@@ -154,7 +154,7 @@ contract Bid is Accept {
         IToken(_token).unlock();
 
         _root.transfer({value: balance/20, flag: 1, bounce: true});
-        emit BID_AC_1{dest: SwiftAddress.value()}(_id);
+        emit BID_AC_nifi_bid_1{dest: SwiftAddress.value()}(_id);
         selfdestruct(owner);
     }
 
@@ -163,7 +163,7 @@ contract Bid is Accept {
      */
     function finish() public bidFinished accept {
         //emit BidFinished(_id, _creator, _token, _price);
-        emit BID_CL_1{dest: SwiftAddress.value()}(_id);
+        emit BID_CL_nifi_bid_1{dest: SwiftAddress.value()}(_id);
         selfdestruct(_creator);
     }
 

@@ -149,7 +149,7 @@
 	],
 	"events": [
 		{
-			"name": "AUC_CT_1",
+			"name": "AUC_CT_nifi_auc_1",
 			"inputs": [
 				{"name":"id","type":"uint128"}
 			],

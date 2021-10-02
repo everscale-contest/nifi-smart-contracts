@@ -127,7 +127,7 @@
 	],
 	"events": [
 		{
-			"name": "TK_CO_art1_1",
+			"name": "TK_CO_nifi_art1_1",
 			"inputs": [
 				{"name":"id","type":"uint128"},
 				{"name":"previousOwner","type":"address"}
@@ -136,7 +136,7 @@
 			]
 		},
 		{
-			"name": "TK_MG_art1_1",
+			"name": "TK_MG_nifi_art1_1",
 			"inputs": [
 				{"name":"id","type":"uint128"}
 			],

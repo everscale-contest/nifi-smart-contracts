@@ -18,7 +18,7 @@ contract Art2Root  {
     TvmCell _seriesCode;
     uint128 _totalSupply;
 
-    event SR_MT_art2_1(uint128 id);
+    event SR_CT_nifi_art2_1(uint128 id);
 
     modifier validCreatorFees(uint32 fees) {
         require(fees < 2401, 277);
@@ -85,7 +85,7 @@ contract Art2Root  {
                 _id: _totalSupply
             }
         }(manager, _name, _symbol, limit, _tokenCode, hash, creatorFees);
-        emit SR_MT_art2_1{dest: SwiftAddress.value()}(_totalSupply);
+        emit SR_CT_nifi_art2_1{dest: SwiftAddress.value()}(_totalSupply);
         
     }
         

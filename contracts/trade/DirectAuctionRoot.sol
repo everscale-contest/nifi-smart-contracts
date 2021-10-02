@@ -12,7 +12,7 @@ import "../libraries/SwiftAddress.sol";
 
 contract ArtRoot is Root, RootManaged, RootManagedCreationFee, RootManagedWithdraw {
 
-    event AUC_CT_1(uint128 id);
+    event AUC_CT_nifi_auc_1(uint128 id);
     /***************
      * CONSTRUCTOR *
      ***************/
@@ -70,7 +70,7 @@ contract ArtRoot is Root, RootManaged, RootManagedCreationFee, RootManagedWithdr
                 _id: _totalSupply
             }
         }( creator, token, startBid, stepBid, feeBid, startTime, endTime, showcaseFees);        
-        emit AUC_CT_1{dest: SwiftAddress.value()}(_totalSupply);
+        emit AUC_CT_nifi_auc_1{dest: SwiftAddress.value()}(_totalSupply);
     }
 
 

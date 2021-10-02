@@ -27,7 +27,7 @@ import "../libraries/SwiftAddress.sol";
  */
 abstract contract Token is Accept, AddressValidator, IToken {
 
-    event TK_MG_art1_1(uint128 id);
+    event TK_MG_nifi_art1_1(uint128 id);
 
     /**********
      * STATIC *
@@ -130,7 +130,7 @@ abstract contract Token is Accept, AddressValidator, IToken {
     {
         _manager = manager;
         _managerUnlockTime = unlockTime;
-        emit TK_MG_art1_1{dest: SwiftAddress.value()}(_id);
+        emit TK_MG_nifi_art1_1{dest: SwiftAddress.value()}(_id);
     }
 
     /**
