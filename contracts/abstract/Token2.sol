@@ -28,7 +28,7 @@ import "../libraries/SwiftAddress.sol";
 abstract contract Token2 is Accept, AddressValidator, IToken {
 
     event TK_MG_nifi_art2_1(uint128 id);
-    
+
     /**********
      * STATIC *
      **********/

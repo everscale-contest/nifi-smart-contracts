@@ -1,43 +1,77 @@
-pragma ton-solidity ^0.47.0;
+pragma ton-solidity >=0.47.0;
 pragma AbiHeader time;
 pragma AbiHeader pubkey;
 pragma AbiHeader expire;
 
-import "../../abstract/extensions/tokenChangeOwnerEvent/token/TokenChangeOwnerAddressEvent2.sol";
-import "../../abstract/TokenAddress2.sol";
-import "interfaces/IArtToken.sol";
+import "../../libraries/SwiftAddress.sol";
 
-/**
- * Error codes
- *     100 - Method for the owner only
- *     101 - Method for the manager only
- *     102 - Method for the owner or manager only
- *     103 - Method for the root only
- *     104 - Manager unlocked
- *     105 - Manager locked
- *     106 - Invalid lock time
- *
- *     201 - Address can't be null
- */
-contract Art2Token is TokenAddress2, TokenChangeOwnerAddressEvent2, IArtToken {
+contract Art2Token {
+
+    event TK_CO_nifi_art2_1(address series, uint128 id, address previousOwner);
+    event TK_MG_nifi_art2_1(address series, uint128 id);
+
     /*************
      * VARIABLES *
      *************/
-    address static _serie;
+    address static _root;
+    address static _series;
+    uint128 static _id;
+
+    address _owner;
+    address internal _manager;
+    uint32  internal _managerUnlockTime;
 
     address   private _creator;
     uint32    private _creatorFees;
     uint256   private _hash;
- 
-    modifier validCreatorFees(uint32 fees) {
-        require(fees < 2401, 277);
-        _;
-    } 
+
+
 
     modifier onlySeries() {
-        require(msg.sender == _serie, 103, "Method for the series only");
+        require(msg.sender == _series, 101, "Method for the series only");
         _;
     }
+
+    modifier onlyManager {
+        require(msg.sender == _manager, 102, "Method for the manager only");
+        _;
+    }
+
+    modifier onlyLockedManager{
+        require(msg.sender == _manager && now < _managerUnlockTime, 103, "Method for locked manager only");
+        _;
+    }
+
+    modifier onlyUnlockedOwnerOrLockedManager {
+        require((msg.sender == _owner && now >= _managerUnlockTime) ||
+                (msg.sender == _manager && now < _managerUnlockTime),
+                104,
+                "Method for the owner or manager only"
+        );
+        _;
+    }
+
+    modifier unlockTimeIsValid(uint32 unlockTime) {
+        require(now < unlockTime, 105, "Invalid lock time");
+        _;
+    }
+
+    modifier addressIsNotNull(address addr) {
+        require(addr.value != 0, 106, "Address can't be null");
+        _;
+    }
+
+    modifier validCreatorFees(uint32 fees) {
+        require(fees < 2401, 107, "Unvalid creator fees");
+        _;
+    }
+
+
+    modifier accept {
+        tvm.accept();
+        _;
+    }
+
 
 
     /***************
@@ -62,73 +96,52 @@ contract Art2Token is TokenAddress2, TokenChangeOwnerAddressEvent2, IArtToken {
         public
         onlySeries
         validCreatorFees(creatorFees)
-        TokenAddress2(
-            owner,
-            manager,
-            managerUnlockTime
-        )
+        addressIsNotNull(creator)
+        addressIsNotNull(owner)
+        accept
     {
         _root.transfer({value: 0.1 ton, flag: 1, bounce: true});
         _creator = creator;
         _creatorFees = creatorFees;
         _hash = hash;
+        _owner = owner;
+        _manager = manager;
+        _managerUnlockTime = managerUnlockTime;
     }
 
-
-
-    /*************
-     * RECEIVERS *
-     *************/
-    /**
-     * Returns art info.
-     * creator ....... Address of creator.
-     * creatorFees ... Creator fee. e.g. 1 = 0.01%. 1 is minimum. 10_000 is maximum.
-     * hash .......... Hash of data that associated with token.
-     * hashesCount ... Total count of hashes.
-     */
-    function receiveArtInfo() override external view responsible returns(
-            address creator,
-            uint32  creatorFees,
-            uint256 hash
-        )
+    function changeOwner(address owner)
+        public
+        onlyUnlockedOwnerOrLockedManager
+        addressIsNotNull(owner)
+        accept
     {
-        return{value: 0, bounce: false, flag: 64} getArtInfo();
+        address previousOwner = _owner;
+        _owner = owner;
+        emit TK_CO_nifi_art2_1{dest: SwiftAddress.value()}(_series, _id, previousOwner);
     }
 
+    function receiveArtHash() public view responsible returns(uint256 hash) {
+        return{value: 0, bounce: false, flag: 64} getArtHash();
+    }
 
-
-    /***********
-     * GETTERS *
-     ***********/
-    /**
-     * Returns art info.
-     * creator ............. Address of creator.
-     * creatorFees ......... Creator fee. e.g. 1 = 0.01%. 1 is minimum. 10_000 is maximum.
-     * hash ................ Hash of data that associated with token.
-     * hashesCount ......... Total count of hashes.
-     */
-    function getArtInfo() public view returns(address creator, uint32 creatorFees, uint256 hash) {
-        creator = _creator;
-        creatorFees = _creatorFees;
+    function getArtHash() public view returns(uint256 hash) {
         hash = _hash;
     }
 
-     /************
-     * INTERNAL *
-     ************/
-    /**
-     * Revert() if owner or manager can't change owner address.
-     */
-    function _canChangeOwner() override internal {}
+    function getInfo() public view returns(address root, address series, uint128 id) {
+        root = _root;
+        series = _series;
+        id = _id;
+    }
 
-    function receiveTradeInfo() external view responsible returns(
+
+    function receiveTradeInfo() public view responsible returns(
             address owner,
             address creator,
             uint32  creatorFees,
             address manager,
             uint32  managerUnlockTime
-        )
-    {
+        ) {
         return{value: 0, bounce: false, flag: 64} getTradeInfo();
     }
 
@@ -139,4 +152,37 @@ contract Art2Token is TokenAddress2, TokenChangeOwnerAddressEvent2, IArtToken {
         manager = _manager;
         managerUnlockTime = _managerUnlockTime;
     }
+
+     /*******************************************************
+     * EXTERNAL * ONLY OWNER IF UNLOCKED OR LOCKED MANAGER *
+     *******************************************************/
+    /**
+     * Owner can set manager and lock. To prevent manager from replacing during trading, he is locked.
+     * If manager is already locked, call revert().
+     * manager ...... Contract that governs this contract.
+     * unlockTime ... UNIX time. Time when manager can be unlocked.
+     */
+    function lockManager(address manager, uint32 unlockTime)
+        public
+        onlyUnlockedOwnerOrLockedManager
+        addressIsNotNull(manager)
+        unlockTimeIsValid(unlockTime)
+        accept
+    {
+        _manager = manager;
+        _managerUnlockTime = unlockTime;
+        emit TK_MG_nifi_art2_1{dest: SwiftAddress.value()}(_series, _id);
+    }
+
+    /**********************************
+     * EXTERNAL * ONLY LOCKED MANAGER *
+     **********************************/
+    /**
+     * Manager can unlock himself.
+     * If manager is already unlocked, call revert().
+     */
+    function unlock() public onlyLockedManager accept {
+        _managerUnlockTime = 0;
+    }
+
 }
