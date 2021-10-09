@@ -79,7 +79,7 @@ abstract contract TokenAddress is Token, ITokenAddress {
      */
     function receiveInfo() override external view responsible returns(
             address root,
-            uint128 id,
+            uint64 id,
             uint256 publicKey,
             address owner,
             address manager,
@@ -105,7 +105,7 @@ abstract contract TokenAddress is Token, ITokenAddress {
      */
     function getInfo() public view returns(
             address root,
-            uint128 id,
+            uint64 id,
             uint256 publicKey,
             address owner,
             address manager,

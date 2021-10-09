@@ -29,9 +29,9 @@ contract DirectAuction is Accept {
     /**********
      * EVENTS *
      **********/
-    event AUC_BS_nifi_auc_1(uint128 id);
-    event AUC_SC_nifi_auc_1(uint128 id);
-    event AUC_EX_nifi_auc_1(uint128 id);
+    event AUC_BS_nifi_auc_1(uint64 id, uint128 bidValue, address bidCreator);
+    event AUC_SC_nifi_auc_1(uint64 id, uint128 finalBidValue, address bidCreator);
+    event AUC_EX_nifi_auc_1(uint64 id);
 
 
 
@@ -49,7 +49,7 @@ contract DirectAuction is Accept {
      * STATIC *
      **********/
     address static _root;
-    uint128 static _id;
+    uint64 static _id;
 
 
 
@@ -160,7 +160,7 @@ contract DirectAuction is Accept {
 
         _curBid.value = msg.value - _feeBid;
         _curBid.bider = msg.sender;
-        emit AUC_BS_nifi_auc_1{dest: SwiftAddress.value()}(_id);
+        emit AUC_BS_nifi_auc_1{dest: SwiftAddress.value()}(_id,_curBid.value,_curBid.bider);
     }
 
     /**
@@ -199,7 +199,7 @@ contract DirectAuction is Accept {
             }
 
             if (_curBid.bider != address(0)) {
-                emit AUC_SC_nifi_auc_1{dest: SwiftAddress.value()}(_id);
+                emit AUC_SC_nifi_auc_1{dest: SwiftAddress.value()}(_id,_curBid.value,_curBid.bider);
                 ITokenAddress(_token).changeOwner(_curBid.bider);
             }else {
                 emit AUC_EX_nifi_auc_1{dest: SwiftAddress.value()}(_id);
@@ -243,7 +243,7 @@ contract DirectAuction is Accept {
      */
     function getInfo() public view returns(
             address root,
-            uint128 id,
+            uint64 id,
             address creator,
             address token,
             uint128 startBid,

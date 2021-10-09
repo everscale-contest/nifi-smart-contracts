@@ -26,7 +26,7 @@ interface ITokenAddress {
      */
     function receiveInfo() external view responsible returns(
             address root,
-            uint128 id,
+            uint64 id,
             uint256 publicKey,
             address owner,
             address manager,

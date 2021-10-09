@@ -32,7 +32,7 @@
 			"name": "receiveTokenAddress",
 			"inputs": [
 				{"name":"_answer_id","type":"uint32"},
-				{"name":"id","type":"uint128"}
+				{"name":"id","type":"uint64"}
 			],
 			"outputs": [
 				{"name":"addr","type":"address"}
@@ -41,7 +41,7 @@
 		{
 			"name": "getTokenAddress",
 			"inputs": [
-				{"name":"id","type":"uint128"}
+				{"name":"id","type":"uint64"}
 			],
 			"outputs": [
 				{"name":"addr","type":"address"}
@@ -121,7 +121,7 @@
 			"outputs": [
 				{"name":"name","type":"bytes"},
 				{"name":"symbol","type":"bytes"},
-				{"name":"totalSupply","type":"uint128"},
+				{"name":"totalSupply","type":"uint64"},
 				{"name":"publicKey","type":"uint256"}
 			]
 		},
@@ -132,7 +132,7 @@
 			"outputs": [
 				{"name":"name","type":"bytes"},
 				{"name":"symbol","type":"bytes"},
-				{"name":"totalSupply","type":"uint128"},
+				{"name":"totalSupply","type":"uint64"},
 				{"name":"publicKey","type":"uint256"}
 			]
 		},
@@ -151,7 +151,11 @@
 		{
 			"name": "BID_CT_nifi_bid_1",
 			"inputs": [
-				{"name":"id","type":"uint128"}
+				{"name":"id","type":"uint64"},
+				{"name":"tokenAddress","type":"address"},
+				{"name":"bidValue","type":"uint128"},
+				{"name":"endTime","type":"uint32"},
+				{"name":"bidCreator","type":"address"}
 			],
 			"outputs": [
 			]

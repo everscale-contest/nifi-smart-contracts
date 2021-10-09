@@ -34,15 +34,15 @@ contract Bid is Accept {
     /**********
      * EVENTS *
      **********/
-    event BID_AC_nifi_bid_1(uint128 id);
-    event BID_CL_nifi_bid_1(uint128 id);
+    event BID_AC_nifi_bid_1(uint64 id);
+    event BID_CL_nifi_bid_1(uint64 id);
     
 
     /**********
      * STATIC *
      **********/
     address static _root;
-    uint128 static _id;
+    uint64 static _id;
 
 
 
@@ -184,7 +184,7 @@ contract Bid is Accept {
      */
     function getInfo() public view returns(
             address root,
-            uint128 id,
+            uint64 id,
             address creator,
             address token,
             uint128 price,

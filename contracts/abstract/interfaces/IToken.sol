@@ -12,13 +12,6 @@ interface IToken {
      */
     function lockManager(address manager, uint32 unlockTime) external;
 
-    /**
-     * Owner can lock manager. To prevent manager from replacing during trading, he is locked.
-     * If manager is already locked, call revert().
-     * unlockTime ... UNIX time. Time when manager can be unlocked.
-     */
-    function lock(uint32 unlockTime) external;
-
 
 
     /**********************************

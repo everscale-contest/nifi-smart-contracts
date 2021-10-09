@@ -12,7 +12,7 @@ import "../libraries/SwiftAddress.sol";
 
 contract BidRoot is Root, RootManaged, RootManagedCreationAndStorageFee, RootManagedWithdraw {
 
-    event BID_CT_nifi_bid_1(uint128 id);
+    event BID_CT_nifi_bid_1(uint64 id, address tokenAddress, uint128 bidValue, uint32 endTime, address bidCreator);
     /***************
      * CONSTRUCTOR *
      ***************/
@@ -67,8 +67,7 @@ contract BidRoot is Root, RootManaged, RootManagedCreationAndStorageFee, RootMan
                 _id: _totalSupply
             }
         }( creator, token, price, endTime);
-        emit BID_CT_nifi_bid_1{dest: SwiftAddress.value()}(_totalSupply);
-        
+        emit BID_CT_nifi_bid_1{dest: SwiftAddress.value()}(_totalSupply, addr, price, endTime, creator);      
     }
 
 
@@ -81,7 +80,7 @@ contract BidRoot is Root, RootManaged, RootManagedCreationAndStorageFee, RootMan
      * id ..... Id of token.
      * addr ... Address of the token contract.
      */
-    function receiveTokenAddress(uint128 id) override external view responsible returns(address addr) {
+    function receiveTokenAddress(uint64 id) override external view responsible returns(address addr) {
         return{value: 0, bounce: false, flag: 64} getTokenAddress(id);
     }
 
@@ -95,7 +94,7 @@ contract BidRoot is Root, RootManaged, RootManagedCreationAndStorageFee, RootMan
      * id ..... Id of token.
      * addr ... Address of the token contract.
      */
-    function getTokenAddress(uint128 id) override public view returns(address addr) {
+    function getTokenAddress(uint64 id) override public view returns(address addr) {
         TvmCell stateInit = tvm.buildStateInit({
             contr: Bid,
             varInit: {

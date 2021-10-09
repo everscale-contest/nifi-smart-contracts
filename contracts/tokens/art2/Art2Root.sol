@@ -16,9 +16,9 @@ contract Art2Root  {
     string _symbol;
     TvmCell _tokenCode;
     TvmCell _seriesCode;
-    uint128 _totalSupply;
+    uint64 _totalSupply;
 
-    event SR_CT_nifi_art2_1(uint128 id);
+    event SR_CT_nifi_art2_1(uint64 id);
 
     modifier validCreatorFees(uint32 fees) {
         require(fees < 2401, 277);
@@ -72,7 +72,7 @@ contract Art2Root  {
         addr.transfer(value, bounce);
     }
 
-    function createSerie(address manager, uint128 limit, uint256 hash, uint32 creatorFees) public validCreatorFees(creatorFees) internalMsg returns(address addr){
+    function createSerie(address manager, uint64 limit, uint256 hash, uint32 creatorFees) public validCreatorFees(creatorFees) internalMsg returns(address addr){
         require(msg.value >= _creationMinValue,278);
         uint128 value = msg.value - _creationFee;
         _totalSupply++;
@@ -91,7 +91,7 @@ contract Art2Root  {
         
 
    
-    function getSeriesAddress(uint128 id) public view returns(address addr) {
+    function getSeriesAddress(uint64 id) public view returns(address addr) {
         TvmCell stateInit = tvm.buildStateInit({
             contr: Art2Series,
             varInit: {
@@ -104,7 +104,7 @@ contract Art2Root  {
         return address(tvm.hash(stateInit));
     }
 
-    function getTokenAddress(uint128 serie, uint128 token) public view returns(address addr) {
+    function getTokenAddress(uint64 serie, uint64 token) public view returns(address addr) {
         TvmCell stateInit = tvm.buildStateInit({
             contr: Art2Series,
             varInit: {

@@ -9,19 +9,19 @@ import "Art2Token.sol";
 contract Art2Series {
     
     address static _root;
-    uint128 static _id;
+    uint64 static _id;
     address _manager;
     address _creator;
     string _name;
     string _symbol;
     TvmCell _tokenCode;
-    uint128 _totalSupply;
-    uint128 _limit;
+    uint64 _totalSupply;
+    uint64 _limit;
     uint256 _hash;
     uint32 _creatorFees;
 
 
-    event TK_MT_nifi_art2_1(uint128 seriesId, uint128 id);
+    event TK_MT_nifi_art2_1(uint64 seriesId, uint64 id);
 
     modifier onlyRoot() {
         require(msg.sender == _root, 101, "Method for the root only");
@@ -35,7 +35,7 @@ contract Art2Series {
         address manager,
         string  name,
         string  symbol,
-        uint128 limit,
+        uint64 limit,
         TvmCell tokenCode,
         uint256 hash,
         uint32 creatorFees
@@ -90,7 +90,8 @@ contract Art2Series {
             pubkey: tvm.pubkey(),
             varInit: {
                 _root: _root,
-                _serie: address(this),
+                _series: address(this),
+                _seriesId: _id,
                 _id: _totalSupply
             }
         }(_manager, manager, managerUnlockTime, _creator, _creatorFees, _hash);
@@ -108,7 +109,7 @@ contract Art2Series {
      * id ..... Id of token.
      * addr ... Address of the token contract.
      */
-    function receiveTokenAddress(uint128 id) external view responsible returns(address addr) {
+    function receiveTokenAddress(uint64 id) external view responsible returns(address addr) {
         return{value: 0, bounce: false, flag: 64} getTokenAddress(id);
     }
 
@@ -122,12 +123,13 @@ contract Art2Series {
      * id ..... Id of token.
      * addr ... Address of the token contract.
      */
-    function getTokenAddress(uint128 id) public view returns(address addr) {
+    function getTokenAddress(uint64 id) public view returns(address addr) {
         TvmCell stateInit = tvm.buildStateInit({
             contr: Art2Token,
             varInit: {
                 _root: _root,
-                _serie: address(this),
+                _series: address(this),
+                _seriesId: _id,
                 _id: id
             },
             pubkey: tvm.pubkey(),
@@ -146,7 +148,7 @@ contract Art2Series {
         _manager = newManager;
     }
 
-    function getInfo() public view returns(uint128 id, string  name, string  symbol, uint128 totalSupply, uint128 limit, uint256 hash, address creator, uint32 creatorFees){
+    function getInfo() public view returns(uint64 id, string  name, string  symbol, uint64 totalSupply, uint64 limit, uint256 hash, address creator, uint32 creatorFees){
         id = _id;
         name = _name;
         symbol = _symbol;

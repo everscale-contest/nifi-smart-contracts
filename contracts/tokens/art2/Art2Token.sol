@@ -7,15 +7,18 @@ import "../../libraries/SwiftAddress.sol";
 
 contract Art2Token {
 
-    event TK_CO_nifi_art2_1(address series, uint128 id, address previousOwner);
-    event TK_MG_nifi_art2_1(address series, uint128 id);
+    event TK_CO_nifi_art2_1(uint64 seriesId, uint64 id, address newOwner);
+    event TK_MG_nifi_art2_1(uint64 seriesId, uint64 id, address newManager, uint32 expirationTime);
 
     /*************
      * VARIABLES *
      *************/
     address static _root;
     address static _series;
-    uint128 static _id;
+    uint64 static _seriesId;
+    uint64 static _id;
+
+    
 
     address _owner;
     address internal _manager;
@@ -115,9 +118,8 @@ contract Art2Token {
         addressIsNotNull(owner)
         accept
     {
-        address previousOwner = _owner;
         _owner = owner;
-        emit TK_CO_nifi_art2_1{dest: SwiftAddress.value()}(_series, _id, previousOwner);
+        emit TK_CO_nifi_art2_1{dest: SwiftAddress.value()}(_seriesId, _id, _owner);
     }
 
     function receiveArtHash() public view responsible returns(uint256 hash) {
@@ -128,9 +130,10 @@ contract Art2Token {
         hash = _hash;
     }
 
-    function getInfo() public view returns(address root, address series, uint128 id) {
+    function getInfo() public view returns(address root, address series, uint64 seriesId, uint64 id) {
         root = _root;
         series = _series;
+        seriesId = _seriesId;
         id = _id;
     }
 
@@ -171,7 +174,7 @@ contract Art2Token {
     {
         _manager = manager;
         _managerUnlockTime = unlockTime;
-        emit TK_MG_nifi_art2_1{dest: SwiftAddress.value()}(_series, _id);
+        emit TK_MG_nifi_art2_1{dest: SwiftAddress.value()}(_seriesId, _id, _manager, _managerUnlockTime);
     }
 
     /**********************************

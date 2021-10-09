@@ -141,9 +141,8 @@ contract ArtToken is TokenAddress, TokenChangeOwnerAddressEvent, IArtToken {
         canChangeOwner
         accept
     {
-        address previousOwner = _owner;
         _owner = owner;
-        _onChangeOwner(previousOwner);
+        _onChangeOwner(_owner);
     }
 
 

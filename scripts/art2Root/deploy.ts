@@ -21,8 +21,8 @@ async function run(): Promise<void> {
     console.log(artRootKeys.public);
     console.log(artRootKeys.secret);*/
     const artRootKeys: KeyPair = 
-         {public: '3b4d32825953a5161f32fe973ae5bccb3f80900e58a38aeff26626100a6fab68',
-          secret: '3093a3c342e4306b929fb5056c05bf038a29a0bdf5b414a5dd5f5c4e1c31e489'}
+        {public: 'ccf79f4f7fbe92d7586c0ea99a1e0a332e413bc06e1223979129d9494e431413',
+         secret: 'e76f170a9de82042be98d5794966e501d8a1acf8b5c361bfc7983cf21f05b7b7'}
     const giverKeys: KeyPair = await TonKeysFile.createRandomIfNotExist(config.net.deploy.keys.giver, kit.client)
     const art2Root: Art2Root = new Art2Root(kit, artRootKeys)
     const giver: GiverV2 = new GiverV2(kit, giverKeys)
@@ -34,7 +34,7 @@ async function run(): Promise<void> {
     await TerminalContractInfo.log()
     await TerminalContractInfo.logAccount('Art2Root', art2Root, config.net.deploy.locale)
     await TerminalContractInfo.log()
-    //process.exit()
+    process.exit()
     const balance: number = parseInt(await art2Root.getBalance())
     if (balance === 0) {
         await TerminalContractInfo.log('SENDING...')

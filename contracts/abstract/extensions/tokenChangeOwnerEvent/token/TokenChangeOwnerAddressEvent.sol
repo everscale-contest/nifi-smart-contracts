@@ -9,7 +9,7 @@ abstract contract TokenChangeOwnerAddressEvent is TokenAddress {
      **********/
     event TK_CO_nifi_art1_1(
         uint128 id,
-        address previousOwner
+        address newOwner
     );
 
     /**
