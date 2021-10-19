@@ -20,7 +20,7 @@ async function run(): Promise<void> {
     )
     console.log(rootKeys.public)
     console.log(rootKeys.secret)*/
-    const rootKeys: KeyPair = 
+    const rootKeys: KeyPair =
     {public: 'ccf79f4f7fbe92d7586c0ea99a1e0a332e413bc06e1223979129d9494e431413',
     secret: 'e76f170a9de82042be98d5794966e501d8a1acf8b5c361bfc7983cf21f05b7b7'}
     /*{public: '3b4d32825953a5161f32fe973ae5bccb3f80900e58a38aeff26626100a6fab68',

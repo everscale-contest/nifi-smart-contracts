@@ -7,7 +7,7 @@ const make: Make = new Make({
 
         'contracts/tokens/art/ArtRoot',
         'contracts/tokens/art/ArtToken',
-        
+
         'contracts/tokens/art2/Art2Root',
         'contracts/tokens/art2/Art2Token',
         'contracts/tokens/art2/Art2Series',
@@ -26,6 +26,6 @@ const make: Make = new Make({
         'library/ton/contracts/GiverV2/GiverV2'
     ],
     compiler: '0.47.0',
-    linker: '0.13.50'
+    linker: '0.13.57'
 })
 make.run().then()

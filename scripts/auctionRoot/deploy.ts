@@ -18,10 +18,10 @@ async function run(): Promise<void> {
         config.net.deploy.contracts.auctionRoot.keyFile,
         kit.client
     )*/
-    /*const rootKeys: KeyPair = 
+    /*const rootKeys: KeyPair =
         {public: '2d63aa848a4ddef7369288ab8552d745bb2355c29735c3eb21e2086b473e5ddc',
          secret: '578eb00d401b10fec61f3f89320137bf820cbab60af33de09e9e5d22ac3676be'}*/
-    const rootKeys: KeyPair = 
+    const rootKeys: KeyPair =
     {public: 'ccf79f4f7fbe92d7586c0ea99a1e0a332e413bc06e1223979129d9494e431413',
      secret: 'e76f170a9de82042be98d5794966e501d8a1acf8b5c361bfc7983cf21f05b7b7'}
     /*{public: '3b4d32825953a5161f32fe973ae5bccb3f80900e58a38aeff26626100a6fab68',

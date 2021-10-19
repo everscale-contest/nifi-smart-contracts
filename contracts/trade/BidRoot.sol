@@ -67,7 +67,7 @@ contract BidRoot is Root, RootManaged, RootManagedCreationAndStorageFee, RootMan
                 _id: _totalSupply
             }
         }( creator, token, price, endTime);
-        emit BID_CT_nifi_bid_1{dest: SwiftAddress.value()}(_totalSupply, addr, price, endTime, creator);      
+        emit BID_CT_nifi_bid_1{dest: SwiftAddress.value()}(_totalSupply, token, price, endTime, creator);
     }
 
 
