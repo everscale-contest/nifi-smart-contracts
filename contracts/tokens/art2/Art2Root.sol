@@ -118,12 +118,15 @@ contract Art2Root  {
         TvmCell stateInit1 = tvm.buildStateInit({
             contr: Art2Token,
             varInit: {
-                _root: address(tvm.hash(stateInit)),
+                _root: address(this),
+                _series: address(tvm.hash(stateInit)),
+                _seriesId: serie,
                 _id: token
             },
             pubkey: tvm.pubkey(),
             code: _tokenCode
         });
+
         return address(tvm.hash(stateInit1));
     }
 }
