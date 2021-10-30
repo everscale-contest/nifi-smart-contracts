@@ -8,7 +8,7 @@ import "../abstract/interfaces/ITokenAddress.sol";
 import "../abstract/modifiers/Accept.sol";
 import "../libraries/SwiftAddress.sol";
 
-interface ITradeToken {    
+interface ITradeToken {
     function receiveTradeInfo() external view responsible returns(
             address owner,
             address creator,
@@ -166,9 +166,9 @@ contract DirectAuction is Accept {
     /**
      * Everyone can call this method by external message.
      */
-    function finish() public auctionFinished canAskFinish accept {   
+    function finish() public auctionFinished canAskFinish accept {
         _askFinish = now+120;
-        ITradeToken(_token).receiveTradeInfo{value: 0.06 ton, bounce: false, flag: 0, callback: DirectAuction.onReceiveTradeInfo}();        
+        ITradeToken(_token).receiveTradeInfo{value: 0.06 ton, bounce: false, flag: 0, callback: DirectAuction.onReceiveTradeInfo}();
     }
 
     /**
@@ -181,9 +181,7 @@ contract DirectAuction is Accept {
             address manager,
             uint32  managerUnlockTime
     ) public onlyToken {
-        require(manager == address(this), 106, "Wrong manager");
-        //require(managerUnlockTime > now+60, 107, "Wrong manager unlock time");
-        if (managerUnlockTime > now+60){
+        if ((manager == address(this)) && (managerUnlockTime > now+60)){
             uint128 balance = address(this).balance;
 
             if (creatorFees>0) {
