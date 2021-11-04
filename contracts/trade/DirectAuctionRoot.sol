@@ -59,6 +59,7 @@ contract ArtRoot is Root, RootManaged, RootManagedCreationFee, RootManagedWithdr
         )
     {
         require(msg.value >= _creationMinValue,278);
+	    require(showcaseFees<1001,279)//<=10%
         uint128 value = msg.value - _creationFee;
         _totalSupply++;
         addr = new DirectAuction{

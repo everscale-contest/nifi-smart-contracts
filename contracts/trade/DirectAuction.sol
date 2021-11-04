@@ -205,15 +205,13 @@ contract DirectAuction is Accept {
 
             IToken(_token).unlock();
 
-            _root.transfer({value: address(this).balance/20, flag: 1, bounce: true});
-            //emit FinishEvent(_id, _creator, _token, _curBid.bider, _curBid.value);
+            _root.transfer({value: balance/20, flag: 1, bounce: true});//send 5%
             selfdestruct(owner);
         }else{
             if (_curBid.bider != address(0)) {
                 _curBid.bider.transfer({value: _curBid.value, flag: 1, bounce: true});
             }
             IToken(_token).unlock();
-            //emit FinishEvent(_id, _creator, _token, address(0), 0);
             emit AUC_EX_nifi_auc_1{dest: SwiftAddress.value()}(_id);
             selfdestruct(owner);
         }
