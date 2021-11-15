@@ -19,7 +19,10 @@ const make: Make = new Make({
         'contracts/trade/DirectAuction',
 
         'contracts/trade/BidRoot',
-        'contracts/trade/Bid'
+        'contracts/trade/Bid',
+
+        'contracts/trade/AskRoot',
+        'contracts/trade/Ask'
     ],
     wrap: [
         'library/ton/contracts/SafeMultisigWallet/SafeMultisigWallet',

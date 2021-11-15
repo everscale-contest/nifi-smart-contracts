@@ -14,6 +14,7 @@
         "auctionRoot.deploy": "ts-node scripts/auctionRoot/deploy",
         "bidRoot": "ts-node scripts/bidRoot/info",
         "bidRoot.deploy": "ts-node scripts/bidRoot/deploy",
+        "askRoot.deploy": "ts-node scripts/askRoot/deploy",
         "ticketRoot.deploy": "ts-node scripts/ticketRoot/deploy",
         "giver": "ts-node scripts/giver/info",
         "giver.deploy": "ts-node scripts/giver/deploy",
