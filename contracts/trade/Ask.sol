@@ -16,7 +16,7 @@ contract Ask is Accept {
     event ASK_AC_nifi_ask_1(uint64 id);
     event ASK_CL_nifi_ask_1(uint64 id);
     event ASK_EX_nifi_ask_1(uint64 id);
-    event ASK_CG_nifi_ask_1(uint64 id, uint128 newPrice);
+    event ASK_PC_nifi_ask_1(uint64 id, uint128 newPrice);
     
     /**********
      * STATIC *
@@ -128,7 +128,7 @@ contract Ask is Accept {
 
     function changePrice(uint128 newPrice) public onlyCreator accept {
         _price = newPrice;
-        emit ASK_CG_nifi_ask_1{dest: SwiftAddress.value()}(_id, newPrice);
+        emit ASK_PC_nifi_ask_1{dest: SwiftAddress.value()}(_id, newPrice);
     }
 
 

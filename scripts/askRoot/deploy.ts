@@ -21,10 +21,12 @@ async function run(): Promise<void> {
     console.log(rootKeys.public)
     console.log(rootKeys.secret)*/
     const rootKeys: KeyPair =
+    {public: 'fade393f0ad3476a669c22939f266a8282ceb6cf03036defc02dd5568960478f',
+    secret: 'b755fd9cef09646d679bb2b61a2c7ad960b194f8d3903d7842ecf075bc01e388'}
     /*{public: 'ccf79f4f7fbe92d7586c0ea99a1e0a332e413bc06e1223979129d9494e431413',
     secret: 'e76f170a9de82042be98d5794966e501d8a1acf8b5c361bfc7983cf21f05b7b7'}*/
-    {public: '3b4d32825953a5161f32fe973ae5bccb3f80900e58a38aeff26626100a6fab68',
-    secret: '3093a3c342e4306b929fb5056c05bf038a29a0bdf5b414a5dd5f5c4e1c31e489'}
+    /*{public: '3b4d32825953a5161f32fe973ae5bccb3f80900e58a38aeff26626100a6fab68',
+    secret: '3093a3c342e4306b929fb5056c05bf038a29a0bdf5b414a5dd5f5c4e1c31e489'}*/
     const giverKeys: KeyPair = await TonKeysFile.createRandomIfNotExist(config.net.deploy.keys.giver, kit.client)
     const askRoot: AskRoot = new AskRoot(kit, rootKeys)
     const giver: GiverV2 = new GiverV2(kit, giverKeys)
@@ -35,7 +37,7 @@ async function run(): Promise<void> {
     await TerminalContractInfo.log()
     await TerminalContractInfo.logAccount('AskRoot', askRoot, config.net.deploy.locale)
     await TerminalContractInfo.log()
-    //process.exit()
+    process.exit()
     const balance: number = parseInt(await askRoot.getBalance())
     if (balance === 0) {
         await TerminalContractInfo.log('SENDING...')

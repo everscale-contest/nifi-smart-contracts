@@ -88,7 +88,7 @@
 			]
 		},
 		{
-			"name": "ASK_CG_nifi_ask_1",
+			"name": "ASK_PC_nifi_ask_1",
 			"inputs": [
 				{"name":"id","type":"uint64"},
 				{"name":"newPrice","type":"uint128"}
