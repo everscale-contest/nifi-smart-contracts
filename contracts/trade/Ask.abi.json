@@ -29,6 +29,21 @@
 			]
 		},
 		{
+			"name": "expired",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "changePrice",
+			"inputs": [
+				{"name":"newPrice","type":"uint128"}
+			],
+			"outputs": [
+			]
+		},
+		{
 			"name": "getInfo",
 			"inputs": [
 			],
@@ -60,6 +75,23 @@
 			"name": "ASK_CL_nifi_ask_1",
 			"inputs": [
 				{"name":"id","type":"uint64"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "ASK_EX_nifi_ask_1",
+			"inputs": [
+				{"name":"id","type":"uint64"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "ASK_CG_nifi_ask_1",
+			"inputs": [
+				{"name":"id","type":"uint64"},
+				{"name":"newPrice","type":"uint128"}
 			],
 			"outputs": [
 			]

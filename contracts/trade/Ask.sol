@@ -15,8 +15,9 @@ contract Ask is Accept {
      **********/
     event ASK_AC_nifi_ask_1(uint64 id);
     event ASK_CL_nifi_ask_1(uint64 id);
+    event ASK_EX_nifi_ask_1(uint64 id);
+    event ASK_CG_nifi_ask_1(uint64 id, uint128 newPrice);
     
-
     /**********
      * STATIC *
      **********/
@@ -53,7 +54,7 @@ contract Ask is Accept {
     }
 
     modifier validTime() {
-        require(now < _endTime, 103, "Offer already finished");
+        require(now < _endTime-30, 103, "Offer already finished");
         _;
     }
 
@@ -118,6 +119,17 @@ contract Ask is Accept {
         selfdestruct(_creator);
     }
 
+    function expired() public {
+        require(now > _endTime, 104, "Offer not finished");
+        tvm.accept();
+        emit ASK_EX_nifi_ask_1{dest: SwiftAddress.value()}(_id);
+        selfdestruct(_creator);
+    }
+
+    function changePrice(uint128 newPrice) public onlyCreator accept {
+        _price = newPrice;
+        emit ASK_CG_nifi_ask_1{dest: SwiftAddress.value()}(_id, newPrice);
+    }
 
 
     /***********
