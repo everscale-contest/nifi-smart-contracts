@@ -13,11 +13,11 @@ contract Ask is Accept {
     /**********
      * EVENTS *
      **********/
-    event ASK_AC_nifi_ask_1(uint64 id);
-    event ASK_CL_nifi_ask_1(uint64 id);
+    event ASK_AC_nifi_ask_1(uint64 id, address newOwner);
+    event ASK_CN_nifi_ask_1(uint64 id);
     event ASK_EX_nifi_ask_1(uint64 id);
     event ASK_PC_nifi_ask_1(uint64 id, uint128 newPrice);
-    
+
     /**********
      * STATIC *
      **********/
@@ -93,8 +93,8 @@ contract Ask is Accept {
     /**
      * Everyone can call this method by internal message.
      */
-    function acceptAsk() public onlyInnerMsg validTime {   
-        require(msg.value > _price, 105, "Not enougth money");     
+    function acceptAsk() public onlyInnerMsg validTime {
+        require(msg.value > _price, 105, "Not enougth money");
         uint128 balance = msg.value;
 
         if (_showCaseFee>0) {
@@ -107,7 +107,7 @@ contract Ask is Accept {
         IToken(_token).unlock();
 
         _root.transfer({value: balance/20, flag: 1, bounce: true});
-        emit ASK_AC_nifi_ask_1{dest: SwiftAddress.value()}(_id);  
+        emit ASK_AC_nifi_ask_1{dest: SwiftAddress.value()}(_id, msg.sender);
         selfdestruct(_creator);
     }
 
@@ -115,7 +115,7 @@ contract Ask is Accept {
      * Everyone can call this method by external message.
      */
     function cancel() public onlyCreator accept {
-        emit ASK_CL_nifi_ask_1{dest: SwiftAddress.value()}(_id);
+        emit ASK_CN_nifi_ask_1{dest: SwiftAddress.value()}(_id);
         selfdestruct(_creator);
     }
 
@@ -160,7 +160,7 @@ contract Ask is Accept {
         creator = _creator;
         token = _token;
         price = _price;
-        endTime = _endTime;     
-        showcaseFee = _showCaseFee;  
+        endTime = _endTime;
+        showcaseFee = _showCaseFee;
     }
 }

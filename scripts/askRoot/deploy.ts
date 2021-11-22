@@ -14,14 +14,16 @@ import AskRoot from '../../contracts/AskRoot'
 async function run(): Promise<void> {
     TonClient.useBinaryLibrary(libNode)
     const kit: KitInterface = Ton.kit.create(config.net.deploy)
-   /* const rootKeys: KeyPair = await TonKeysFile.createRandomIfNotExist(
+    /*const rootKeys: KeyPair = await TonKeysFile.createRandomIfNotExist(
         config.net.deploy.contracts.bidRoot.keyFile,
         kit.client
     )
     console.log(rootKeys.public)
     console.log(rootKeys.secret)*/
     const rootKeys: KeyPair =
-    {public: 'fade393f0ad3476a669c22939f266a8282ceb6cf03036defc02dd5568960478f',
+    {public: 'bb1080f7951262ebc58e6c0ad5c191c583e08a1f2456c7c0871ca8836322d4cd',
+    secret: '4fa3037a5419e1d4742b758b6d5252c020d4197bf5ae59b386044ba8c0a3d867'}
+    /*{public: 'fade393f0ad3476a669c22939f266a8282ceb6cf03036defc02dd5568960478f',
     secret: 'b755fd9cef09646d679bb2b61a2c7ad960b194f8d3903d7842ecf075bc01e388'}
     /*{public: 'ccf79f4f7fbe92d7586c0ea99a1e0a332e413bc06e1223979129d9494e431413',
     secret: 'e76f170a9de82042be98d5794966e501d8a1acf8b5c361bfc7983cf21f05b7b7'}*/
@@ -37,7 +39,7 @@ async function run(): Promise<void> {
     await TerminalContractInfo.log()
     await TerminalContractInfo.logAccount('AskRoot', askRoot, config.net.deploy.locale)
     await TerminalContractInfo.log()
-    process.exit()
+    //process.exit()
     const balance: number = parseInt(await askRoot.getBalance())
     if (balance === 0) {
         await TerminalContractInfo.log('SENDING...')

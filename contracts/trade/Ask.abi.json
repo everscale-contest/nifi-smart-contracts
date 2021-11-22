@@ -66,13 +66,14 @@
 		{
 			"name": "ASK_AC_nifi_ask_1",
 			"inputs": [
-				{"name":"id","type":"uint64"}
+				{"name":"id","type":"uint64"},
+				{"name":"newOwner","type":"address"}
 			],
 			"outputs": [
 			]
 		},
 		{
-			"name": "ASK_CL_nifi_ask_1",
+			"name": "ASK_CN_nifi_ask_1",
 			"inputs": [
 				{"name":"id","type":"uint64"}
 			],
