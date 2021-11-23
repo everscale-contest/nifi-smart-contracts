@@ -115,6 +115,7 @@ contract Ask is Accept {
      * Everyone can call this method by external message.
      */
     function cancel() public onlyCreator accept {
+        IToken(_token).unlock();
         emit ASK_CN_nifi_ask_1{dest: SwiftAddress.value()}(_id);
         selfdestruct(_creator);
     }
@@ -122,6 +123,7 @@ contract Ask is Accept {
     function expired() public {
         require(now > _endTime, 104, "Offer not finished");
         tvm.accept();
+        IToken(_token).unlock();
         emit ASK_EX_nifi_ask_1{dest: SwiftAddress.value()}(_id);
         selfdestruct(_creator);
     }
