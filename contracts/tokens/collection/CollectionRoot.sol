@@ -81,11 +81,11 @@ contract CollectionRoot  {
         uint64 limit,
         uint32 creatorFees,
         uint128 mintCost,
-        uint256[] level1,
-        uint256[] level2,
-        uint256[] level3,
-        uint256[] level4,
-        uint256[] level5
+        string[] level1,
+        string[] level2,
+        string[] level3,
+        string[] level4,
+        string[] level5
     ) public validCreatorFees(creatorFees) internalMsg returns(address addr){
         require(msg.value >= _creationMinValue,278);
         uint128 value = msg.value - _creationFee;

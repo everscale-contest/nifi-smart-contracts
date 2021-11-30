@@ -14,11 +14,11 @@
 				{"name":"tokenCode","type":"cell"},
 				{"name":"creatorFees","type":"uint32"},
 				{"name":"mintCost","type":"uint128"},
-				{"name":"level1","type":"uint256[]"},
-				{"name":"level2","type":"uint256[]"},
-				{"name":"level3","type":"uint256[]"},
-				{"name":"level4","type":"uint256[]"},
-				{"name":"level5","type":"uint256[]"}
+				{"name":"level1","type":"string[]"},
+				{"name":"level2","type":"string[]"},
+				{"name":"level3","type":"string[]"},
+				{"name":"level4","type":"string[]"},
+				{"name":"level5","type":"string[]"}
 			],
 			"outputs": [
 			]
@@ -80,6 +80,18 @@
 			]
 		},
 		{
+			"name": "getLevels",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"level1","type":"string[]"},
+				{"name":"level2","type":"string[]"},
+				{"name":"level3","type":"string[]"},
+				{"name":"level4","type":"string[]"},
+				{"name":"level5","type":"string[]"}
+			]
+		},
+		{
 			"name": "withdraw",
 			"inputs": [
 				{"name":"addr","type":"address"},
@@ -125,10 +137,10 @@
 		{"name":"_limit","type":"uint64"},
 		{"name":"_creatorFees","type":"uint32"},
 		{"name":"_mintCost","type":"uint128"},
-		{"name":"_level1","type":"uint256[]"},
-		{"name":"_level2","type":"uint256[]"},
-		{"name":"_level3","type":"uint256[]"},
-		{"name":"_level4","type":"uint256[]"},
-		{"name":"_level5","type":"uint256[]"}
+		{"name":"_level1","type":"string[]"},
+		{"name":"_level2","type":"string[]"},
+		{"name":"_level3","type":"string[]"},
+		{"name":"_level4","type":"string[]"},
+		{"name":"_level5","type":"string[]"}
 	]
 }

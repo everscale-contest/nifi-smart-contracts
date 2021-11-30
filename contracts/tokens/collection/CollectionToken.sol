@@ -99,7 +99,11 @@ contract CollectionToken {
         uint32  creatorFees,
         uint32 index
     ) public onlyCollection {
-       if (_owner==address(0)) {
+        _owner = owner;
+        _creator = creator;
+        _creatorFees = creatorFees;
+        _index = index;
+       /*if (_owner==address(0)) {
            _owner = owner;
            _creator = creator;
            _creatorFees = creatorFees;
@@ -109,7 +113,7 @@ contract CollectionToken {
            _collection.transfer({value: half, bounce: true, flag: 0});
        } else {
            owner.transfer({value: 0, bounce: false, flag: 64});
-       }
+       }*/
     }
 
     function changeOwner(address owner)

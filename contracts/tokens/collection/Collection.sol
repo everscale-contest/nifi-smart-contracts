@@ -20,11 +20,11 @@ contract Collection {
     uint32 _creatorFees;
     uint128 _mintCost;
 
-    uint256[] _level1;
-    uint256[] _level2;
-    uint256[] _level3;
-    uint256[] _level4;
-    uint256[] _level5;
+    string[] _level1;
+    string[] _level2;
+    string[] _level3;
+    string[] _level4;
+    string[] _level5;
 
     event TK_MT_nifi_col1_1(uint64 collectionId, uint32 index, uint8 id1, uint8 id2, uint8 id3, uint8 id4, uint8 id5);
 
@@ -50,11 +50,11 @@ contract Collection {
         TvmCell tokenCode,
         uint32 creatorFees,
         uint128 mintCost,
-        uint256[] level1,
-        uint256[] level2,
-        uint256[] level3,
-        uint256[] level4,
-        uint256[] level5
+        string[] level1,
+        string[] level2,
+        string[] level3,
+        string[] level4,
+        string[] level5
     )
         public onlyRoot
     {
@@ -102,7 +102,7 @@ contract Collection {
     {
         require(_totalSupply<_limit,103);
         require(msg.sender == _manager,102);
-        require(msg.value > _mintCost,105);
+        require(msg.value >= _mintCost,105);
         _totalSupply++;
         //uint128 value = msg.value;
         TvmCell stateInit = tvm.buildStateInit({
@@ -178,6 +178,14 @@ contract Collection {
         limit = _limit;
         creator = _creator;
         creatorFees = _creatorFees;
+    }
+
+    function getLevels() public view returns(string[] level1,string[] level2,string[] level3,string[] level4,string[] level5) {
+        level1 = _level1;
+        level2 = _level2;
+        level3 = _level3;
+        level4 = _level4;
+        level5 = _level5;
     }
 
     function withdraw(address addr, uint128 value, bool bounce) public view {
