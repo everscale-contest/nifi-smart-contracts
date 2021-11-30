@@ -27,6 +27,7 @@ contract Collection {
     string[] _level5;
 
     event TK_MT_nifi_col1_1(uint64 collectionId, uint32 index, uint8 id1, uint8 id2, uint8 id3, uint8 id4, uint8 id5);
+    event SRC_PY_nifi_col1_1(uint64 collectionId, uint128 value, address owner);
 
     modifier onlyRoot() {
         require(msg.sender == _root, 101, "Method for the root only");
@@ -137,6 +138,13 @@ contract Collection {
         }(_manager, manager, managerUnlockTime, _creator, _creatorFees, _hash);*/
         emit TK_MT_nifi_col1_1{dest: NotificationAddress.value()}(_id,_totalSupply,id1,id2,id3,id4,id5);
 
+    }
+
+
+    function mintToken() public view {
+        require(msg.value >= _mintCost,105);
+        _manager.transfer(msg.value, false);
+        emit SRC_PY_nifi_col1_1{dest: NotificationAddress.value()}(_id, msg.value, msg.sender);
     }
 
     /***********

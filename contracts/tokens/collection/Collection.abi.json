@@ -37,6 +37,13 @@
 			]
 		},
 		{
+			"name": "mintToken",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
 			"name": "getTokenAddress",
 			"inputs": [
 				{"name":"id1","type":"uint8"},
@@ -117,6 +124,16 @@
 				{"name":"id3","type":"uint8"},
 				{"name":"id4","type":"uint8"},
 				{"name":"id5","type":"uint8"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "SRC_PY_nifi_col1_1",
+			"inputs": [
+				{"name":"collectionId","type":"uint64"},
+				{"name":"value","type":"uint128"},
+				{"name":"owner","type":"address"}
 			],
 			"outputs": [
 			]
