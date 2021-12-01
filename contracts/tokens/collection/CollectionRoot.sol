@@ -85,7 +85,8 @@ contract CollectionRoot  {
         string[] level2,
         string[] level3,
         string[] level4,
-        string[] level5
+        string[] level5,
+        string hash
     ) public validCreatorFees(creatorFees) internalMsg returns(address addr){
         require(msg.value >= _creationMinValue,278);
         uint128 value = msg.value - _creationFee;
@@ -99,7 +100,7 @@ contract CollectionRoot  {
                 _root: address(this),
                 _id: _totalSupply
             }
-        }(creator, _manager, name, symbol, limit, _colTokenCode, creatorFees, mintCost, level1, level2, level3, level4, level5);
+        }(creator, _manager, name, symbol, limit, _colTokenCode, creatorFees, mintCost, level1, level2, level3, level4, level5, hash);
         emit SRC_CT_nifi_col1_1{dest: NotificationAddress.value()}(_totalSupply);
     }
 

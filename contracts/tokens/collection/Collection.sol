@@ -16,6 +16,7 @@ contract Collection {
     string _symbol;
     TvmCell _tokenCode;
     uint32 _totalSupply;
+    uint32 _ready2Mint;
     uint64 _limit;
     uint32 _creatorFees;
     uint128 _mintCost;
@@ -26,8 +27,10 @@ contract Collection {
     string[] _level4;
     string[] _level5;
 
+    string _hash;
+
     event TK_MT_nifi_col1_1(uint64 collectionId, uint32 index, uint8 id1, uint8 id2, uint8 id3, uint8 id4, uint8 id5);
-    event SRC_PY_nifi_col1_1(uint64 collectionId, uint128 value, address owner);
+    event SRC_PY_nifi_col1_1(uint64 collectionId, uint32 futureId, uint128 value, address owner);
 
     modifier onlyRoot() {
         require(msg.sender == _root, 101, "Method for the root only");
@@ -55,7 +58,8 @@ contract Collection {
         string[] level2,
         string[] level3,
         string[] level4,
-        string[] level5
+        string[] level5,
+        string hash
     )
         public onlyRoot
     {
@@ -72,6 +76,7 @@ contract Collection {
         _level3 = level3;
         _level4 = level4;
         _level5 = level5;
+        _hash = hash;
     }
 
 
@@ -122,7 +127,7 @@ contract Collection {
         }});
         address addr = address(tvm.hash(stateInit));
         TvmCell body = tvm.encodeBody(CollectionToken.onMint, owner, _creator, _creatorFees, _totalSupply);
-        addr.transfer({value: 0, flag:64, body: body, stateInit: stateInit });
+        addr.transfer({value: 0.4 ton, body: body, stateInit: stateInit });
 
 
         /*addr = new Art2Token{
@@ -141,10 +146,11 @@ contract Collection {
     }
 
 
-    function mintToken() public view {
+    function mintToken() public {
         require(msg.value >= _mintCost,105);
         _manager.transfer(msg.value, false);
-        emit SRC_PY_nifi_col1_1{dest: NotificationAddress.value()}(_id, msg.value, msg.sender);
+        _ready2Mint++;
+        emit SRC_PY_nifi_col1_1{dest: NotificationAddress.value()}(_id, _ready2Mint, msg.value, msg.sender);
     }
 
     /***********
@@ -178,7 +184,7 @@ contract Collection {
         _manager = newManager;
     }
 
-    function getInfo() public view returns(uint64 id, string  name, string  symbol, uint64 totalSupply, uint64 limit, address creator, uint32 creatorFees){
+    function getInfo() public view returns(uint64 id, string  name, string  symbol, uint64 totalSupply, uint64 limit, address creator, uint32 creatorFees, string hash){
         id = _id;
         name = _name;
         symbol = _symbol;
@@ -186,6 +192,7 @@ contract Collection {
         limit = _limit;
         creator = _creator;
         creatorFees = _creatorFees;
+        hash = _hash;
     }
 
     function getLevels() public view returns(string[] level1,string[] level2,string[] level3,string[] level4,string[] level5) {

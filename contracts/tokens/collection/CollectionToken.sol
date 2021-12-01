@@ -103,6 +103,7 @@ contract CollectionToken {
         _creator = creator;
         _creatorFees = creatorFees;
         _index = index;
+        tvm.accept();
        /*if (_owner==address(0)) {
            _owner = owner;
            _creator = creator;

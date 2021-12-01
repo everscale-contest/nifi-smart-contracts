@@ -66,7 +66,8 @@
 				{"name":"level2","type":"string[]"},
 				{"name":"level3","type":"string[]"},
 				{"name":"level4","type":"string[]"},
-				{"name":"level5","type":"string[]"}
+				{"name":"level5","type":"string[]"},
+				{"name":"hash","type":"string"}
 			],
 			"outputs": [
 				{"name":"addr","type":"address"}

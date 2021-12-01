@@ -18,7 +18,8 @@
 				{"name":"level2","type":"string[]"},
 				{"name":"level3","type":"string[]"},
 				{"name":"level4","type":"string[]"},
-				{"name":"level5","type":"string[]"}
+				{"name":"level5","type":"string[]"},
+				{"name":"hash","type":"string"}
 			],
 			"outputs": [
 			]
@@ -83,7 +84,8 @@
 				{"name":"totalSupply","type":"uint64"},
 				{"name":"limit","type":"uint64"},
 				{"name":"creator","type":"address"},
-				{"name":"creatorFees","type":"uint32"}
+				{"name":"creatorFees","type":"uint32"},
+				{"name":"hash","type":"string"}
 			]
 		},
 		{
@@ -132,6 +134,7 @@
 			"name": "SRC_PY_nifi_col1_1",
 			"inputs": [
 				{"name":"collectionId","type":"uint64"},
+				{"name":"futureId","type":"uint32"},
 				{"name":"value","type":"uint128"},
 				{"name":"owner","type":"address"}
 			],
@@ -151,6 +154,7 @@
 		{"name":"_symbol","type":"string"},
 		{"name":"_tokenCode","type":"cell"},
 		{"name":"_totalSupply","type":"uint32"},
+		{"name":"_ready2Mint","type":"uint32"},
 		{"name":"_limit","type":"uint64"},
 		{"name":"_creatorFees","type":"uint32"},
 		{"name":"_mintCost","type":"uint128"},
@@ -158,6 +162,7 @@
 		{"name":"_level2","type":"string[]"},
 		{"name":"_level3","type":"string[]"},
 		{"name":"_level4","type":"string[]"},
-		{"name":"_level5","type":"string[]"}
+		{"name":"_level5","type":"string[]"},
+		{"name":"_hash","type":"string"}
 	]
 }
