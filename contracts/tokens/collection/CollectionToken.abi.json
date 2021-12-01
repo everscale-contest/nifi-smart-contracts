@@ -4,7 +4,7 @@
 	"header": ["pubkey", "time", "expire"],
 	"functions": [
 		{
-			"name": "onMint",
+			"name": "constructor",
 			"inputs": [
 				{"name":"owner","type":"address"},
 				{"name":"creator","type":"address"},
@@ -73,13 +73,6 @@
 		},
 		{
 			"name": "unlock",
-			"inputs": [
-			],
-			"outputs": [
-			]
-		},
-		{
-			"name": "constructor",
 			"inputs": [
 			],
 			"outputs": [

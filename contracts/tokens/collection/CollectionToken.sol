@@ -70,30 +70,24 @@ contract CollectionToken {
         _;
     }
 
-    /*constructor(
+    constructor(
         address owner,
-        address manager,
-        uint32  managerUnlockTime,
         address creator,
         uint32  creatorFees,
-        uint256 hash
+        uint32 index
     )
         public
         onlyCollection
-        validCreatorFees(creatorFees)
         addressIsNotNull(creator)
         addressIsNotNull(owner)
         accept
     {
-        _root.transfer({value: 0.1 ton, flag: 1, bounce: true});
+        _owner = owner;
         _creator = creator;
         _creatorFees = creatorFees;
-        _hash = hash;
-        _owner = owner;
-        _manager = manager;
-        _managerUnlockTime = managerUnlockTime;
-    }*/
-    function onMint(
+        _index = index;
+    }
+    /*function onMint(
         address owner,
         address creator,
         uint32  creatorFees,
@@ -115,7 +109,7 @@ contract CollectionToken {
        } else {
            owner.transfer({value: 0, bounce: false, flag: 64});
        }*/
-    }
+   // }
 
     function changeOwner(address owner)
         public

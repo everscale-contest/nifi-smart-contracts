@@ -27,6 +27,7 @@
 		{
 			"name": "mint",
 			"inputs": [
+				{"name":"mintId","type":"uint32"},
 				{"name":"owner","type":"address"},
 				{"name":"id1","type":"uint8"},
 				{"name":"id2","type":"uint8"},

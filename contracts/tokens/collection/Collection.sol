@@ -8,6 +8,9 @@ import "CollectionToken.sol";
 
 contract Collection {
 
+    uint128 constant GAS = 0.1 ton;
+    uint128 constant TOKEN_MINT_GAS = 0.2 ton;
+
     address static _root;
     uint64 static _id;
     address _creator;
@@ -97,6 +100,7 @@ contract Collection {
      * hash ................ Hash of data that associated with token.
      */
     function mint(
+        uint32 mintId,
         address owner,
         uint8 id1,
         uint8 id2,
@@ -106,12 +110,14 @@ contract Collection {
     )
         public
     {
+
         require(_totalSupply<_limit,103);
         require(msg.sender == _manager,102);
         require(msg.value >= _mintCost,105);
+        require(_totalSupply+1==mintId,106);
         _totalSupply++;
         //uint128 value = msg.value;
-        TvmCell stateInit = tvm.buildStateInit({
+        /*TvmCell stateInit = tvm.buildStateInit({
             code: _tokenCode,
             contr: CollectionToken,
             pubkey: tvm.pubkey(),
@@ -124,23 +130,27 @@ contract Collection {
                 _id3: id3,
                 _id4: id4,
                 _id5: id5
-        }});
-        address addr = address(tvm.hash(stateInit));
-        TvmCell body = tvm.encodeBody(CollectionToken.onMint, owner, _creator, _creatorFees, _totalSupply);
-        addr.transfer({value: 0.4 ton, body: body, stateInit: stateInit });
+        }});*/
 
-
-        /*addr = new Art2Token{
+     new CollectionToken{
             code: _tokenCode,
-            value: value,
+            value: TOKEN_MINT_GAS,
             pubkey: tvm.pubkey(),
             varInit: {
                 _root: _root,
-                _series: address(this),
-                _seriesId: _id,
-                _id: _totalSupply
+                _collection: address(this),
+                _collectionId: _id,
+                _id1: id1,
+                _id2: id2,
+                _id3: id3,
+                _id4: id4,
+                _id5: id5
             }
-        }(_manager, manager, managerUnlockTime, _creator, _creatorFees, _hash);*/
+        }(owner,_creator,_creatorFees, mintId);
+        //address addr = address(tvm.hash(stateInit));
+        uint128 half = (msg.value-GAS-TOKEN_MINT_GAS)/2;
+        _creator.transfer({value: half, bounce: true, flag: 0});
+        _root.transfer({value: half, bounce: true, flag: 0});
         emit TK_MT_nifi_col1_1{dest: NotificationAddress.value()}(_id,_totalSupply,id1,id2,id3,id4,id5);
 
     }
