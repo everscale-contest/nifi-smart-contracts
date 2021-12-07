@@ -20,7 +20,7 @@ async function run(): Promise<void> {
     )
     console.log(artRootKeys.public);
     console.log(artRootKeys.secret);*/
-    const artRootKeys: KeyPair = 
+    const artRootKeys: KeyPair =
         {public: 'ccf79f4f7fbe92d7586c0ea99a1e0a332e413bc06e1223979129d9494e431413',
          secret: 'e76f170a9de82042be98d5794966e501d8a1acf8b5c361bfc7983cf21f05b7b7'}
     const giverKeys: KeyPair = await TonKeysFile.createRandomIfNotExist(config.net.deploy.keys.giver, kit.client)
@@ -34,7 +34,7 @@ async function run(): Promise<void> {
     await TerminalContractInfo.log()
     await TerminalContractInfo.logAccount('Art2Root', art2Root, config.net.deploy.locale)
     await TerminalContractInfo.log()
-    process.exit()
+    //process.exit()
     const balance: number = parseInt(await art2Root.getBalance())
     if (balance === 0) {
         await TerminalContractInfo.log('SENDING...')

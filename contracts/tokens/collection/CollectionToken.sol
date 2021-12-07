@@ -87,29 +87,6 @@ contract CollectionToken {
         _creatorFees = creatorFees;
         _index = index;
     }
-    /*function onMint(
-        address owner,
-        address creator,
-        uint32  creatorFees,
-        uint32 index
-    ) public onlyCollection {
-        _owner = owner;
-        _creator = creator;
-        _creatorFees = creatorFees;
-        _index = index;
-        tvm.accept();
-       /*if (_owner==address(0)) {
-           _owner = owner;
-           _creator = creator;
-           _creatorFees = creatorFees;
-           _index = index;
-           uint128 half = (msg.value-0.1 ton)/2;
-           _creator.transfer({value: half, bounce: true, flag: 0});
-           _collection.transfer({value: half, bounce: true, flag: 0});
-       } else {
-           owner.transfer({value: 0, bounce: false, flag: 64});
-       }*/
-   // }
 
     function changeOwner(address owner)
         public
@@ -150,15 +127,7 @@ contract CollectionToken {
         managerUnlockTime = _managerUnlockTime;
     }
 
-     /*******************************************************
-     * EXTERNAL * ONLY OWNER IF UNLOCKED OR LOCKED MANAGER *
-     *******************************************************/
-    /**
-     * Owner can set manager and lock. To prevent manager from replacing during trading, he is locked.
-     * If manager is already locked, call revert().
-     * manager ...... Contract that governs this contract.
-     * unlockTime ... UNIX time. Time when manager can be unlocked.
-     */
+
     function lockManager(address manager, uint32 unlockTime)
         public
         onlyUnlockedOwnerOrLockedManager
@@ -171,13 +140,6 @@ contract CollectionToken {
         emit TK_MG_nifi_col1_1{dest: NotificationAddress.value()}(_collectionId, _index, _manager, _managerUnlockTime);
     }
 
-    /**********************************
-     * EXTERNAL * ONLY LOCKED MANAGER *
-     **********************************/
-    /**
-     * Manager can unlock himself.
-     * If manager is already unlocked, call revert().
-     */
     function unlock() public onlyLockedManager accept {
         _managerUnlockTime = 0;
     }

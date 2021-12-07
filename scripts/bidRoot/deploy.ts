@@ -35,7 +35,7 @@ async function run(): Promise<void> {
     await TerminalContractInfo.log()
     await TerminalContractInfo.logAccount('BidRoot', offerRoot, config.net.deploy.locale)
     await TerminalContractInfo.log()
-    //process.exit()
+    process.exit()
     const balance: number = parseInt(await offerRoot.getBalance())
     if (balance === 0) {
         await TerminalContractInfo.log('SENDING...')

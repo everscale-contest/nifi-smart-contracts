@@ -19,7 +19,7 @@ export default {
              */
             //port: '',
             port: '8080',
-            
+
 
             /**
              * Version of test node. Actual for testing on local node. Run `tondev se version` to view options.
@@ -60,8 +60,8 @@ export default {
              *     'http://localhost'
              *     'http://0.0.0.0
              */
-            url: 'https://net.ton.dev',
-            //url: 'https://main.ton.dev',
+            //url: 'https://net.ton.dev',
+            url: 'https://main.ton.dev',
             //url: 'http://localhost',
 
             /**

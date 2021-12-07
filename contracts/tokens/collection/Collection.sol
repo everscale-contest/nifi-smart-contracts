@@ -10,6 +10,7 @@ contract Collection {
 
     uint128 constant GAS = 0.1 ton;
     uint128 constant TOKEN_MINT_GAS = 0.2 ton;
+    uint128 constant CREATOR_MINT_MIN = 0.5 ton;
 
     address static _root;
     uint64 static _id;
@@ -31,6 +32,7 @@ contract Collection {
     string[] _level5;
 
     string _hash;
+    uint32 _startTime;
 
     event TK_MT_nifi_col1_1(uint64 collectionId, uint32 index, uint8 id1, uint8 id2, uint8 id3, uint8 id4, uint8 id5);
     event SRC_PY_nifi_col1_1(uint64 collectionId, uint32 futureId, uint128 value, address owner);
@@ -62,7 +64,8 @@ contract Collection {
         string[] level3,
         string[] level4,
         string[] level5,
-        string hash
+        string hash,
+        uint32 startTime
     )
         public onlyRoot
     {
@@ -80,25 +83,9 @@ contract Collection {
         _level4 = level4;
         _level5 = level5;
         _hash = hash;
+        _startTime = startTime;
     }
 
-
-
-    /************
-     * EXTERNAL *
-     ************/
-    /**
-     * Create token contract and returns address. Accept 0.1 ton and more.
-     * owner ............... Address of token owner.
-     * manager ............. Contract that governs token contract.
-     *                       If you don't want to set the manager, use 0:000011112222...
-     * managerUnlockTime ... UNIX time. Time when the manager can be unlocked.
-     *                       If you don't want to set the manager, use 0.
-     * addr ................ Address of the token contract.
-     * creator ............. Address of creator.
-     * creatorFees ......... Creator fee. e.g. 1 = 0.01%. 1 is minimum. 10_000 is maximum.
-     * hash ................ Hash of data that associated with token.
-     */
     function mint(
         uint32 mintId,
         address owner,
@@ -110,29 +97,13 @@ contract Collection {
     )
         public
     {
-
+        require(now > _startTime, 112);
         require(_totalSupply<_limit,103);
         require(msg.sender == _manager,102);
-        require(msg.value >= _mintCost,105);
+        require(msg.value >= CREATOR_MINT_MIN);
         require(_totalSupply+1==mintId,106);
         _totalSupply++;
-        //uint128 value = msg.value;
-        /*TvmCell stateInit = tvm.buildStateInit({
-            code: _tokenCode,
-            contr: CollectionToken,
-            pubkey: tvm.pubkey(),
-            varInit: {
-                _root: _root,
-                _collection: address(this),
-                _collectionId: _id,
-                _id1: id1,
-                _id2: id2,
-                _id3: id3,
-                _id4: id4,
-                _id5: id5
-        }});*/
-
-     new CollectionToken{
+        new CollectionToken{
             code: _tokenCode,
             value: TOKEN_MINT_GAS,
             pubkey: tvm.pubkey(),
@@ -147,17 +118,25 @@ contract Collection {
                 _id5: id5
             }
         }(owner,_creator,_creatorFees, mintId);
-        //address addr = address(tvm.hash(stateInit));
-        uint128 half = (msg.value-GAS-TOKEN_MINT_GAS)/2;
-        _creator.transfer({value: half, bounce: true, flag: 0});
-        _root.transfer({value: half, bounce: true, flag: 0});
+        if (owner == _creator) {
+            if (msg.value-GAS-TOKEN_MINT_GAS>0.01 ton) {
+                _root.transfer({value: msg.value-GAS-TOKEN_MINT_GAS, bounce: true, flag: 0});
+            }
+        } else {
+            uint128 half = (msg.value-GAS-TOKEN_MINT_GAS)/2;
+            if (half>0.01 ton) {
+                _creator.transfer({value: half, bounce: true, flag: 0});
+                _root.transfer({value: half, bounce: true, flag: 0});
+            }
+        }
         emit TK_MT_nifi_col1_1{dest: NotificationAddress.value()}(_id,_totalSupply,id1,id2,id3,id4,id5);
 
     }
 
 
     function mintToken() public {
-        require(msg.value >= _mintCost,105);
+        require(now > _startTime, 112);
+        require((msg.value >= _mintCost) || ((msg.sender == _creator)&&(msg.value >= CREATOR_MINT_MIN)),105);
         _manager.transfer(msg.value, false);
         _ready2Mint++;
         emit SRC_PY_nifi_col1_1{dest: NotificationAddress.value()}(_id, _ready2Mint, msg.value, msg.sender);
@@ -194,7 +173,7 @@ contract Collection {
         _manager = newManager;
     }
 
-    function getInfo() public view returns(uint64 id, string  name, string  symbol, uint64 totalSupply, uint64 limit, address creator, uint32 creatorFees, string hash){
+    function getInfo() public view returns(uint64 id, string  name, string  symbol, uint64 totalSupply, uint64 limit, address creator, uint32 creatorFees, string hash, uint32 startTime){
         id = _id;
         name = _name;
         symbol = _symbol;
@@ -203,6 +182,7 @@ contract Collection {
         creator = _creator;
         creatorFees = _creatorFees;
         hash = _hash;
+        startTime = _startTime;
     }
 
     function getLevels() public view returns(string[] level1,string[] level2,string[] level3,string[] level4,string[] level5) {
@@ -212,11 +192,4 @@ contract Collection {
         level4 = _level4;
         level5 = _level5;
     }
-
-    function withdraw(address addr, uint128 value, bool bounce) public view {
-        require(msg.sender == _manager,102);
-        tvm.accept();
-        addr.transfer(value, bounce);
-    }
-
 }

@@ -67,7 +67,8 @@
 				{"name":"level3","type":"string[]"},
 				{"name":"level4","type":"string[]"},
 				{"name":"level5","type":"string[]"},
-				{"name":"hash","type":"string"}
+				{"name":"hash","type":"string"},
+				{"name":"startTime","type":"uint32"}
 			],
 			"outputs": [
 				{"name":"addr","type":"address"}

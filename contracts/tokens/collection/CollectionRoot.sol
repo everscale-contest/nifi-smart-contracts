@@ -20,16 +20,11 @@ contract CollectionRoot  {
     TvmCell _collectionCode;
     uint64 _totalSupply;
 
-
-
     modifier validCreatorFees(uint32 fees) {
         require(fees < 2401, 277);
         _;
     }
 
-    /***************
-     * CONSTRUCTOR *
-     ***************/
     constructor(
         address manager,
         uint128 creationMinValue,
@@ -86,9 +81,11 @@ contract CollectionRoot  {
         string[] level3,
         string[] level4,
         string[] level5,
-        string hash
+        string hash,
+        uint32 startTime
     ) public validCreatorFees(creatorFees) internalMsg returns(address addr){
         require(msg.value >= _creationMinValue,278);
+        require(mintCost >= 0.5 ton, 279);
         uint128 value = msg.value - _creationFee;
         _totalSupply++;
 
@@ -100,11 +97,9 @@ contract CollectionRoot  {
                 _root: address(this),
                 _id: _totalSupply
             }
-        }(creator, _manager, name, symbol, limit, _colTokenCode, creatorFees, mintCost, level1, level2, level3, level4, level5, hash);
+        }(creator, _manager, name, symbol, limit, _colTokenCode, creatorFees, mintCost, level1, level2, level3, level4, level5, hash, startTime);
         emit SRC_CT_nifi_col1_1{dest: NotificationAddress.value()}(_totalSupply);
     }
-
-
 
     function getCollectionAddress(uint64 id) public view returns(address addr) {
         TvmCell stateInit = tvm.buildStateInit({
