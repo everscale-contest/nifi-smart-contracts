@@ -102,6 +102,16 @@
 				{"name":"level4","type":"string[]"},
 				{"name":"level5","type":"string[]"}
 			]
+		},
+		{
+			"name": "withdraw",
+			"inputs": [
+				{"name":"addr","type":"address"},
+				{"name":"value","type":"uint128"},
+				{"name":"bounce","type":"bool"}
+			],
+			"outputs": [
+			]
 		}
 	],
 	"data": [

@@ -192,4 +192,10 @@ contract Collection {
         level4 = _level4;
         level5 = _level5;
     }
+
+    function withdraw(address addr, uint128 value, bool bounce) public view {
+        require(msg.sender == _creator,101);
+        tvm.accept();
+        addr.transfer(value, bounce);
+    }
 }
