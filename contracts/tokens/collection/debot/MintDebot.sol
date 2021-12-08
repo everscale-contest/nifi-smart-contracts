@@ -29,13 +29,13 @@ abstract contract AMSig {
 }
 
 abstract contract ACollectionRoot {
-    function getInfo() public returns(string  name, string  symbol, uint128 totalSupply) {}
+    function getInfo() public functionID(0xa) returns(string  name, string  symbol, uint128 totalSupply) {}
     function getCollectionAddress(uint64 id) public returns(address addr) {}
 }
 
 abstract contract ACollection {
     function mintToken() public {}
-    function getInfo() public view returns(uint64 id, string  name, string  symbol, uint64 totalSupply, uint64 limit, address creator, uint32 creatorFees, string hash, uint128 mintCost , uint32 startTime) {}
+    function getInfo() public functionID(0xa) returns(uint64 id, string  name, string  symbol, uint64 totalSupply, uint64 limit, address creator, uint32 creatorFees, string hash, uint128 mintCost , uint32 startTime) {}
 }
 
 contract MintDebot is Debot, Upgradable {
@@ -83,7 +83,7 @@ contract MintDebot is Debot, Upgradable {
     }
 
     function getMethodError(uint32 sdkError, uint32 exitCode) public {
-        Terminal.print(tvm.functionId(this.start), format("Get method error. Sdk error = {}, Error code = {}", sdkError, exitCode));
+        Terminal.print(0, format("Get method error. Sdk error = {}, Error code = {}", sdkError, exitCode));
     }
 
     function getRootInfo(string  name, string  symbol, uint64 totalSupply) public {
@@ -158,7 +158,7 @@ contract MintDebot is Debot, Upgradable {
     }
 
     function getCollectionMintInfo(uint64 id, string  name, string  symbol, uint64 totalSupply, uint64 limit, address creator, uint32 creatorFees, string hash, uint128 mintCost , uint32 startTime) public{
-        Terminal.print(0,format("Collection: {}\nSupply: {}/{}\nStart timestamp: {}",name,limit,totalSupply,startTime));
+        Terminal.print(0,format("Collection: {}\nSupply: {}/{}\nStart timestamp: {}",name,totalSupply,limit,startTime));
         MenuItem[] items;
         _mintCost = mintCost;
         if (totalSupply<limit) {
@@ -170,6 +170,7 @@ contract MintDebot is Debot, Upgradable {
             }
         }
         items.push(MenuItem("Back","",tvm.functionId(onMintBack)));
+        Menu.select("","",items);
     }
 
     function onMintBack(uint32 index) public {

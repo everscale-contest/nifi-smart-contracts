@@ -99,6 +99,24 @@ CALL $start_internal_macro$
 
 .macro start_internal_macro
 ; function start
+PUSHINT 0
+NIL
+NEWC
+PUSHSLICE x726f6f7420
+CALLREF {
+	CALL $storeStringInBuilders_macro$
+}
+;; push identifier _root
+GETGLOB 14
+CALLREF {
+	CALL $convertAddressToHexString_macro$
+}
+CALLREF {
+	CALL $assembleList_macro$
+}
+CALLREF {
+	CALL $Terminal_no_obj_print_macro$
+}
 PUSHINT 788935932
 CALLREF {
 	CALL $UserInfo_no_obj_getAccount_macro$
@@ -203,7 +221,7 @@ STSLICECONST 0
 PUSH S2
 ISNULL
 THROWIFNOT 64
-PUSHSLICE x00000000000000000000000034e3c7a74_
+PUSHSLICE x000000000000000000000000000000054_
 STSLICER
 STBREFR
 ENDC
@@ -241,7 +259,7 @@ CALL $getMethodError_internal_macro$
 ;; param: sdkError
 ;; param: exitCode
 ; function getMethodError
-PUSHINT 94113135
+PUSHINT 0
 NIL
 NEWC
 PUSHSLICE x476574206d6574686f64206572726f722e2053646b206572726f72203d20
@@ -521,7 +539,7 @@ STSLICECONST 0
 PUSH S2
 ISNULL
 THROWIFNOT 64
-PUSHSLICE x0000000000000000000000000f1ccef9c_
+PUSHSLICE x000000000000000000000000000000054_
 STSLICER
 STBREFR
 ENDC
@@ -812,7 +830,7 @@ STSLICECONST 0
 PUSH S2
 ISNULL
 THROWIFNOT 64
-PUSHSLICE x0000000000000000000000000f1ccef9c_
+PUSHSLICE x000000000000000000000000000000054_
 STSLICER
 STBREFR
 ENDC
@@ -951,8 +969,8 @@ PUSHSLICE x0a537570706c793a20
 CALLREF {
 	CALL $storeStringInBuilders_macro$
 }
-;; push identifier limit
-PUSH S8
+;; push identifier totalSupply
+PUSH S9
 PUSHINT 0
 FALSE
 FALSE
@@ -963,8 +981,8 @@ PUSHSLICE x2f
 CALLREF {
 	CALL $storeStringInBuilders_macro$
 }
-;; push identifier totalSupply
-PUSH S9
+;; push identifier limit
+PUSH S8
 PUSHINT 0
 FALSE
 FALSE
@@ -1129,10 +1147,23 @@ INC
 BLKSWAP 3, 1
 PUSHINT 32
 DICTUSETB
+PAIR
 ; colValue
+NIP
 ; end colValue
+PUSHREF {
+	.blob x
+}
+PUSHREF {
+	.blob x
+}
+;; push identifier items
+PUSH S2
+CALLREF {
+	CALL $Menu_no_obj_select_macro$
+}
 ; end function getCollectionMintInfo
-BLKDROP 13
+BLKDROP 11
 
 .macro onMintBack
 DROP

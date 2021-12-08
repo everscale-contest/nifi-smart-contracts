@@ -35,6 +35,7 @@
 		},
 		{
 			"name": "getInfo",
+			"id": "0xA",
 			"inputs": [
 			],
 			"outputs": [

@@ -173,7 +173,7 @@ contract Collection {
         _manager = newManager;
     }
 
-    function getInfo() public view returns(uint64 id, string  name, string  symbol, uint64 totalSupply, uint64 limit, address creator, uint32 creatorFees, string hash, uint128 mintCost , uint32 startTime){
+    function getInfo() public view functionID(0xa) returns(uint64 id, string  name, string  symbol, uint64 totalSupply, uint64 limit, address creator, uint32 creatorFees, string hash, uint128 mintCost , uint32 startTime){
         id = _id;
         name = _name;
         symbol = _symbol;
