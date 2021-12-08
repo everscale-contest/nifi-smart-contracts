@@ -57,7 +57,7 @@ contract CollectionRoot  {
         _manager = newManager;
     }
 
-    function getInfo() public view returns(string  name, string  symbol, uint128 totalSupply){
+    function getInfo() public view returns(string  name, string  symbol, uint64 totalSupply){
         name = _name;
         symbol = _symbol;
         totalSupply = _totalSupply;

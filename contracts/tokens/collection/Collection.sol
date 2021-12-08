@@ -173,7 +173,7 @@ contract Collection {
         _manager = newManager;
     }
 
-    function getInfo() public view returns(uint64 id, string  name, string  symbol, uint64 totalSupply, uint64 limit, address creator, uint32 creatorFees, string hash, uint32 startTime){
+    function getInfo() public view returns(uint64 id, string  name, string  symbol, uint64 totalSupply, uint64 limit, address creator, uint32 creatorFees, string hash, uint128 mintCost , uint32 startTime){
         id = _id;
         name = _name;
         symbol = _symbol;
@@ -182,6 +182,7 @@ contract Collection {
         creator = _creator;
         creatorFees = _creatorFees;
         hash = _hash;
+	mintCost = _mintCost;
         startTime = _startTime;
     }
 

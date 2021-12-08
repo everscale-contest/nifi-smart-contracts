@@ -40,7 +40,7 @@
 			"outputs": [
 				{"name":"name","type":"string"},
 				{"name":"symbol","type":"string"},
-				{"name":"totalSupply","type":"uint128"}
+				{"name":"totalSupply","type":"uint64"}
 			]
 		},
 		{

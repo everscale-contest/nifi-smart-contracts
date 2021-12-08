@@ -88,6 +88,7 @@
 				{"name":"creator","type":"address"},
 				{"name":"creatorFees","type":"uint32"},
 				{"name":"hash","type":"string"},
+				{"name":"mintCost","type":"uint128"},
 				{"name":"startTime","type":"uint32"}
 			]
 		},
