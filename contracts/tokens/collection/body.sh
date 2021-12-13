@@ -10,9 +10,9 @@ CLI_PATH=~/git/tonos-cli/target/release
 NET_GIVER_PATH=~/givers/net_giver
 LINKER_PATH=~/git/TVM-linker/tvm_linker/target/release
 
-body=te6ccgEBAQEADgAAGGO32HMAAAAAAAAAAQ==
+body=te6ccgEBAQEARAAAg1Z+cPsAAAAAAAAAAwAAAAQAAAAAAAAAAAAAAAAvrwgAgAXUvHLR2R8ZhK1IaKiWIBeeHO6H4y6uhkb58bk5v7WxEA==
 
-$CLI_PATH/tonos-cli decode body $body --abi CollectionRoot.abi.json
+$CLI_PATH/tonos-cli decode body $body --abi Collection.abi.json
 #./tonos-cli decode body <base64_body> --abi efewfew.abi.json
 
 echo DONE

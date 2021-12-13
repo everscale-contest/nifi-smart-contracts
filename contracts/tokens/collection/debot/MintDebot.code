@@ -76,6 +76,53 @@ ACCEPT
 ; end function setRoot
 SETGLOB 14
 
+.macro setIcon
+DROP
+GETGLOB 2
+ISNULL
+IFREF {
+	CALL $c4_to_c7$
+}
+LDREF
+ENDS
+;; param: icon
+CALLREF {
+	CALL $setIcon_internal_macro$
+}
+CALLREF {
+	CALL $c7_to_c4$
+}
+TRUE
+SETGLOB 7
+
+.globl	setIcon_internal
+.type	setIcon_internal, @function
+CALL $setIcon_internal_macro$
+
+.macro setIcon_internal_macro
+;; param: icon
+; function setIcon
+GETGLOB 5
+DUP
+ISNULL
+PUSHCONT {
+	DROP
+	PUSHINT 0
+}
+IF
+;; ==
+GETGLOB 2
+EQUAL
+THROWIFNOT 101
+ACCEPT
+; expValue
+; end expValue
+;; push identifier icon
+; colValue
+; end colValue
+; end function setIcon
+SETGLOB 24
+
 .macro start
 DROP
 GETGLOB 2
@@ -99,24 +146,6 @@ CALL $start_internal_macro$
 
 .macro start_internal_macro
 ; function start
-PUSHINT 0
-NIL
-NEWC
-PUSHSLICE x726f6f7420
-CALLREF {
-	CALL $storeStringInBuilders_macro$
-}
-;; push identifier _root
-GETGLOB 14
-CALLREF {
-	CALL $convertAddressToHexString_macro$
-}
-CALLREF {
-	CALL $assembleList_macro$
-}
-CALLREF {
-	CALL $Terminal_no_obj_print_macro$
-}
 PUSHINT 788935932
 CALLREF {
 	CALL $UserInfo_no_obj_getAccount_macro$
@@ -989,7 +1018,7 @@ FALSE
 CALLREF {
 	CALL $convertIntToDecStr_macro$
 }
-PUSHSLICE x0a53746172742074696d657374616d703a20
+PUSHSLICE x0a4d696e742073746172742074696d653a20
 CALLREF {
 	CALL $storeStringInBuilders_macro$
 }
@@ -1408,10 +1437,13 @@ CALL $confirmTransfer_internal_macro$
 ;; push identifier value
 DUP
 PUSHCONT {
-	;; push identifier _sendMsg
-	GETGLOB 15
-	PUSHINT 1
-	SENDRAWMSG
+	PUSHINT 158041591
+	PUSHREF {
+		.blob xe29aa0efb88f20496e206361736520796f7520657870657269656e63652070726f626c656d732077697468206d6573736167652070726f63657373696e6720706c656173652072656c6f616420746865206465626f74
+	}
+	CALLREF {
+		CALL $Terminal_no_obj_print_macro$
+	}
 }
 PUSHCONT {
 	PUSHINT 852952310
@@ -1426,6 +1458,35 @@ IFELSE
 ;; end if
 ; end function confirmTransfer
 DROP
+
+.macro sendMsg
+DROP
+GETGLOB 2
+ISNULL
+IFREF {
+	CALL $c4_to_c7$
+}
+ENDS
+CALLREF {
+	CALL $sendMsg_internal_macro$
+}
+CALLREF {
+	CALL $c7_to_c4$
+}
+TRUE
+SETGLOB 7
+
+.globl	sendMsg_internal
+.type	sendMsg_internal, @function
+CALL $sendMsg_internal_macro$
+
+.macro sendMsg_internal_macro
+; function sendMsg
+;; push identifier _sendMsg
+GETGLOB 15
+PUSHINT 1
+SENDRAWMSG
+; end function sendMsg
 
 .macro onMintError
 DROP
@@ -1643,7 +1704,7 @@ PUSHREF {
 ; expValue
 ; end expValue
 PUSHREF {
-	.blob x4d696e74
+	.blob x4e69466920436c7562
 }
 ; colValue
 POP S10
@@ -1667,7 +1728,7 @@ POP S8
 ; expValue
 ; end expValue
 PUSHREF {
-	.blob x4d696e74
+	.blob x
 }
 ; colValue
 POP S7
@@ -1715,11 +1776,10 @@ POP S2
 ; end colValue
 ; expValue
 ; end expValue
-PUSHREF {
-	.blob x
-}
+;; push identifier _icon
 ; colValue
-NIP
+DROP
+GETGLOB 24
 ; end colValue
 ; end function getDebotInfo
 
@@ -1828,6 +1888,9 @@ PUSHINT 0
 SETGLOB 22
 PUSHSLICE x8000000000000000000000000000000000000000000000000000000000000000001_
 SETGLOB 23
+PUSHREF {
+}
+SETGLOB 24
 ;; end set default state vars
 ; end function onCodeUpgrade
 CALLREF {
@@ -2105,6 +2168,7 @@ SETGLOB 10
 SETGLOB 11
 
 .macro c7_to_c4
+GETGLOB 24
 GETGLOB 23
 GETGLOB 22
 GETGLOB 21
@@ -2173,7 +2237,7 @@ PUSHCONT {
 }
 IFELSE
 STSLICE
-BLKSWAP 9, 1
+BLKSWAP 10, 1
 NEWC
 STREF
 STSLICE
@@ -2191,9 +2255,10 @@ STDICT
 STU 64
 STU 64
 STU 128
-SWAP
+ROTREV
 NEWC
 STSLICE
+STREF
 STBREFR
 STBREFR
 ENDC
@@ -2264,7 +2329,9 @@ LDREF
 ENDS
 CTOS
 LDMSGADDR
+LDREF
 ENDS
+SETGLOB 24
 SETGLOB 23
 SETGLOB 22
 SETGLOB 21
@@ -2344,6 +2411,10 @@ PUSHCONT {
 	; init _mintAddr
 	PUSHSLICE x8000000000000000000000000000000000000000000000000000000000000000001_
 	SETGLOB 23
+	; init _icon
+	PUSHREF {
+	}
+	SETGLOB 24
 	PUSHINT 64
 	DICTUGET
 	THROWIFNOT 61
@@ -2736,11 +2807,11 @@ DROP2
 
 .macro public_function_selector
 DUP
-PUSHINT 1115850364
+PUSHINT 997368628
 LEQ
 IFJMPREF {
 	DUP
-	PUSHINT 207032353
+	PUSHINT 158041591
 	LEQ
 	IFJMPREF {
 		DUP
@@ -2762,16 +2833,28 @@ IFJMPREF {
 			CALL $start$
 		}
 		DUP
+		PUSHINT 158041591
+		EQUAL
+		IFJMPREF {
+			CALL $sendMsg$
+		}
+	}
+	DUP
+	PUSHINT 540543001
+	LEQ
+	IFJMPREF {
+		DUP
 		PUSHINT 207032353
 		EQUAL
 		IFJMPREF {
 			CALL $getRootInfo$
 		}
-	}
-	DUP
-	PUSHINT 762849677
-	LEQ
-	IFJMPREF {
+		DUP
+		PUSHINT 258836457
+		EQUAL
+		IFJMPREF {
+			CALL $setIcon$
+		}
 		DUP
 		PUSHINT 388172858
 		EQUAL
@@ -2784,6 +2867,11 @@ IFJMPREF {
 		IFJMPREF {
 			CALL $onCollectionMenu$
 		}
+	}
+	DUP
+	PUSHINT 788935932
+	LEQ
+	IFJMPREF {
 		DUP
 		PUSHINT 757375996
 		EQUAL
@@ -2796,11 +2884,6 @@ IFJMPREF {
 		IFJMPREF {
 			CALL $onMint$
 		}
-	}
-	DUP
-	PUSHINT 846692928
-	LEQ
-	IFJMPREF {
 		DUP
 		PUSHINT 770627428
 		EQUAL
@@ -2813,6 +2896,11 @@ IFJMPREF {
 		IFJMPREF {
 			CALL $getAccount$
 		}
+	}
+	DUP
+	PUSHINT 997368628
+	LEQ
+	IFJMPREF {
 		DUP
 		PUSHINT 814434028
 		EQUAL
@@ -2825,11 +2913,6 @@ IFJMPREF {
 		IFJMPREF {
 			CALL $getCollectionMenuInfo$
 		}
-	}
-	DUP
-	PUSHINT 1115850364
-	LEQ
-	IFJMPREF {
 		DUP
 		PUSHINT 852952310
 		EQUAL
@@ -2842,6 +2925,16 @@ IFJMPREF {
 		IFJMPREF {
 			CALL $getCollectionMintInfo$
 		}
+	}
+}
+DUP
+PUSHINT 2112671963
+LEQ
+IFJMPREF {
+	DUP
+	PUSHINT 1295590786
+	LEQ
+	IFJMPREF {
 		DUP
 		PUSHINT 1069642691
 		EQUAL
@@ -2854,16 +2947,6 @@ IFJMPREF {
 		IFJMPREF {
 			CALL $onMintOwner$
 		}
-	}
-}
-DUP
-PUSHINT 2112671963
-LEQ
-IFJMPREF {
-	DUP
-	PUSHINT 1568115769
-	LEQ
-	IFJMPREF {
 		DUP
 		PUSHINT 1227848520
 		EQUAL
@@ -2876,6 +2959,11 @@ IFJMPREF {
 		IFJMPREF {
 			CALL $collectInfo$
 		}
+	}
+	DUP
+	PUSHINT 1764397179
+	LEQ
+	IFJMPREF {
 		DUP
 		PUSHINT 1482960138
 		EQUAL
@@ -2888,11 +2976,6 @@ IFJMPREF {
 		IFJMPREF {
 			CALL $setABI$
 		}
-	}
-	DUP
-	PUSHINT 2112671963
-	LEQ
-	IFJMPREF {
 		DUP
 		PUSHINT 1756716863
 		EQUAL
@@ -2905,6 +2988,11 @@ IFJMPREF {
 		IFJMPREF {
 			CALL $confirmTransfer$
 		}
+	}
+	DUP
+	PUSHINT 2112671963
+	LEQ
+	IFJMPREF {
 		DUP
 		PUSHINT 2088432571
 		EQUAL

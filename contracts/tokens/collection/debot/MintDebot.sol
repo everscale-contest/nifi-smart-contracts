@@ -51,11 +51,18 @@ contract MintDebot is Debot, Upgradable {
     uint64 _totalSupply;
     uint128 _mintCost;
     address _mintAddr;
+    bytes _icon;
 
     function setRoot(address addr) public {
         require(msg.pubkey()==tvm.pubkey(),101);
         tvm.accept();
         _root = addr;
+    }
+
+    function setIcon(bytes icon) public {
+        require(msg.pubkey()==tvm.pubkey(),101);
+        tvm.accept();
+        _icon = icon;
     }
 
     function start() public override {
@@ -158,7 +165,7 @@ contract MintDebot is Debot, Upgradable {
     }
 
     function getCollectionMintInfo(uint64 id, string  name, string  symbol, uint64 totalSupply, uint64 limit, address creator, uint32 creatorFees, string hash, uint128 mintCost , uint32 startTime) public{
-        Terminal.print(0,format("Collection: {}\nSupply: {}/{}\nStart timestamp: {}",name,totalSupply,limit,startTime));
+        Terminal.print(0,format("Collection: {}\nSupply: {}/{}\nMint start time: {}",name,totalSupply,limit,startTime));
         MenuItem[] items;
         _mintCost = mintCost;
         if (totalSupply<limit) {
@@ -202,10 +209,14 @@ contract MintDebot is Debot, Upgradable {
 
     function confirmTransfer(bool value) public {
         if (value) {
-            tvm.sendrawmsg(_sendMsg, 1);
+            Terminal.print(tvm.functionId(sendMsg),"⚠ In case you experience problems with message processing please reload the debot");
         } else {
             Terminal.print(tvm.functionId(showCollectionMenu), "Terminated!");
         }
+    }
+
+    function sendMsg() public {
+        tvm.sendrawmsg(_sendMsg, 1);
     }
 
     function onMintError(uint32 sdkError, uint32 exitCode) public {
@@ -224,16 +235,16 @@ contract MintDebot is Debot, Upgradable {
         string name, string version, string publisher, string caption, string author,
         address support, string hello, string language, string dabi, bytes icon
     ) {
-        name = "Mint";
+        name = "NiFi Club";
         version = "0.1.0";
         publisher = "";
-        caption = "Mint";
+        caption = "";
         author = "";
         support = address.makeAddrStd(0, 0x0);
         hello = "";
         language = "en";
         dabi = m_debotAbi.get();
-        icon = "";
+        icon = _icon;
     }
 
     function getRequiredInterfaces() public view override returns (uint256[] interfaces) {

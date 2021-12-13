@@ -11,6 +11,14 @@
 			]
 		},
 		{
+			"name": "setIcon",
+			"inputs": [
+				{"name":"icon","type":"bytes"}
+			],
+			"outputs": [
+			]
+		},
+		{
 			"name": "start",
 			"inputs": [
 			],
@@ -144,6 +152,13 @@
 			"name": "confirmTransfer",
 			"inputs": [
 				{"name":"value","type":"bool"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "sendMsg",
+			"inputs": [
 			],
 			"outputs": [
 			]
