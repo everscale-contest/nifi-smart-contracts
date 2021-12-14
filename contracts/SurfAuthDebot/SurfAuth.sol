@@ -15,7 +15,7 @@ abstract contract AMSig {
         address dest,
         uint128 value,
         bool bounce,
-        bool allBalance,
+        uint8 flag,
         TvmCell payload)
     public {}
     function submitTransaction(
@@ -33,11 +33,14 @@ contract SurfAuthDebot is Debot, Upgradable {
 
     event BOT_INI_nifi_bot1_1(uint256 hash, address user);
 
-    uint128 AUTH_FEE = 0.05 ton;
+    uint128 constant AUTH_FEE = 0.05 ton;
 
     uint256 m_hash;
     uint32 m_sign;
     TvmCell m_sendMsg;
+    address m_dst;
+    uint128 m_amount;
+    TvmCell m_payload;
 
     function onAuth(uint256 hash) public internalMsg {
         emit BOT_INI_nifi_bot1_1{dest: SwiftAddress.value()}(hash, msg.sender);
@@ -79,7 +82,7 @@ contract SurfAuthDebot is Debot, Upgradable {
 
         m_sendMsg = tvm.buildExtMsg({
             abiVer: 2,
-            dest: address(this),
+            dest: value,
             callbackId: tvm.functionId(authSuccess),
             onErrorId: tvm.functionId(authError),
             time: 0,
@@ -87,7 +90,7 @@ contract SurfAuthDebot is Debot, Upgradable {
             sign: true,
             pubkey: none,
             signBoxHandle: m_sign,
-            call: {AMSig.submitTransaction, value, AUTH_FEE, true, false, payload}
+            call: {AMSig.submitTransaction, address(this), AUTH_FEE, true, false, payload}
         });
 
         confirmAuth(true);
@@ -110,7 +113,68 @@ contract SurfAuthDebot is Debot, Upgradable {
         Terminal.print(0,"Auth request sent!");
     }
 
+    function getPayMsg(address recipient, uint128 amount, TvmCell payload) public pure
+        returns(TvmCell message) {
+        TvmCell body = tvm.encodeBody(SurfAuthDebot.pay, recipient, amount, payload);
+        TvmBuilder message_;
+        message_.store(false, true, true, false, address(0), address(this));
+        message_.storeTons(0);
+        message_.storeUnsigned(0, 1);
+        message_.storeTons(0);
+        message_.storeTons(0);
+        message_.store(uint64(0));
+        message_.store(uint32(0));
+        message_.storeUnsigned(0, 1); //init: nothing$0
+        message_.storeUnsigned(1, 1); //body: right$1
+        message_.store(body);
+        message = message_.toCell();
+    }
 
+    function pay(address recipient, uint128 amount, TvmCell payload) public {
+        m_dst = recipient;
+        m_amount = amount;
+        m_payload = payload;
+        UserInfo.getSigningBox(tvm.functionId(getPayUserSign));
+    }
+
+    function getPayUserSign(uint32 handle) public {
+        m_sign = handle;
+        UserInfo.getAccount(tvm.functionId(getPayUserAddress));
+    }
+
+    function getPayUserAddress (address value) public {
+        optional(uint256) none;
+        m_sendMsg = tvm.buildExtMsg({
+            abiVer: 2,
+            dest: value,
+            callbackId: tvm.functionId(paySuccess),
+            onErrorId: tvm.functionId(payError),
+            time: 0,
+            expire: 0,
+            sign: true,
+            pubkey: none,
+            signBoxHandle: m_sign,
+            call: {AMSig.sendTransaction, m_dst, m_amount, true, 1, m_payload}
+        });
+        confirmPay(true);
+    }
+
+    function confirmPay(bool value) public {
+        if (value) {
+            tvm.sendrawmsg(m_sendMsg,1);
+        } else {
+            Terminal.print(0, "Terminated!");
+        }
+    }
+
+    function payError(uint32 sdkError, uint32 exitCode) public {
+        ConfirmInput.get(tvm.functionId(confirmPay), format("Transaction failed. Sdk error = {}, Error code = {}\nDo you want to retry?", sdkError, exitCode));
+    }
+
+    function paySuccess(uint256 id) public {
+        id;
+        Terminal.print(0,"Payment done!");
+    }
 
 
     /*
@@ -120,8 +184,8 @@ contract SurfAuthDebot is Debot, Upgradable {
         string name, string version, string publisher, string caption, string author,
         address support, string hello, string language, string dabi, bytes icon
     ) {
-        name = "Surf Auth";
-        version = "0.1.0";
+        name = "NiFi Club";
+        version = "0.2.0";
         publisher = "";
         caption = "";
         author = "";

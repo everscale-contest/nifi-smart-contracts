@@ -76,6 +76,68 @@
 			]
 		},
 		{
+			"name": "getPayMsg",
+			"inputs": [
+				{"name":"recipient","type":"address"},
+				{"name":"amount","type":"uint128"},
+				{"name":"payload","type":"cell"}
+			],
+			"outputs": [
+				{"name":"message","type":"cell"}
+			]
+		},
+		{
+			"name": "pay",
+			"inputs": [
+				{"name":"recipient","type":"address"},
+				{"name":"amount","type":"uint128"},
+				{"name":"payload","type":"cell"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "getPayUserSign",
+			"inputs": [
+				{"name":"handle","type":"uint32"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "getPayUserAddress",
+			"inputs": [
+				{"name":"value","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "confirmPay",
+			"inputs": [
+				{"name":"value","type":"bool"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "payError",
+			"inputs": [
+				{"name":"sdkError","type":"uint32"},
+				{"name":"exitCode","type":"uint32"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "paySuccess",
+			"inputs": [
+				{"name":"id","type":"uint256"}
+			],
+			"outputs": [
+			]
+		},
+		{
 			"name": "getDebotInfo",
 			"id": "0xDEB",
 			"inputs": [
