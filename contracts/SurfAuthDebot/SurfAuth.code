@@ -666,6 +666,15 @@ PUSHCONT {
 	LDMSGADDR
 }
 IFNOT
+LDMSGADDRQ
+PUSHCONT {
+	;; load next cell
+	LDREF
+	ENDS
+	CTOS
+	LDMSGADDR
+}
+IFNOT
 LDUQ 128
 PUSHCONT {
 	;; load next cell
@@ -678,6 +687,7 @@ IFNOT
 ;; decode TvmCell
 LDREF
 ENDS
+;; param: sender
 ;; param: recipient
 ;; param: amount
 ;; param: payload
@@ -696,7 +706,7 @@ PUSHCONT {
 	NEWC
 	STSLICECONST xc
 	STSLICE
-	PUSHSLICE x00000000000000000000000020d8ee2e2_
+	PUSHSLICE x0000000000000000000000002108b245a_
 	STSLICER
 	STREF
 	ENDC
@@ -718,6 +728,7 @@ SETGLOB 7
 CALL $getPayMsg_internal_macro$
 
 .macro getPayMsg_internal_macro
+;; param: sender
 ;; param: recipient
 ;; param: amount
 ;; param: payload
@@ -729,11 +740,17 @@ PUSHREF {
 ;; push identifier amount
 ;; push identifier recipient
 PUSH3 S1, S2, S3
+;; push identifier sender
+PUSH S7
 NEWC
-STSLICECONST x22c43926
+STSLICECONST x53fe10ba
+STSLICE
+BLKSWAP 3, 1
+NEWC
 STSLICE
 STU 128
 STREF
+STBREFR
 ENDC
 ;; decl: body
 NEWC
@@ -829,7 +846,7 @@ ENDC
 POP S2
 DROP
 ; end function getPayMsg
-BLKDROP2 3, 1
+BLKDROP2 4, 1
 
 .macro pay
 DROP
@@ -838,6 +855,15 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
+LDMSGADDRQ
+PUSHCONT {
+	;; load next cell
+	LDREF
+	ENDS
+	CTOS
+	LDMSGADDR
+}
+IFNOT
 LDMSGADDRQ
 PUSHCONT {
 	;; load next cell
@@ -859,6 +885,7 @@ IFNOT
 ;; decode TvmCell
 LDREF
 ENDS
+;; param: sender
 ;; param: recipient
 ;; param: amount
 ;; param: payload
@@ -876,6 +903,7 @@ SETGLOB 7
 CALL $pay_internal_macro$
 
 .macro pay_internal_macro
+;; param: sender
 ;; param: recipient
 ;; param: amount
 ;; param: payload
@@ -885,28 +913,35 @@ CALL $pay_internal_macro$
 ;; push identifier recipient
 PUSH S2
 ; colValue
-SETGLOB 17
+SETGLOB 18
 ; end colValue
 ; expValue
 ; end expValue
 ;; push identifier amount
 PUSH S1
 ; colValue
-SETGLOB 18
+SETGLOB 19
 ; end colValue
 ; expValue
 ; end expValue
 ;; push identifier payload
 DUP
 ; colValue
-SETGLOB 19
+SETGLOB 20
+; end colValue
+; expValue
+; end expValue
+;; push identifier sender
+PUSH S3
+; colValue
+SETGLOB 17
 ; end colValue
 PUSHINT 482255309
 CALLREF {
 	CALL $UserInfo_no_obj_getSigningBox_macro$
 }
 ; end function pay
-BLKDROP 3
+BLKDROP 4
 
 .macro getPayUserSign
 DROP
@@ -982,95 +1017,115 @@ CALL $getPayUserAddress_internal_macro$
 .macro getPayUserAddress_internal_macro
 ;; param: value
 ; function getPayUserAddress
-NULL
-;; decl: none
+;; if
 ;; push identifier value
-PUSH S1
-;; push identifier m_sign
-GETGLOB 15
-PUSHINT 2
-PUSHINT 25277183
-PUSHINT 2054732523
-NEWC
-STSLICECONST x6_
-PUSH S4
-ISNULL
-PUSHCONT {
-	STSLICECONST x264_
-}
-PUSHCONT {
-	STSLICECONST x364_
-}
-IFELSE
-STU 32
-STU 32
-STU 8
-STSLICECONST xf_
-PUSH S1
-ISNULL
-PUSHCONT {
-	NIP
-	STSLICECONST 0
-}
-PUSHCONT {
-	STSLICECONST 1
-	STU 32
-}
-IFELSE
-NEWC
-STSLICECONST xa_
-STB
-STSLICE
-PUSHINT 1
-STUR 6
-;; push identifier m_payload
-GETGLOB 19
-PUSHINT 1
-TRUE
-;; push identifier m_amount
-GETGLOB 18
-;; push identifier m_dst
+DUP
+;; push identifier m_sender
 GETGLOB 17
-NEWC
-STSLICECONST 1
-PUSHINT 512
-STZEROES
-;; push identifier none
-PUSH2 S7, S7
-ISNULL
+SDEQ
 PUSHCONT {
+	NULL
+	;; decl: none
+	;; push identifier value
+	PUSH S1
+	;; push identifier m_sign
+	GETGLOB 15
+	PUSHINT 2
+	PUSHINT 25277183
+	PUSHINT 2054732523
+	NEWC
+	STSLICECONST x6_
+	PUSH S4
+	ISNULL
+	PUSHCONT {
+		STSLICECONST x264_
+	}
+	PUSHCONT {
+		STSLICECONST x364_
+	}
+	IFELSE
+	STU 32
+	STU 32
+	STU 8
+	STSLICECONST xf_
+	PUSH S1
+	ISNULL
+	PUSHCONT {
+		NIP
+		STSLICECONST 0
+	}
+	PUSHCONT {
+		STSLICECONST 1
+		STU 32
+	}
+	IFELSE
+	NEWC
+	STSLICECONST xa_
+	STB
+	STSLICE
+	PUSHINT 1
+	STUR 6
+	;; push identifier m_payload
+	GETGLOB 20
+	PUSHINT 1
+	TRUE
+	;; push identifier m_amount
+	GETGLOB 19
+	;; push identifier m_dst
+	GETGLOB 18
+	NEWC
+	STSLICECONST 1
+	PUSHINT 512
+	STZEROES
+	;; push identifier none
+	PUSH2 S7, S7
+	ISNULL
+	PUSHCONT {
+		DROP
+		STSLICECONST 0
+	}
+	PUSHCONT {
+		SWAP
+		STSLICECONST 1
+		STU 256
+	}
+	IFELSE
+	PUSHSLICE x0000000000000000000000004cee646c
+	STSLICER
+	BLKSWAP 5, 1
+	NEWC
+	STSLICE
+	STU 128
+	STI 1
+	STU 8
+	STREF
+	STBREFR
+	STBREFR
+	ENDC
+	; expValue
+	; end expValue
+	; colValue
+	SETGLOB 16
+	; end colValue
+	TRUE
+	CALLREF {
+		CALL $confirmPay_internal_macro$
+	}
 	DROP
-	STSLICECONST 0
 }
 PUSHCONT {
-	SWAP
-	STSLICECONST 1
-	STU 256
+	PUSHINT 0
+	PUSHREF {
+		.blob x4572726f723a2077726f6e672073656e646572206164647265737321
+	}
+	CALLREF {
+		CALL $Terminal_no_obj_print_macro$
+	}
 }
 IFELSE
-PUSHSLICE x0000000000000000000000004cee646c
-STSLICER
-BLKSWAP 5, 1
-NEWC
-STSLICE
-STU 128
-STI 1
-STU 8
-STREF
-STBREFR
-STBREFR
-ENDC
-; expValue
-; end expValue
-; colValue
-SETGLOB 16
-; end colValue
-TRUE
-CALLREF {
-	CALL $confirmPay_internal_macro$
-}
+;; end if
 ; end function getPayUserAddress
-DROP2
+DROP
 
 .macro confirmPay
 DROP
@@ -1504,11 +1559,13 @@ PUSHREF {
 SETGLOB 16
 PUSHSLICE x8000000000000000000000000000000000000000000000000000000000000000001_
 SETGLOB 17
-PUSHINT 0
+PUSHSLICE x8000000000000000000000000000000000000000000000000000000000000000001_
 SETGLOB 18
+PUSHINT 0
+SETGLOB 19
 PUSHREF {
 }
-SETGLOB 19
+SETGLOB 20
 ;; end set default state vars
 ; end function onCodeUpgrade
 CALLREF {
@@ -1786,6 +1843,7 @@ SETGLOB 10
 SETGLOB 11
 
 .macro c7_to_c4
+GETGLOB 20
 GETGLOB 19
 GETGLOB 18
 GETGLOB 17
@@ -1851,12 +1909,16 @@ PUSHCONT {
 IFELSE
 STU 256
 STU 32
-BLKSWAP 4, 1
+BLKSWAP 5, 1
 NEWC
 STREF
 STSLICE
+BLKSWAP 3, 1
+NEWC
+STSLICE
 STU 128
 STREF
+STBREFR
 STBREFR
 ENDC
 POP C4
@@ -1908,10 +1970,16 @@ ENDS
 CTOS
 LDREF
 LDMSGADDR
+;; load next cell
+LDREF
+ENDS
+CTOS
+LDMSGADDR
 LDU 128
 ;; decode TvmCell
 LDREF
 ENDS
+SETGLOB 20
 SETGLOB 19
 SETGLOB 18
 SETGLOB 17
@@ -1962,16 +2030,19 @@ PUSHCONT {
 	PUSHREF {
 	}
 	SETGLOB 16
-	; init m_dst
+	; init m_sender
 	PUSHSLICE x8000000000000000000000000000000000000000000000000000000000000000001_
 	SETGLOB 17
+	; init m_dst
+	PUSHSLICE x8000000000000000000000000000000000000000000000000000000000000000001_
+	SETGLOB 18
 	; init m_amount
 	PUSHINT 0
-	SETGLOB 18
+	SETGLOB 19
 	; init m_payload
 	PUSHREF {
 	}
-	SETGLOB 19
+	SETGLOB 20
 	PUSHINT 64
 	DICTUGET
 	THROWIFNOT 61
@@ -2305,7 +2376,7 @@ PUSHSLICE x6000836ae862e6c1c4e746e344048c678129e6cae022248b81e6e5a6e388642a23f_
 
 .macro public_function_selector
 DUP
-PUSHINT 1088593723
+PUSHINT 1409159354
 LEQ
 IFJMPREF {
 	DUP
@@ -2325,7 +2396,7 @@ IFJMPREF {
 			CALL $payError$
 		}
 		DUP
-		PUSHINT 56867000
+		PUSHINT 69388566
 		EQUAL
 		IFJMPREF {
 			CALL $getPayMsg$
@@ -2367,7 +2438,7 @@ IFJMPREF {
 		}
 	}
 	DUP
-	PUSHINT 601894754
+	PUSHINT 763849393
 	LEQ
 	IFJMPREF {
 		DUP
@@ -2375,12 +2446,6 @@ IFJMPREF {
 		EQUAL
 		IFJMPREF {
 			CALL $getPayUserAddress$
-		}
-		DUP
-		PUSHINT 583285030
-		EQUAL
-		IFJMPREF {
-			CALL $pay$
 		}
 		DUP
 		PUSHINT 599292210
@@ -2394,17 +2459,17 @@ IFJMPREF {
 		IFJMPREF {
 			CALL $getUserSign$
 		}
-	}
-	DUP
-	PUSHINT 1088593723
-	LEQ
-	IFJMPREF {
 		DUP
 		PUSHINT 763849393
 		EQUAL
 		IFJMPREF {
 			CALL $getAuthMsg$
 		}
+	}
+	DUP
+	PUSHINT 1409159354
+	LEQ
+	IFJMPREF {
 		DUP
 		PUSHINT 821466924
 		EQUAL
@@ -2422,6 +2487,12 @@ IFJMPREF {
 		EQUAL
 		IFJMPREF {
 			CALL $onAuth$
+		}
+		DUP
+		PUSHINT 1409159354
+		EQUAL
+		IFJMPREF {
+			CALL $pay$
 		}
 	}
 }

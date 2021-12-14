@@ -38,9 +38,11 @@ contract SurfAuthDebot is Debot, Upgradable {
     uint256 m_hash;
     uint32 m_sign;
     TvmCell m_sendMsg;
+    address m_sender;
     address m_dst;
     uint128 m_amount;
     TvmCell m_payload;
+
 
     function onAuth(uint256 hash) public internalMsg {
         emit BOT_INI_nifi_bot1_1{dest: SwiftAddress.value()}(hash, msg.sender);
@@ -113,9 +115,9 @@ contract SurfAuthDebot is Debot, Upgradable {
         Terminal.print(0,"Auth request sent!");
     }
 
-    function getPayMsg(address recipient, uint128 amount, TvmCell payload) public pure
+    function getPayMsg(address sender, address recipient, uint128 amount, TvmCell payload) public pure
         returns(TvmCell message) {
-        TvmCell body = tvm.encodeBody(SurfAuthDebot.pay, recipient, amount, payload);
+        TvmCell body = tvm.encodeBody(SurfAuthDebot.pay, sender, recipient, amount, payload);
         TvmBuilder message_;
         message_.store(false, true, true, false, address(0), address(this));
         message_.storeTons(0);
@@ -130,10 +132,11 @@ contract SurfAuthDebot is Debot, Upgradable {
         message = message_.toCell();
     }
 
-    function pay(address recipient, uint128 amount, TvmCell payload) public {
+    function pay(address sender, address recipient, uint128 amount, TvmCell payload) public {
         m_dst = recipient;
         m_amount = amount;
         m_payload = payload;
+        m_sender = sender;
         UserInfo.getSigningBox(tvm.functionId(getPayUserSign));
     }
 
@@ -143,20 +146,24 @@ contract SurfAuthDebot is Debot, Upgradable {
     }
 
     function getPayUserAddress (address value) public {
-        optional(uint256) none;
-        m_sendMsg = tvm.buildExtMsg({
-            abiVer: 2,
-            dest: value,
-            callbackId: tvm.functionId(paySuccess),
-            onErrorId: tvm.functionId(payError),
-            time: 0,
-            expire: 0,
-            sign: true,
-            pubkey: none,
-            signBoxHandle: m_sign,
-            call: {AMSig.sendTransaction, m_dst, m_amount, true, 1, m_payload}
-        });
-        confirmPay(true);
+        if (value == m_sender){
+            optional(uint256) none;
+            m_sendMsg = tvm.buildExtMsg({
+                abiVer: 2,
+                dest: value,
+                callbackId: tvm.functionId(paySuccess),
+                onErrorId: tvm.functionId(payError),
+                time: 0,
+                expire: 0,
+                sign: true,
+                pubkey: none,
+                signBoxHandle: m_sign,
+                call: {AMSig.sendTransaction, m_dst, m_amount, true, 1, m_payload}
+            });
+            confirmPay(true);
+        } else {
+            Terminal.print(0,"Error: wrong sender address!");
+        }
     }
 
     function confirmPay(bool value) public {

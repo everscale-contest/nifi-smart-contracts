@@ -78,6 +78,7 @@
 		{
 			"name": "getPayMsg",
 			"inputs": [
+				{"name":"sender","type":"address"},
 				{"name":"recipient","type":"address"},
 				{"name":"amount","type":"uint128"},
 				{"name":"payload","type":"cell"}
@@ -89,6 +90,7 @@
 		{
 			"name": "pay",
 			"inputs": [
+				{"name":"sender","type":"address"},
 				{"name":"recipient","type":"address"},
 				{"name":"amount","type":"uint128"},
 				{"name":"payload","type":"cell"}
