@@ -178,8 +178,7 @@ contract SurfAuthDebot is Debot, Upgradable {
         ConfirmInput.get(tvm.functionId(confirmPay), format("Transaction failed. Sdk error = {}, Error code = {}\nDo you want to retry?", sdkError, exitCode));
     }
 
-    function paySuccess(uint256 id) public {
-        id;
+    function paySuccess() public {
         Terminal.print(0,"Payment done!");
     }
 

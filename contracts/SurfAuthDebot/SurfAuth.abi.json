@@ -134,7 +134,6 @@
 		{
 			"name": "paySuccess",
 			"inputs": [
-				{"name":"id","type":"uint256"}
 			],
 			"outputs": [
 			]
