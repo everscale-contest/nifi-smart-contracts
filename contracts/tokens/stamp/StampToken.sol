@@ -90,7 +90,6 @@ contract StampToken {
         addressIsNotNull(owner)
         accept
     {
-        _root.transfer({value: 0.1 ton, flag: 1, bounce: true});
         _creator = creator;
         _creatorFees = creatorFees;
         _hash = hash;
@@ -109,11 +108,13 @@ contract StampToken {
         emit TK_CO_nifi_stamp1_1{dest: SwiftAddress.value()}(_id, _owner);
     }
 
-    function receiveArtHash() public view responsible returns(uint256 hash) {
-        return{value: 0, bounce: false, flag: 64} getArtHash();
+    function receiveArtInfo() public view responsible returns(address creator, uint32  creatorFees, uint256 hash) {
+        return{value: 0, bounce: false, flag: 64} getArtInfo();
     }
 
-    function getArtHash() public view returns(uint256 hash) {
+    function getArtInfo() public view returns(address creator, uint32  creatorFees, uint256 hash) {
+        creator = _creator;
+        creatorFees = _creatorFees;
         hash = _hash;
     }
 

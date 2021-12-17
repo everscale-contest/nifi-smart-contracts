@@ -24,19 +24,23 @@
 			]
 		},
 		{
-			"name": "receiveArtHash",
+			"name": "receiveArtInfo",
 			"inputs": [
 				{"name":"_answer_id","type":"uint32"}
 			],
 			"outputs": [
+				{"name":"creator","type":"address"},
+				{"name":"creatorFees","type":"uint32"},
 				{"name":"hash","type":"uint256"}
 			]
 		},
 		{
-			"name": "getArtHash",
+			"name": "getArtInfo",
 			"inputs": [
 			],
 			"outputs": [
+				{"name":"creator","type":"address"},
+				{"name":"creatorFees","type":"uint32"},
 				{"name":"hash","type":"uint256"}
 			]
 		},
