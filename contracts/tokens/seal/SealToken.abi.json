@@ -46,23 +46,6 @@
 			]
 		},
 		{
-			"name": "getSeal",
-			"inputs": [
-			],
-			"outputs": [
-				{"name":"seal","type":"optional(address)"},
-				{"name":"corner","type":"uint8"}
-			]
-		},
-		{
-			"name": "getForever",
-			"inputs": [
-			],
-			"outputs": [
-				{"name":"forever","type":"optional(address)"}
-			]
-		},
-		{
 			"name": "getInfo",
 			"inputs": [
 			],
@@ -113,41 +96,10 @@
 			]
 		},
 		{
-			"name": "requestEndorse",
-			"inputs": [
-				{"name":"seal","type":"address"},
-				{"name":"places","type":"uint8"}
-			],
-			"outputs": [
-			]
-		},
-		{
-			"name": "cancelEndrose",
-			"inputs": [
-			],
-			"outputs": [
-			]
-		},
-		{
 			"name": "endrose",
 			"inputs": [
-				{"name":"place","type":"uint8"},
-				{"name":"receiver","type":"address"}
-			],
-			"outputs": [
-			]
-		},
-		{
-			"name": "setForever",
-			"inputs": [
-				{"name":"forever","type":"address"}
-			],
-			"outputs": [
-			]
-		},
-		{
-			"name": "delForever",
-			"inputs": [
+				{"name":"stamp","type":"address"},
+				{"name":"place","type":"uint8"}
 			],
 			"outputs": [
 			]
@@ -159,7 +111,7 @@
 	],
 	"events": [
 		{
-			"name": "TK_CO_nifi_stamp1_1",
+			"name": "TK_CO_nifi_seal_1",
 			"inputs": [
 				{"name":"id","type":"uint64"},
 				{"name":"newOwner","type":"address"}
@@ -168,58 +120,11 @@
 			]
 		},
 		{
-			"name": "TK_MG_nifi_stamp1_1",
+			"name": "TK_MG_nifi_seal_1",
 			"inputs": [
 				{"name":"id","type":"uint64"},
 				{"name":"newManager","type":"address"},
 				{"name":"expirationTime","type":"uint32"}
-			],
-			"outputs": [
-			]
-		},
-		{
-			"name": "TK_RQ_nifi_stamp1_1",
-			"inputs": [
-				{"name":"id","type":"uint64"},
-				{"name":"seal","type":"address"},
-				{"name":"sealPlaces","type":"uint8"},
-				{"name":"value","type":"uint64"}
-			],
-			"outputs": [
-			]
-		},
-		{
-			"name": "TK_RX_nifi_stamp1_1",
-			"inputs": [
-				{"name":"id","type":"uint64"}
-			],
-			"outputs": [
-			]
-		},
-		{
-			"name": "TK_EN_nifi_stamp1_1",
-			"inputs": [
-				{"name":"id","type":"uint64"},
-				{"name":"seal","type":"address"},
-				{"name":"corner","type":"uint8"}
-			],
-			"outputs": [
-			]
-		},
-		{
-			"name": "TK_FE_nifi_stamp1_1",
-			"inputs": [
-				{"name":"id","type":"uint64"},
-				{"name":"forever","type":"address"}
-			],
-			"outputs": [
-			]
-		},
-		{
-			"name": "TK_FD_nifi_stamp1_1",
-			"inputs": [
-				{"name":"id","type":"uint64"},
-				{"name":"forever","type":"address"}
 			],
 			"outputs": [
 			]
@@ -236,11 +141,6 @@
 		{"name":"_managerUnlockTime","type":"uint32"},
 		{"name":"_creator","type":"address"},
 		{"name":"_creatorFees","type":"uint32"},
-		{"name":"_hash","type":"uint256"},
-		{"name":"_sealPlace","type":"uint8"},
-		{"name":"_seal","type":"optional(address)"},
-		{"name":"_sealValue","type":"uint128"},
-		{"name":"_sealPosiblePlaces","type":"uint8"},
-		{"name":"_forever","type":"optional(address)"}
+		{"name":"_hash","type":"uint256"}
 	]
 }

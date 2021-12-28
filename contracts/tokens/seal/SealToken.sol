@@ -4,25 +4,14 @@ pragma AbiHeader pubkey;
 pragma AbiHeader expire;
 
 import "../../libraries/SwiftAddress.sol";
-import "IStampToken.sol";
-import "../forever/IForeverToken.sol";
+import "../stamp/IStampToken.sol";
 
-contract StampToken is IStampToken {
+contract SealToken {
 
-    uint8 constant CORNER_SW = 1;
-    uint8 constant CORNER_SE = 2;
-    uint8 constant CORNER_NW = 4;
-    uint8 constant CORNER_NE = 8;
+    uint128 constant ENDROSE_FEE = 0.1 ton;
 
-    uint128 constant SEAL_FEE = 0.01 ton;
-
-    event TK_CO_nifi_stamp1_1(uint64 id, address newOwner);
-    event TK_MG_nifi_stamp1_1(uint64 id, address newManager, uint32 expirationTime);
-    event TK_RQ_nifi_stamp1_1(uint64 id, address seal, uint8 sealPlaces, uint64 value);
-    event TK_RX_nifi_stamp1_1(uint64 id);
-    event TK_EN_nifi_stamp1_1(uint64 id, address seal, uint8 corner);
-    event TK_FE_nifi_stamp1_1(uint64 id, address forever);
-    event TK_FD_nifi_stamp1_1(uint64 id, address forever);
+    event TK_CO_nifi_seal_1(uint64 id, address newOwner);
+    event TK_MG_nifi_seal_1(uint64 id, address newManager, uint32 expirationTime);
 
     /*************
      * VARIABLES *
@@ -38,33 +27,23 @@ contract StampToken is IStampToken {
     uint32  _creatorFees;
     uint256 _hash;
 
-    uint8 _sealPlace;
-
-    optional(address) _seal;
-    uint128 _sealValue;
-    uint8 _sealPosiblePlaces;
-
-    optional(address) _forever;
-
-
-
     modifier onlyRoot() {
         require(msg.sender == _root, 101, "Method for the root only");
         _;
     }
 
     modifier onlyManager {
-        require(!_forever.hasValue() && msg.sender == _manager, 102, "Method for the manager only");
+        require(msg.sender == _manager, 102, "Method for the manager only");
         _;
     }
 
     modifier onlyLockedManager{
-        require(!_forever.hasValue() && msg.sender == _manager && now < _managerUnlockTime, 103, "Method for locked manager only");
+        require(msg.sender == _manager && now < _managerUnlockTime, 103, "Method for locked manager only");
         _;
     }
 
     modifier onlyUnlockedOwnerOrLockedManager {
-        require(!_forever.hasValue()&&(msg.sender == _owner && now >= _managerUnlockTime) ||
+        require((msg.sender == _owner && now >= _managerUnlockTime) ||
                 (msg.sender == _manager && now < _managerUnlockTime),
                 104,
                 "Method for the owner or manager only"
@@ -88,7 +67,7 @@ contract StampToken is IStampToken {
     }
 
     modifier onlyOwner{
-        require(!_forever.hasValue() && (msg.sender == _owner && now >= _managerUnlockTime) , 108, "Method for owner only");
+        require((msg.sender == _owner && now >= _managerUnlockTime) , 108, "Method for owner only");
         _;
     }
 
@@ -128,7 +107,7 @@ contract StampToken is IStampToken {
         accept
     {
         _owner = owner;
-        emit TK_CO_nifi_stamp1_1{dest: SwiftAddress.value()}(_id, _owner);
+        emit TK_CO_nifi_seal_1{dest: SwiftAddress.value()}(_id, _owner);
     }
 
     function receiveArtInfo() public view responsible returns(address creator, uint32  creatorFees, uint256 hash) {
@@ -139,15 +118,6 @@ contract StampToken is IStampToken {
         creator = _creator;
         creatorFees = _creatorFees;
         hash = _hash;
-    }
-
-    function getSeal() public view returns (optional(address) seal, uint8 corner) {
-        seal = _seal;
-        corner = _sealPlace;
-    }
-
-    function getForever() public view returns (optional(address) forever) {
-        forever = _forever;
     }
 
     function getInfo() public view returns(address root, uint64 id) {
@@ -182,50 +152,17 @@ contract StampToken is IStampToken {
     {
         _manager = manager;
         _managerUnlockTime = unlockTime;
-        emit TK_MG_nifi_stamp1_1{dest: SwiftAddress.value()}(_id, _manager, _managerUnlockTime);
+        emit TK_MG_nifi_seal_1{dest: SwiftAddress.value()}(_id, _manager, _managerUnlockTime);
     }
 
     function unlock() public onlyLockedManager accept {
         _managerUnlockTime = 0;
     }
 
-    function requestEndorse(address seal, uint8 places) public onlyOwner {
-        require(msg.value>SEAL_FEE, 109);
-        require(_sealPlace == 0, 110);
-        _seal.set(seal);
-        _sealValue = msg.value-SEAL_FEE;
-        _sealPosiblePlaces = places;
-        emit TK_RQ_nifi_stamp1_1{dest: SwiftAddress.value()}(_id, _seal.get(), places, uint64(_sealValue));        
-    }
-
-    function cancelEndrose() public  onlyOwner {
-        require(_sealPlace == 0, 110);
-        tvm.accept();
-        _seal.reset();
-        _owner.transfer(_sealValue,true);
-        emit TK_RX_nifi_stamp1_1{dest: SwiftAddress.value()}(_id);
-    }
-
-    function endrose(uint8 place, address receiver) public override {
-         require(_seal.hasValue() && msg.sender==_seal.get(), 111);
-         require((place&_sealPosiblePlaces)!=0,113);
-         require(place==CORNER_SW || place==CORNER_SE || place==CORNER_NW || place==CORNER_NE, 112 );
+    function endrose(address stamp, uint8 place) public onlyOwner {
+         require(msg.value>=ENDROSE_FEE, 111);
          tvm.accept();
-         _sealPlace = place;
-         receiver.transfer(_sealValue,true);
-         emit TK_EN_nifi_stamp1_1{dest: SwiftAddress.value()}(_id,_seal.get(),_sealPlace);         
-    }
-
-    function setForever(address forever) public onlyOwner accept {
-        _forever.set(forever);
-        IForeverToken(forever).addStamp(_owner,_sealPlace);
-        emit TK_FE_nifi_stamp1_1{dest: SwiftAddress.value()}(_id,forever);
-    }
-
-    function delForever() public override {
-        require(_forever.hasValue() && (msg.sender == _forever.get()) , 118);
-        _forever.reset();   
-        emit TK_FD_nifi_stamp1_1{dest: SwiftAddress.value()}(_id,msg.sender);
+         IStampToken(stamp).endrose(place,_owner);     
     }
     
 }

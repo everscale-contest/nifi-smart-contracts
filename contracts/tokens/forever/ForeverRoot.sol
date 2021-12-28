@@ -4,9 +4,9 @@ pragma AbiHeader pubkey;
 pragma AbiHeader expire;
 
 import "../../libraries/SwiftAddress.sol";
-import "StampToken.sol";
+import "ForeverToken.sol";
 
-contract StampRoot  {
+contract ForeverRoot  {
 
     address _manager;
     uint128 _creationFee;
@@ -16,7 +16,7 @@ contract StampRoot  {
     TvmCell _tokenCode;
     uint64 _totalSupply;
 
-    event TK_CT_nifi_stamp1_1(uint64 id);
+    event FOR_CT_nifi_for1_1(uint64 id);
 
     modifier validCreatorFees(uint32 fees) {
         require(fees < 2401, 277);
@@ -85,7 +85,7 @@ contract StampRoot  {
         require(msg.value >= _creationMinValue,278);
         uint128 value = msg.value - _creationFee;
         _totalSupply++;
-        addr = new StampToken{
+        addr = new ForeverToken{
             code: _tokenCode,
             value: value,
             pubkey: tvm.pubkey(),
@@ -94,14 +94,14 @@ contract StampRoot  {
                 _id: _totalSupply
             }
         }(owner, manager, managerUnlockTime, creator, creatorFees, hash);
-        emit TK_CT_nifi_stamp1_1{dest: SwiftAddress.value()}(_totalSupply);
+        emit FOR_CT_nifi_for1_1{dest: SwiftAddress.value()}(_totalSupply);
         //_totalSupply++;
     }
 
 
     function getTokenAddress(uint64 id) public view returns(address addr) {
         TvmCell stateInit = tvm.buildStateInit({
-            contr: StampToken,
+            contr: ForeverToken,
             varInit: {
                 _root: address(this),
                 _id: id
