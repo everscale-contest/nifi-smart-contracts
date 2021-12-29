@@ -21,8 +21,8 @@ async function run(): Promise<void> {
     console.log(rootKeys.public)
     console.log(rootKeys.secret)*/
     const rootKeys: KeyPair =
-    {public: '038f8816b7fe64dff88fa9655c6ee29895e8ec00f222dfdb2de27fd74c44bc0e',
-    secret: '73c338c44e2c5d86290908ab5d6d0878ca70552a2ba9a97d4ec746786b2cb574'}
+    {public: '5c4e2691bd84acca584c8ebd158f3f6f91df5d12f6c8771a01a30b1d1fc836a2',
+    secret: 'a265524169d2781e3aca21f84eb4182f87d2116291aebfb43b3caad4f4eae07e'}
     /*{public: 'bb1080f7951262ebc58e6c0ad5c191c583e08a1f2456c7c0871ca8836322d4cd',
     secret: '4fa3037a5419e1d4742b758b6d5252c020d4197bf5ae59b386044ba8c0a3d867'}*/
     /*{public: 'fade393f0ad3476a669c22939f266a8282ceb6cf03036defc02dd5568960478f',

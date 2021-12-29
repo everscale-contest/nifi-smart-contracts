@@ -21,8 +21,8 @@ async function run(): Promise<void> {
     console.log(rootKeys.public)
     console.log(rootKeys.secret)*/
     const rootKeys: KeyPair =
-    {public: 'ccf79f4f7fbe92d7586c0ea99a1e0a332e413bc06e1223979129d9494e431413',
-    secret: 'e76f170a9de82042be98d5794966e501d8a1acf8b5c361bfc7983cf21f05b7b7'}
+    {public: '5c4e2691bd84acca584c8ebd158f3f6f91df5d12f6c8771a01a30b1d1fc836a2',
+    secret: 'a265524169d2781e3aca21f84eb4182f87d2116291aebfb43b3caad4f4eae07e'}
     /*{public: '3b4d32825953a5161f32fe973ae5bccb3f80900e58a38aeff26626100a6fab68',
     secret: '3093a3c342e4306b929fb5056c05bf038a29a0bdf5b414a5dd5f5c4e1c31e489'}*/
     const giverKeys: KeyPair = await TonKeysFile.createRandomIfNotExist(config.net.deploy.keys.giver, kit.client)
@@ -35,7 +35,7 @@ async function run(): Promise<void> {
     await TerminalContractInfo.log()
     await TerminalContractInfo.logAccount('BidRoot', offerRoot, config.net.deploy.locale)
     await TerminalContractInfo.log()
-    process.exit()
+    //process.exit()
     const balance: number = parseInt(await offerRoot.getBalance())
     if (balance === 0) {
         await TerminalContractInfo.log('SENDING...')

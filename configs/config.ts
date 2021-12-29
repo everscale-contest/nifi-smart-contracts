@@ -7,9 +7,9 @@ export default {
              *     'http://localhost'
              *     'http://0.0.0.0
              */
-            //url: 'https://net.ton.dev',
+            url: 'https://net.ton.dev',
             //url: 'https://main.ton.dev',
-            url: 'http://localhost',
+            //url: 'http://localhost',
 
             /**
              * Network port.
@@ -60,8 +60,8 @@ export default {
              *     'http://localhost'
              *     'http://0.0.0.0
              */
-            //url: 'https://net.ton.dev',
-            url: 'https://main.ton.dev',
+            url: 'https://net.ton.dev',
+            //url: 'https://main.ton.dev',
             //url: 'http://localhost',
 
             /**
@@ -142,6 +142,36 @@ export default {
                     creationAndStorageFee : 0,
                     name: 'Bid',
                     symbol: 'BID'
+                },
+                stampRoot: {
+                    keyFile: __dirname + '/../keys/StampRoot.keys.json',
+                    giverDeposit: 100_000_000,
+
+                    manager: '0:ab5f48c154f672d2f4c30c4473251e14a05199d1df1300263d8f5b0e80e3e387',
+                    creationMinValue: 200_000_000,
+                    creationFee: 100_000_000,
+                    name: 'Stamp',
+                    symbol: 'STP'
+                },
+                sealRoot: {
+                    keyFile: __dirname + '/../keys/StampRoot.keys.json',
+                    giverDeposit: 100_000_000,
+
+                    manager: '0:ab5f48c154f672d2f4c30c4473251e14a05199d1df1300263d8f5b0e80e3e387',
+                    creationMinValue: 200_000_000,
+                    creationFee: 100_000_000,
+                     name: 'Seal',
+                    symbol: 'SEA'
+                },
+                foreverRoot: {
+                    keyFile: __dirname + '/../keys/StampRoot.keys.json',
+                    giverDeposit: 100_000_000,
+
+                    manager: '0:ab5f48c154f672d2f4c30c4473251e14a05199d1df1300263d8f5b0e80e3e387',
+                    creationMinValue: 200_000_000,
+                    creationFee: 100_000_000,
+                     name: 'Forever',
+                    symbol: 'FOR'
                 },
                 ticketRoot: {
                     keyFile: __dirname + '/../keys/AuctionRoot.keys.json',
