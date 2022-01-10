@@ -80,7 +80,7 @@
 	],
 	"events": [
 		{
-			"name": "FOR_CT_nifi_for1_1",
+			"name": "TK_CT_nifi_for1_1",
 			"inputs": [
 				{"name":"id","type":"uint64"}
 			],

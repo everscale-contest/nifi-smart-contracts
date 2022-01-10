@@ -16,7 +16,7 @@ contract ForeverRoot  {
     TvmCell _tokenCode;
     uint64 _totalSupply;
 
-    event FOR_CT_nifi_for1_1(uint64 id);
+    event TK_CT_nifi_for1_1(uint64 id);
 
     modifier validCreatorFees(uint32 fees) {
         require(fees < 2401, 277);
@@ -94,7 +94,7 @@ contract ForeverRoot  {
                 _id: _totalSupply
             }
         }(owner, manager, managerUnlockTime, creator, creatorFees, hash);
-        emit FOR_CT_nifi_for1_1{dest: SwiftAddress.value()}(_totalSupply);
+        emit TK_CT_nifi_for1_1{dest: SwiftAddress.value()}(_totalSupply);
         //_totalSupply++;
     }
 
