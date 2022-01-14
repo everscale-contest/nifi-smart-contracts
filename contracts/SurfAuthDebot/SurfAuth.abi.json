@@ -51,6 +51,14 @@
 			]
 		},
 		{
+			"name": "firstMessage",
+			"inputs": [
+				{"name":"value","type":"bool"}
+			],
+			"outputs": [
+			]
+		},
+		{
 			"name": "confirmAuth",
 			"inputs": [
 				{"name":"value","type":"bool"}

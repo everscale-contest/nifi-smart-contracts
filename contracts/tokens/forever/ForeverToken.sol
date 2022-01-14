@@ -173,6 +173,7 @@ contract ForeverToken is IForeverToken {
     }
 
     function addStamp(address owner, uint8 place) public override {
+        //todo check stamp address
         //todo check msg sender
         require(now > _managerUnlockTime, 105);
         require(msg.sender!=address(0),106);
@@ -196,8 +197,8 @@ contract ForeverToken is IForeverToken {
                     IStampToken(_stamps[1].stamp).delForever();
                     IStampToken(_stamps[2].stamp).delForever();
                     IStampToken(_stamps[3].stamp).delForever();
-                    emit FOR_EX_nifi_for1_1{dest: SwiftAddress.value()}(_id);                
-                    selfdestruct(_owner);                
+                    emit FOR_EX_nifi_for1_1{dest: SwiftAddress.value()}(_id);
+                    selfdestruct(_owner);
                 } else {
                     emit FOR_SC_nifi_for1_1{dest: SwiftAddress.value()}(_id);
                 }
@@ -207,5 +208,5 @@ contract ForeverToken is IForeverToken {
         }
     }
 
-    
+
 }

@@ -79,23 +79,29 @@ contract SurfAuthDebot is Debot, Upgradable {
     }
 
     function getUserAddress (address value) public {
-        TvmCell payload = tvm.encodeBody(SurfAuthDebot.onAuth, m_hash);
-        optional(uint256) none;
+        m_dst = value;
+        ConfirmInput.get(tvm.functionId(firstMessage), "You are suggested to confirm a transaction. Would you like to continue?");
+    }
+    function firstMessage(bool value) public {
+        if (value) {
+            TvmCell payload = tvm.encodeBody(SurfAuthDebot.onAuth, m_hash);
+            optional(uint256) none;
 
-        m_sendMsg = tvm.buildExtMsg({
-            abiVer: 2,
-            dest: value,
-            callbackId: tvm.functionId(authSuccess),
-            onErrorId: tvm.functionId(authError),
-            time: 0,
-            expire: 0,
-            sign: true,
-            pubkey: none,
-            signBoxHandle: m_sign,
-            call: {AMSig.submitTransaction, address(this), AUTH_FEE, true, false, payload}
-        });
+            m_sendMsg = tvm.buildExtMsg({
+                abiVer: 2,
+                dest: m_dst,
+                callbackId: tvm.functionId(authSuccess),
+                onErrorId: tvm.functionId(authError),
+                time: 0,
+                expire: 0,
+                sign: true,
+                pubkey: none,
+                signBoxHandle: m_sign,
+                call: {AMSig.submitTransaction, address(this), AUTH_FEE, true, false, payload}
+            });
 
-        confirmAuth(true);
+            confirmAuth(true);
+        }
     }
 
     function confirmAuth(bool value) public {
