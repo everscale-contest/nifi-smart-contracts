@@ -84,7 +84,7 @@
 			"inputs": [
 			],
 			"outputs": [
-				{"components":[{"name":"stamp","type":"address"},{"name":"owner","type":"address"},{"name":"place","type":"uint8"}],"name":"stamps","type":"tuple[]"}
+				{"components":[{"name":"stamp","type":"address"},{"name":"owner","type":"address"},{"name":"seal","type":"address"},{"name":"place","type":"uint8"}],"name":"stamps","type":"tuple[]"}
 			]
 		},
 		{
@@ -107,6 +107,7 @@
 			"name": "addStamp",
 			"inputs": [
 				{"name":"owner","type":"address"},
+				{"name":"seal","type":"address"},
 				{"name":"place","type":"uint8"}
 			],
 			"outputs": [
@@ -119,7 +120,7 @@
 	],
 	"events": [
 		{
-			"name": "FOR_CO_nifi_for1_1",
+			"name": "TK_CO_nifi_for1_1",
 			"inputs": [
 				{"name":"id","type":"uint64"},
 				{"name":"newOwner","type":"address"}
@@ -128,7 +129,7 @@
 			]
 		},
 		{
-			"name": "FOR_MG_nifi_for1_1",
+			"name": "TK_MG_nifi_for1_1",
 			"inputs": [
 				{"name":"id","type":"uint64"},
 				{"name":"newManager","type":"address"},
@@ -140,7 +141,12 @@
 		{
 			"name": "FOR_SC_nifi_for1_1",
 			"inputs": [
-				{"name":"id","type":"uint64"}
+				{"name":"id","type":"uint64"},
+				{"name":"token1Address","type":"address"},
+				{"name":"token2Address","type":"address"},
+				{"name":"token3Address","type":"address"},
+				{"name":"token4Address","type":"address"},
+				{"name":"sealAddress","type":"address"}
 			],
 			"outputs": [
 			]
@@ -166,6 +172,6 @@
 		{"name":"_creator","type":"address"},
 		{"name":"_creatorFees","type":"uint32"},
 		{"name":"_hash","type":"uint256"},
-		{"components":[{"name":"stamp","type":"address"},{"name":"owner","type":"address"},{"name":"place","type":"uint8"}],"name":"_stamps","type":"tuple[]"}
+		{"components":[{"name":"stamp","type":"address"},{"name":"owner","type":"address"},{"name":"seal","type":"address"},{"name":"place","type":"uint8"}],"name":"_stamps","type":"tuple[]"}
 	]
 }

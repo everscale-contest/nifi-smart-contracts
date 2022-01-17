@@ -10,14 +10,15 @@ import "../stamp/IStampToken.sol";
 struct StampInfo {
     address stamp;
     address owner;
+    address seal;
     uint8 place;
 }
 
 contract ForeverToken is IForeverToken {
 
-    event FOR_CO_nifi_for1_1(uint64 id, address newOwner);
-    event FOR_MG_nifi_for1_1(uint64 id, address newManager, uint32 expirationTime);
-    event FOR_SC_nifi_for1_1(uint64 id);
+    event TK_CO_nifi_for1_1(uint64 id, address newOwner);
+    event TK_MG_nifi_for1_1(uint64 id, address newManager, uint32 expirationTime);
+    event FOR_SC_nifi_for1_1(uint64 id,address token1Address, address token2Address, address token3Address, address token4Address, address sealAddress);
     event FOR_EX_nifi_for1_1(uint64 id);
 
     /*************
@@ -116,7 +117,7 @@ contract ForeverToken is IForeverToken {
         accept
     {
         _owner = owner;
-        emit FOR_CO_nifi_for1_1{dest: SwiftAddress.value()}(_id, _owner);
+        emit TK_CO_nifi_for1_1{dest: SwiftAddress.value()}(_id, _owner);
     }
 
     function receiveArtInfo() public view responsible returns(address creator, uint32  creatorFees, uint256 hash) {
@@ -165,21 +166,20 @@ contract ForeverToken is IForeverToken {
     {
         _manager = manager;
         _managerUnlockTime = unlockTime;
-        emit FOR_MG_nifi_for1_1{dest: SwiftAddress.value()}(_id, _manager, _managerUnlockTime);
+        emit TK_MG_nifi_for1_1{dest: SwiftAddress.value()}(_id, _manager, _managerUnlockTime);
     }
 
     function unlock() public onlyLockedManager accept {
         _managerUnlockTime = 0;
     }
 
-    function addStamp(address owner, uint8 place) public override {
-        //todo check stamp address
+    function addStamp(address owner,address seal,uint8 place) public override {
         //todo check msg sender
         require(now > _managerUnlockTime, 105);
         require(msg.sender!=address(0),106);
         if (_stamps.length<4) {
 
-            _stamps.push(StampInfo(msg.sender,owner,place));
+            _stamps.push(StampInfo(msg.sender,owner,seal,place));
 
             if (_stamps.length==4) {
                 uint8 pos = _stamps[0].place;
@@ -187,7 +187,7 @@ contract ForeverToken is IForeverToken {
 
                 for (uint i=1; i<4; i++) {
                     pos = pos|_stamps[i].place;
-                    if (_stamps[i].owner!=_stamps[0].owner) {
+                    if (_stamps[i].owner!=_stamps[0].owner || _stamps[i].seal!=_stamps[0].seal) {
                         bError = true;
                         break;
                     }
@@ -200,7 +200,7 @@ contract ForeverToken is IForeverToken {
                     emit FOR_EX_nifi_for1_1{dest: SwiftAddress.value()}(_id);
                     selfdestruct(_owner);
                 } else {
-                    emit FOR_SC_nifi_for1_1{dest: SwiftAddress.value()}(_id);
+                    emit FOR_SC_nifi_for1_1{dest: SwiftAddress.value()}(_id,_stamps[0].stamp,_stamps[1].stamp,_stamps[2].stamp,_stamps[3].stamp,_stamps[0].seal);
                 }
             }
         } else {

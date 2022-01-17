@@ -195,7 +195,7 @@ contract StampToken is IStampToken {
         _seal.set(seal);
         _sealValue = msg.value-SEAL_FEE;
         _sealPosiblePlaces = places;
-        emit TK_RQ_nifi_stamp1_1{dest: SwiftAddress.value()}(_id, _seal.get(), places, uint64(_sealValue));        
+        emit TK_RQ_nifi_stamp1_1{dest: SwiftAddress.value()}(_id, _seal.get(), places, uint64(_sealValue));
     }
 
     function cancelEndrose() public  onlyOwner {
@@ -213,19 +213,21 @@ contract StampToken is IStampToken {
          tvm.accept();
          _sealPlace = place;
          receiver.transfer(_sealValue,true);
-         emit TK_EN_nifi_stamp1_1{dest: SwiftAddress.value()}(_id,_seal.get(),_sealPlace);         
+         emit TK_EN_nifi_stamp1_1{dest: SwiftAddress.value()}(_id,_seal.get(),_sealPlace);
     }
 
     function setForever(address forever) public onlyOwner accept {
+        require(!_forever.hasValue(),115);
+        require(_seal.hasValue(),114);
         _forever.set(forever);
-        IForeverToken(forever).addStamp(_owner,_sealPlace);
+        IForeverToken(forever).addStamp(_owner,_seal.get(),_sealPlace);
         emit TK_FE_nifi_stamp1_1{dest: SwiftAddress.value()}(_id,forever);
     }
 
     function delForever() public override {
         require(_forever.hasValue() && (msg.sender == _forever.get()) , 118);
-        _forever.reset();   
+        _forever.reset();
         emit TK_FD_nifi_stamp1_1{dest: SwiftAddress.value()}(_id,msg.sender);
     }
-    
+
 }
