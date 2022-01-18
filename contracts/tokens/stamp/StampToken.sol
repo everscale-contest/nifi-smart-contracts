@@ -217,10 +217,11 @@ contract StampToken is IStampToken {
     }
 
     function setForever(address forever) public onlyOwner accept {
+        //todo check value
         require(!_forever.hasValue(),115);
         require(_seal.hasValue(),114);
         _forever.set(forever);
-        IForeverToken(forever).addStamp(_owner,_seal.get(),_sealPlace);
+        IForeverToken(forever).addStamp{value: 0, flag: 64}(_owner,_seal.get(),_sealPlace);
         emit TK_FE_nifi_stamp1_1{dest: SwiftAddress.value()}(_id,forever);
     }
 
