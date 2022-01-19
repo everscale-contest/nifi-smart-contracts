@@ -20,8 +20,83 @@
 			]
 		},
 		{
+			"name": "getPostAuthMsg",
+			"inputs": [
+				{"name":"otp","type":"bytes"}
+			],
+			"outputs": [
+				{"name":"message","type":"cell"}
+			]
+		},
+		{
 			"name": "start",
 			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "authPost",
+			"inputs": [
+				{"name":"otp","type":"bytes"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "getPostUserSign",
+			"inputs": [
+				{"name":"handle","type":"uint32"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "getPostUserAddress",
+			"inputs": [
+				{"name":"value","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "getPostPubkey",
+			"inputs": [
+				{"name":"value","type":"uint256"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "signMessage",
+			"inputs": [
+				{"name":"value","type":"bool"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "setSignature",
+			"inputs": [
+				{"name":"signature","type":"bytes"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "setEncode",
+			"inputs": [
+				{"name":"base64","type":"bytes"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "setResponse",
+			"inputs": [
+				{"name":"statusCode","type":"int32"},
+				{"name":"retHeaders","type":"bytes[]"},
+				{"name":"content","type":"bytes"}
 			],
 			"outputs": [
 			]

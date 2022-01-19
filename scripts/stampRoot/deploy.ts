@@ -14,15 +14,17 @@ import StampRoot from '../../contracts/StampRoot'
 async function run(): Promise<void> {
     TonClient.useBinaryLibrary(libNode)
     const kit: KitInterface = Ton.kit.create(config.net.deploy)
-   /* const rootKeys: KeyPair = await TonKeysFile.createRandomIfNotExist(
+    /*/const rootKeys: KeyPair = await TonKeysFile.createRandomIfNotExist(
         config.net.deploy.contracts.bidRoot.keyFile,
         kit.client
     )
     console.log(rootKeys.public)
     console.log(rootKeys.secret)*/
     const rootKeys: KeyPair =
-    {public: '5c4e2691bd84acca584c8ebd158f3f6f91df5d12f6c8771a01a30b1d1fc836a2',
-    secret: 'a265524169d2781e3aca21f84eb4182f87d2116291aebfb43b3caad4f4eae07e'}
+    {public: '038f8816b7fe64dff88fa9655c6ee29895e8ec00f222dfdb2de27fd74c44bc0e',
+    secret: '73c338c44e2c5d86290908ab5d6d0878ca70552a2ba9a97d4ec746786b2cb574'}
+    /*{public: '5c4e2691bd84acca584c8ebd158f3f6f91df5d12f6c8771a01a30b1d1fc836a2',
+    secret: 'a265524169d2781e3aca21f84eb4182f87d2116291aebfb43b3caad4f4eae07e'}*/
     /*{public: '3b4d32825953a5161f32fe973ae5bccb3f80900e58a38aeff26626100a6fab68',
     secret: '3093a3c342e4306b929fb5056c05bf038a29a0bdf5b414a5dd5f5c4e1c31e489'}*/
     const giverKeys: KeyPair = await TonKeysFile.createRandomIfNotExist(config.net.deploy.keys.giver, kit.client)

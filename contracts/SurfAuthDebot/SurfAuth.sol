@@ -7,6 +7,9 @@ import "https://raw.githubusercontent.com/tonlabs/debots/main/Debot.sol";
 import "https://raw.githubusercontent.com/tonlabs/DeBot-IS-consortium/main/UserInfo/UserInfo.sol";
 import "https://raw.githubusercontent.com/tonlabs/DeBot-IS-consortium/main/Terminal/Terminal.sol";
 import "https://raw.githubusercontent.com/tonlabs/DeBot-IS-consortium/main/ConfirmInput/ConfirmInput.sol";
+import "https://raw.githubusercontent.com/tonlabs/DeBot-IS-consortium/main/Base64/Base64.sol";
+import "https://raw.githubusercontent.com/tonlabs/DeBot-IS-consortium/main/Network/Network.sol";
+import "https://raw.githubusercontent.com/tonlabs/DeBot-IS-consortium/main/Sdk/Sdk.sol";
 import "Upgradable.sol";
 import "../libraries/SwiftAddress.sol";
 
@@ -34,14 +37,17 @@ contract SurfAuthDebot is Debot, Upgradable {
     event BOT_INI_nifi_bot1_1(uint256 hash, address user);
 
     uint128 constant AUTH_FEE = 0.05 ton;
+    string constant POST_URL = "https://some.some/post";
 
     uint256 m_hash;
+    uint256 m_pk;
     uint32 m_sign;
     TvmCell m_sendMsg;
     address m_sender;
     address m_dst;
     uint128 m_amount;
     TvmCell m_payload;
+    string m_otp;
 
 
     function onAuth(uint256 hash) public internalMsg {
@@ -64,9 +70,81 @@ contract SurfAuthDebot is Debot, Upgradable {
         message = message_.toCell();
     }
 
+    function getPostAuthMsg(string otp) public pure returns(TvmCell message) {
+        TvmCell body = tvm.encodeBody(SurfAuthDebot.authPost, otp);
+        TvmBuilder message_;
+        message_.store(false, true, true, false, address(0), address(this));
+        message_.storeTons(0);
+        message_.storeUnsigned(0, 1);
+        message_.storeTons(0);
+        message_.storeTons(0);
+        message_.store(uint64(0));
+        message_.store(uint32(0));
+        message_.storeUnsigned(0, 1); //init: nothing$0
+        message_.storeUnsigned(1, 1); //body: right$1
+        message_.store(body);
+        message = message_.toCell();
+    }
+
     function start() public override {
         Terminal.print(0,"Invoke me!");
     }
+
+    function authPost(string otp) public {
+        m_otp = otp;
+        UserInfo.getSigningBox(tvm.functionId(getPostUserSign));
+    }
+
+    function getPostUserSign(uint32 handle) public {
+        m_sign = handle;
+        UserInfo.getAccount(tvm.functionId(getPostUserAddress));
+    }
+
+    function getPostUserAddress (address value) public {
+        m_dst = value;
+        UserInfo.getPublicKey(tvm.functionId(getPostPubkey));
+    }
+    function getPostPubkey (uint256 value) public {
+        m_pk = value;
+        ConfirmInput.get(tvm.functionId(signMessage), "You are suggested to sign auth data. Would you like to continue?");
+    }
+
+    function signMessage(bool value) public {
+        if (value) {
+            string str;
+            str=format("{}{}",m_otp,m_dst);
+            uint256 hash = sha256(str);
+            Sdk.signHash(tvm.functionId(setSignature), m_sign, hash);
+        } else {
+            Terminal.print(0,"Terminated!");
+        }
+    }
+
+    function setSignature(bytes signature) public {
+         Base64.encode(tvm.functionId(setEncode), signature);
+    }
+
+    function setEncode(string  base64) public {
+        string[] headers;
+        headers.push("Content-Type: application/x-www-form-urlencoded");
+        string body = "&signature=" + base64 + "&pk=" + format("{:064x}",  m_pk );
+        body.append(format("&otp={}",m_otp));
+        body.append(format("&addr={}",m_dst));
+        Terminal.print(0,"[DEBUG] body");
+        Terminal.print(0,body);
+        Network.post(tvm.functionId(setResponse), POST_URL, headers, body);
+    }
+
+   function setResponse(int32 statusCode, string[] retHeaders, string content) public {
+        retHeaders;
+        content;
+        if (statusCode == 200) {
+            Terminal.print(0,'Congratulations, authentication passed.');
+        } else {
+            Terminal.print(0,'Authentication FAILED.');
+        }
+    }
+
 
     function auth(uint256 hash) public {
         m_hash = hash;
