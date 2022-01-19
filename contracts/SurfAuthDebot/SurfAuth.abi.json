@@ -22,7 +22,7 @@
 		{
 			"name": "getPostAuthMsg",
 			"inputs": [
-				{"name":"otp","type":"bytes"}
+				{"name":"hash","type":"uint256"}
 			],
 			"outputs": [
 				{"name":"message","type":"cell"}
@@ -38,7 +38,7 @@
 		{
 			"name": "authPost",
 			"inputs": [
-				{"name":"otp","type":"bytes"}
+				{"name":"hash","type":"uint256"}
 			],
 			"outputs": [
 			]

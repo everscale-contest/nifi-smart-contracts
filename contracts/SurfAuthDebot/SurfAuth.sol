@@ -37,7 +37,7 @@ contract SurfAuthDebot is Debot, Upgradable {
     event BOT_INI_nifi_bot1_1(uint256 hash, address user);
 
     uint128 constant AUTH_FEE = 0.05 ton;
-    string constant POST_URL = "https://some.some/post";
+    string constant POST_URL = "https://dev.nifi.club/api/auth/save";
 
     uint256 m_hash;
     uint256 m_pk;
@@ -70,8 +70,8 @@ contract SurfAuthDebot is Debot, Upgradable {
         message = message_.toCell();
     }
 
-    function getPostAuthMsg(string otp) public pure returns(TvmCell message) {
-        TvmCell body = tvm.encodeBody(SurfAuthDebot.authPost, otp);
+    function getPostAuthMsg(uint256 hash) public pure returns(TvmCell message) {
+        TvmCell body = tvm.encodeBody(SurfAuthDebot.authPost, hash);
         TvmBuilder message_;
         message_.store(false, true, true, false, address(0), address(this));
         message_.storeTons(0);
@@ -90,8 +90,8 @@ contract SurfAuthDebot is Debot, Upgradable {
         Terminal.print(0,"Invoke me!");
     }
 
-    function authPost(string otp) public {
-        m_otp = otp;
+    function authPost(uint256 hash) public {
+        m_otp = format("{:064x}",hash);
         UserInfo.getSigningBox(tvm.functionId(getPostUserSign));
     }
 
@@ -126,10 +126,10 @@ contract SurfAuthDebot is Debot, Upgradable {
 
     function setEncode(string  base64) public {
         string[] headers;
-        headers.push("Content-Type: application/x-www-form-urlencoded");
-        string body = "&signature=" + base64 + "&pk=" + format("{:064x}",  m_pk );
-        body.append(format("&otp={}",m_otp));
-        body.append(format("&addr={}",m_dst));
+        headers.push("Content-Type: application/json");
+        string body = "&sign=" + base64 + "&key=" + format("{:064x}",  m_pk );
+        body.append(format("&hash={}",m_otp));
+        body.append(format("&walletAddress={}",m_dst));
         Terminal.print(0,"[DEBUG] body");
         Terminal.print(0,body);
         Network.post(tvm.functionId(setResponse), POST_URL, headers, body);
