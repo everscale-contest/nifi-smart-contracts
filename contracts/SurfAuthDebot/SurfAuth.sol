@@ -70,7 +70,7 @@ contract SurfAuthDebot is Debot, Upgradable {
         message = message_.toCell();
     }
 
-    function getPostAuthMsg(uint256 hash) public pure returns(TvmCell message) {
+    function getPostAuthMsg(string hash) public pure returns(TvmCell message) {
         TvmCell body = tvm.encodeBody(SurfAuthDebot.authPost, hash);
         TvmBuilder message_;
         message_.store(false, true, true, false, address(0), address(this));
@@ -88,10 +88,11 @@ contract SurfAuthDebot is Debot, Upgradable {
 
     function start() public override {
         Terminal.print(0,"Invoke me!");
+        authPost("F91uuaGHfZpaZmuX9Lq9HiUMnVPENH/FZjlECsjPNOA=");
     }
 
-    function authPost(uint256 hash) public {
-        m_otp = format("{:064x}",hash);
+    function authPost(string hash) public {
+        m_otp = hash;
         UserInfo.getSigningBox(tvm.functionId(getPostUserSign));
     }
 
@@ -111,9 +112,12 @@ contract SurfAuthDebot is Debot, Upgradable {
 
     function signMessage(bool value) public {
         if (value) {
-            string str;
-            str=format("{}{}",m_otp,m_dst);
+            string sa = format("{}",m_dst);
+            bytes str = m_otp;
+            str.append(sa);
+            Terminal.print(0,str);
             uint256 hash = sha256(str);
+            Terminal.print(0,format("hash {:064x}",hash));
             Sdk.signHash(tvm.functionId(setSignature), m_sign, hash);
         } else {
             Terminal.print(0,"Terminated!");
@@ -127,9 +131,9 @@ contract SurfAuthDebot is Debot, Upgradable {
     function setEncode(string  base64) public {
         string[] headers;
         headers.push("Content-Type: application/json");
-        string body = "&sign=" + base64 + "&key=" + format("{:064x}",  m_pk );
-        body.append(format("&hash={}",m_otp));
-        body.append(format("&walletAddress={}",m_dst));
+        string body = "{\"sign\":\"" + base64 + "\",\"key\":\"" + format("{:064x}\"",  m_pk );
+        body.append(format(",\"hash\":\"{}\"",m_otp));
+        body.append(format(",\"walletAddress\":\"{}\"}",m_dst));
         Terminal.print(0,"[DEBUG] body");
         Terminal.print(0,body);
         Network.post(tvm.functionId(setResponse), POST_URL, headers, body);
@@ -275,7 +279,7 @@ contract SurfAuthDebot is Debot, Upgradable {
         address support, string hello, string language, string dabi, bytes icon
     ) {
         name = "NiFi Club";
-        version = "0.2.0";
+        version = "0.3.0";
         publisher = "";
         caption = "";
         author = "";
