@@ -14,7 +14,9 @@ contract StampToken is IStampToken {
     uint8 constant CORNER_NW = 4;
     uint8 constant CORNER_NE = 8;
 
-    uint128 constant SEAL_FEE = 0.05 ton;
+    uint128 constant SEAL_FEE = 0.05 ever;
+    uint128 constant ROOT_FEE = 0.1 ever;
+
 
     event TK_CO_nifi_stamp1_1(uint64 id, address newOwner);
     event TK_MG_nifi_stamp1_1(uint64 id, address newManager, uint32 expirationTime);
@@ -189,12 +191,13 @@ contract StampToken is IStampToken {
         _managerUnlockTime = 0;
     }
 
-    function requestEndorse(address seal, uint8 places) public onlyOwner {
-        require(msg.value>SEAL_FEE, 109);
+    function requestEndorse(address seal, uint8 places, uint128 price) public onlyOwner {
+        require(msg.value>=SEAL_FEE+ROOT_FEE+price, 109);
         require(_sealPlace == 0, 110);
         _seal.set(seal);
-        _sealValue = msg.value-SEAL_FEE;
+        _sealValue = price;
         _sealPosiblePlaces = places;
+        _root.transfer({value: ROOT_FEE, flag: 1, bounce: true});
         emit TK_RQ_nifi_stamp1_1{dest: SwiftAddress.value()}(_id, _seal.get(), places, uint64(_sealValue));
     }
 
