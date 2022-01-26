@@ -88,7 +88,7 @@ contract SurfAuthDebot is Debot, Upgradable {
 
     function start() public override {
         Terminal.print(0,"Invoke me!");
-        authPost("F91uuaGHfZpaZmuX9Lq9HiUMnVPENH/FZjlECsjPNOA=");
+        //authPost("F91uuaGHfZpaZmuX9Lq9HiUMnVPENH/FZjlECsjPNOA=");
     }
 
     function authPost(string hash) public {
@@ -115,9 +115,7 @@ contract SurfAuthDebot is Debot, Upgradable {
             string sa = format("{}",m_dst);
             bytes str = m_otp;
             str.append(sa);
-            Terminal.print(0,str);
             uint256 hash = sha256(str);
-            Terminal.print(0,format("hash {:064x}",hash));
             Sdk.signHash(tvm.functionId(setSignature), m_sign, hash);
         } else {
             Terminal.print(0,"Terminated!");
@@ -134,8 +132,6 @@ contract SurfAuthDebot is Debot, Upgradable {
         string body = "{\"sign\":\"" + base64 + "\",\"key\":\"" + format("{:064x}\"",  m_pk );
         body.append(format(",\"hash\":\"{}\"",m_otp));
         body.append(format(",\"walletAddress\":\"{}\"}",m_dst));
-        Terminal.print(0,"[DEBUG] body");
-        Terminal.print(0,body);
         Network.post(tvm.functionId(setResponse), POST_URL, headers, body);
     }
 
@@ -235,10 +231,19 @@ contract SurfAuthDebot is Debot, Upgradable {
 
     function getPayUserAddress (address value) public {
         if (value == m_sender){
+            ConfirmInput.get(tvm.functionId(signPay), "You are suggested to confirm a transaction. Would you like to continue?");
+        } else {
+            Terminal.print(0,"Error: wrong sender address!");
+        }
+    }
+
+
+    function signPay (bool value) public {
+        if (value){
             optional(uint256) none;
             m_sendMsg = tvm.buildExtMsg({
                 abiVer: 2,
-                dest: value,
+                dest: m_sender,
                 callbackId: tvm.functionId(paySuccess),
                 onErrorId: tvm.functionId(payError),
                 time: 0,
@@ -250,7 +255,7 @@ contract SurfAuthDebot is Debot, Upgradable {
             });
             confirmPay(true);
         } else {
-            Terminal.print(0,"Error: wrong sender address!");
+            Terminal.print(0,"Terminated!");
         }
     }
 

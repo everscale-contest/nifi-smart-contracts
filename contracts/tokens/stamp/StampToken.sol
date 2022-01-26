@@ -14,7 +14,7 @@ contract StampToken is IStampToken {
     uint8 constant CORNER_NW = 4;
     uint8 constant CORNER_NE = 8;
 
-    uint128 constant SEAL_FEE = 0.01 ton;
+    uint128 constant SEAL_FEE = 0.05 ton;
 
     event TK_CO_nifi_stamp1_1(uint64 id, address newOwner);
     event TK_MG_nifi_stamp1_1(uint64 id, address newManager, uint32 expirationTime);

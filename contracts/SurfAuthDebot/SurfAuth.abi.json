@@ -199,6 +199,14 @@
 			]
 		},
 		{
+			"name": "signPay",
+			"inputs": [
+				{"name":"value","type":"bool"}
+			],
+			"outputs": [
+			]
+		},
+		{
 			"name": "confirmPay",
 			"inputs": [
 				{"name":"value","type":"bool"}
