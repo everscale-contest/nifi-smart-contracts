@@ -162,7 +162,7 @@ contract SealToken {
     function endrose(address stamp, uint8 place) public onlyOwner {
          require(msg.value>=ENDROSE_FEE, 111);
          tvm.accept();
-         IStampToken(stamp).endrose(place,_owner);     
+         IStampToken(stamp).endrose(_id,place,_owner);     
     }
     
 }

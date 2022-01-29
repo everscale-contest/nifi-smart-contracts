@@ -6,6 +6,8 @@ pragma AbiHeader expire;
 import "../../libraries/SwiftAddress.sol";
 import "IForeverToken.sol";
 import "../stamp/IStampToken.sol";
+import "../stamp/StampToken.sol";
+import "StampContractInfoLib.sol";
 
 struct StampInfo {
     address stamp;
@@ -173,10 +175,21 @@ contract ForeverToken is IForeverToken {
         _managerUnlockTime = 0;
     }
 
-    function addStamp(address owner,address seal,uint8 place) public override {
-        //todo check msg sender
+
+    function addStamp(uint64 id, address owner,address seal,uint8 place) public override {
+        //todo check constant address into lib
         require(now > _managerUnlockTime, 105);
-        require(msg.sender!=address(0),106);
+        require(_owner == owner,107);
+        TvmCell data = tvm.buildDataInit({
+            contr: StampToken,
+            varInit: {_root: StampContractInfo.STAMP_ROOT(), _id: id},
+            pubkey: StampContractInfo.STAMP_ROOT_PUBKEY
+        });
+        uint dataHash = tvm.hash(data);
+        uint16 dataDepth = data.depth();
+        uint256 hash = tvm.stateInitHash(StampContractInfo.STAMP_CODEHASH, dataHash, StampContractInfo.STAMP_CODEDEPTH, dataDepth);
+        require(msg.sender==address(hash),106);
+        
         if (_stamps.length<4) {
 
             _stamps.push(StampInfo(msg.sender,owner,seal,place));

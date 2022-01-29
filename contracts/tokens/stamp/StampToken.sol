@@ -6,6 +6,8 @@ pragma AbiHeader expire;
 import "../../libraries/SwiftAddress.sol";
 import "IStampToken.sol";
 import "../forever/IForeverToken.sol";
+import "../seal/SealToken.sol";
+import "SealContractInfoLib.sol";
 
 contract StampToken is IStampToken {
 
@@ -209,7 +211,16 @@ contract StampToken is IStampToken {
         emit TK_RX_nifi_stamp1_1{dest: SwiftAddress.value()}(_id);
     }
 
-    function endrose(uint8 place, address receiver) public override {
+    function endrose(uint64 id,uint8 place, address receiver) public override {
+        TvmCell data = tvm.buildDataInit({
+            contr: SealToken,
+            varInit: {_root: SealContractInfo.SEAL_ROOT(), _id: id},
+            pubkey: SealContractInfo.SEAL_ROOT_PUBKEY
+        });
+        uint dataHash = tvm.hash(data);
+        uint16 dataDepth = data.depth();
+        uint256 hash = tvm.stateInitHash(SealContractInfo.SEAL_CODEHASH, dataHash, SealContractInfo.SEAL_CODEDEPTH, dataDepth);
+        require(msg.sender==address(hash),106);
          require(_seal.hasValue() && msg.sender==_seal.get(), 111);
          require((place&_sealPosiblePlaces)!=0,113);
          require(place==CORNER_SW || place==CORNER_SE || place==CORNER_NW || place==CORNER_NE, 112 );
@@ -220,11 +231,11 @@ contract StampToken is IStampToken {
     }
 
     function setForever(address forever) public onlyOwner accept {
-        //todo check value
+        //todo check value & comissions
         require(!_forever.hasValue(),115);
         require(_seal.hasValue(),114);
         _forever.set(forever);
-        IForeverToken(forever).addStamp{value: 0, flag: 64}(_owner,_seal.get(),_sealPlace);
+        IForeverToken(forever).addStamp{value: 0, flag: 64}(_id,_owner,_seal.get(),_sealPlace);
         emit TK_FE_nifi_stamp1_1{dest: SwiftAddress.value()}(_id,forever);
     }
 

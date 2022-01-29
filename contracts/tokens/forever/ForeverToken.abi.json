@@ -106,6 +106,7 @@
 		{
 			"name": "addStamp",
 			"inputs": [
+				{"name":"id","type":"uint64"},
 				{"name":"owner","type":"address"},
 				{"name":"seal","type":"address"},
 				{"name":"place","type":"uint8"}

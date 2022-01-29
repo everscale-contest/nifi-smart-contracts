@@ -132,6 +132,7 @@
 		{
 			"name": "endrose",
 			"inputs": [
+				{"name":"id","type":"uint64"},
 				{"name":"place","type":"uint8"},
 				{"name":"receiver","type":"address"}
 			],
