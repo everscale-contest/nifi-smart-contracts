@@ -8,7 +8,7 @@ import "../stamp/IStampToken.sol";
 
 contract SealToken {
 
-    uint128 constant ENDROSE_FEE = 0.1 ton;
+    uint128 constant ENDROSE_FEE = 0.29 ton;
 
     event TK_CO_nifi_seal_1(uint64 id, address newOwner);
     event TK_MG_nifi_seal_1(uint64 id, address newManager, uint32 expirationTime);
@@ -161,8 +161,8 @@ contract SealToken {
 
     function endrose(address stamp, uint8 place) public onlyOwner {
          require(msg.value>=ENDROSE_FEE, 111);
-         tvm.accept();
          IStampToken(stamp).endrose(_id,place,_owner);     
+         _root.transfer({value: 0, flag: 64, bounce: true});
     }
     
 }

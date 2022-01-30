@@ -17,7 +17,9 @@ contract StampToken is IStampToken {
     uint8 constant CORNER_NE = 8;
 
     uint128 constant SEAL_FEE = 0.05 ever;
+    uint128 constant SEAL_RX_FEE = 0.11 ever;
     uint128 constant ROOT_FEE = 0.1 ever;
+    int128 constant FOR_AD_FEE = 0.21 ever;
 
 
     event TK_CO_nifi_stamp1_1(uint64 id, address newOwner);
@@ -199,16 +201,18 @@ contract StampToken is IStampToken {
         _seal.set(seal);
         _sealValue = price;
         _sealPosiblePlaces = places;
-        _root.transfer({value: ROOT_FEE, flag: 1, bounce: true});
         emit TK_RQ_nifi_stamp1_1{dest: SwiftAddress.value()}(_id, _seal.get(), places, uint64(_sealValue));
+        _root.transfer({value: ROOT_FEE, flag: 1, bounce: true});
     }
 
     function cancelEndrose() public  onlyOwner {
         require(_sealPlace == 0, 110);
-        tvm.accept();
+        require(_seal.hasValue(), 111);
+        require(msg.value>=SEAL_RX_FEE,112);
         _seal.reset();
         _owner.transfer(_sealValue,true);
         emit TK_RX_nifi_stamp1_1{dest: SwiftAddress.value()}(_id);
+        _root.transfer({value: 0, flag: 64, bounce: true});
     }
 
     function endrose(uint64 id,uint8 place, address receiver) public override {
@@ -230,13 +234,16 @@ contract StampToken is IStampToken {
          emit TK_EN_nifi_stamp1_1{dest: SwiftAddress.value()}(_id,_seal.get(),_sealPlace);
     }
 
-    function setForever(address forever) public onlyOwner accept {
+    function setForever(address forever) public onlyOwner {
         //todo check value & comissions
+        require(msg.value>=FOR_AD_FEE,112);
         require(!_forever.hasValue(),115);
         require(_seal.hasValue(),114);
+        require(_sealPlace!=0,116);
         _forever.set(forever);
         IForeverToken(forever).addStamp{value: 0, flag: 64}(_id,_owner,_seal.get(),_sealPlace);
         emit TK_FE_nifi_stamp1_1{dest: SwiftAddress.value()}(_id,forever);
+        _root.transfer({value: 0, flag: 64, bounce: true});
     }
 
     function delForever() public override {
