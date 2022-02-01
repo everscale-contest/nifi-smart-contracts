@@ -37,7 +37,8 @@ contract SurfAuthDebot is Debot, Upgradable {
     event BOT_INI_nifi_bot1_1(uint256 hash, address user);
 
     uint128 constant AUTH_FEE = 0.05 ton;
-    string constant POST_URL = "https://dev.nifi.club/api/auth/save";
+    //string constant POST_URL = "https://dev.nifi.club/api/auth/save";
+    string constant POST_URL = "https://beta.nifi.club/api/auth/save";
 
     uint256 m_hash;
     uint256 m_pk;

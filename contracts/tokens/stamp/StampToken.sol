@@ -19,7 +19,7 @@ contract StampToken is IStampToken {
     uint128 constant SEAL_FEE = 0.05 ever;
     uint128 constant SEAL_RX_FEE = 0.11 ever;
     uint128 constant ROOT_FEE = 0.1 ever;
-    int128 constant FOR_AD_FEE = 0.21 ever;
+    uint128 constant FOR_AD_FEE = 0.21 ever;
 
 
     event TK_CO_nifi_stamp1_1(uint64 id, address newOwner);
@@ -215,7 +215,7 @@ contract StampToken is IStampToken {
         _root.transfer({value: 0, flag: 64, bounce: true});
     }
 
-    function endrose(uint64 id,uint8 place, address receiver) public override {
+    function endrose(uint64 id, uint8 place, address receiver) public override {
         TvmCell data = tvm.buildDataInit({
             contr: SealToken,
             varInit: {_root: SealContractInfo.SEAL_ROOT(), _id: id},
@@ -225,13 +225,13 @@ contract StampToken is IStampToken {
         uint16 dataDepth = data.depth();
         uint256 hash = tvm.stateInitHash(SealContractInfo.SEAL_CODEHASH, dataHash, SealContractInfo.SEAL_CODEDEPTH, dataDepth);
         require(msg.sender==address(hash),106);
-         require(_seal.hasValue() && msg.sender==_seal.get(), 111);
-         require((place&_sealPosiblePlaces)!=0,113);
-         require(place==CORNER_SW || place==CORNER_SE || place==CORNER_NW || place==CORNER_NE, 112 );
-         tvm.accept();
-         _sealPlace = place;
-         receiver.transfer(_sealValue,true);
-         emit TK_EN_nifi_stamp1_1{dest: SwiftAddress.value()}(_id,_seal.get(),_sealPlace);
+        require(_seal.hasValue() && msg.sender==_seal.get(), 111);
+        require((place&_sealPosiblePlaces)!=0,113);
+        require(place==CORNER_SW || place==CORNER_SE || place==CORNER_NW || place==CORNER_NE, 112 );
+        tvm.accept();
+        _sealPlace = place;
+        emit TK_EN_nifi_stamp1_1{dest: SwiftAddress.value()}(_id,_seal.get(),_sealPlace);
+        receiver.transfer(_sealValue,true);
     }
 
     function setForever(address forever) public onlyOwner {

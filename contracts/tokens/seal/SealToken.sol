@@ -161,8 +161,8 @@ contract SealToken {
 
     function endrose(address stamp, uint8 place) public onlyOwner {
          require(msg.value>=ENDROSE_FEE, 111);
-         IStampToken(stamp).endrose(_id,place,_owner);     
+         IStampToken(stamp).endrose{value: 0.9 ever, flag: 0, bounce: true}(_id,place,_owner);
          _root.transfer({value: 0, flag: 64, bounce: true});
     }
-    
+
 }
