@@ -1,0 +1,4 @@
+node_modules
+msig.keys.js
+package-lock.json
+!*.sh

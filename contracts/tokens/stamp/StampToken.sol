@@ -19,7 +19,8 @@ contract StampToken is IStampToken {
     uint128 constant SEAL_FEE = 0.05 ever;
     uint128 constant SEAL_RX_FEE = 0.11 ever;
     uint128 constant ROOT_FEE = 0.1 ever;
-    uint128 constant FOR_AD_FEE = 0.21 ever;
+    uint128 constant FOR_ADD_FEE = 0.21 ever;
+    uint128 constant FOR_ADD_ROOT = 0.1 ever;
 
 
     event TK_CO_nifi_stamp1_1(uint64 id, address newOwner);
@@ -236,14 +237,14 @@ contract StampToken is IStampToken {
 
     function setForever(address forever) public onlyOwner {
         //todo check value & comissions
-        require(msg.value>=FOR_AD_FEE,112);
+        require(msg.value>=FOR_ADD_FEE,112);
         require(!_forever.hasValue(),115);
         require(_seal.hasValue(),114);
         require(_sealPlace!=0,116);
         _forever.set(forever);
-        IForeverToken(forever).addStamp{value: 0, flag: 64}(_id,_owner,_seal.get(),_sealPlace);
+        _root.transfer({value: FOR_ADD_ROOT, flag: 0, bounce: true});
         emit TK_FE_nifi_stamp1_1{dest: SwiftAddress.value()}(_id,forever);
-        _root.transfer({value: 0, flag: 64, bounce: true});
+        IForeverToken(forever).addStamp{value: 0, flag: 64}(_id,_owner,_seal.get(),_sealPlace);
     }
 
     function delForever() public override {
