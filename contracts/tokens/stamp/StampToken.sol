@@ -11,11 +11,6 @@ import "SealContractInfoLib.sol";
 
 contract StampToken is IStampToken {
 
-    uint8 constant CORNER_SW = 1;
-    uint8 constant CORNER_SE = 2;
-    uint8 constant CORNER_NW = 4;
-    uint8 constant CORNER_NE = 8;
-
     uint128 constant SEAL_FEE = 0.05 ever;
     uint128 constant SEAL_RX_FEE = 0.11 ever;
     uint128 constant ROOT_FEE = 0.1 ever;
@@ -228,7 +223,6 @@ contract StampToken is IStampToken {
         require(msg.sender==address(hash),106);
         require(_seal.hasValue() && msg.sender==_seal.get(), 111);
         require((place&_sealPosiblePlaces)!=0,113);
-        require(place==CORNER_SW || place==CORNER_SE || place==CORNER_NW || place==CORNER_NE, 112 );
         tvm.accept();
         _sealPlace = place;
         emit TK_EN_nifi_stamp1_1{dest: SwiftAddress.value()}(_id,_seal.get(),_sealPlace);

@@ -36,3 +36,5 @@ async function deployMultisig (client, keys) {
 
     return {address, keys}
 }
+
+module.exports = {deployMultisig}

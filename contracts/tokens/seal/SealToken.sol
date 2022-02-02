@@ -8,6 +8,11 @@ import "../stamp/IStampToken.sol";
 
 contract SealToken {
 
+    uint8 constant CORNER_SW = 1;
+    uint8 constant CORNER_SE = 2;
+    uint8 constant CORNER_NW = 4;
+    uint8 constant CORNER_NE = 8;
+
     uint128 constant ENDROSE_ROOT = 0.1 ever;
     uint128 constant ENDROSE_STAMP = 0.1 ever;
     uint128 constant ENDROSE_FEE = ENDROSE_ROOT+ENDROSE_STAMP+0.09 ever;
@@ -164,6 +169,7 @@ contract SealToken {
 
     function endrose(address stamp, uint8 place) public onlyOwner {
          require(msg.value>=ENDROSE_FEE, 111);
+         require(place==CORNER_SW || place==CORNER_SE || place==CORNER_NW || place==CORNER_NE, 112 );
          IStampToken(stamp).endrose{value: ENDROSE_STAMP, flag: 0, bounce: true}(_id,place,_owner);
          _root.transfer({value: ENDROSE_ROOT, flag: 0, bounce: true});
     }
