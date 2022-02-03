@@ -2,12 +2,12 @@
 set -e
 
 cd ..
-cd seal
+cd ..
+cd stamp
 tondev sol compile StampToken.sol
 tondev sol compile StampRoot.sol
 
 tondev js wrap StampToken.sol
 tondev js wrap StampRoot.sol
-cd ..
 
-echo DONE
+echo stamp built

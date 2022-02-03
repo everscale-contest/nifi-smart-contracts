@@ -1,6 +1,7 @@
-const {get_tokens_from_giver} = require('giver')
+const {get_tokens_from_giver} = require('./giver')
+const {SafeMultisigWallet} = require('./SafeMultisigWallet')
 
-async function deployMultisig (client, keys) {
+async function deployMultisig (client, keys, amount) {
 
     let safeMultisigWalletKeys = {
         type: "Keys",
@@ -27,7 +28,7 @@ async function deployMultisig (client, keys) {
     }
 
     const { address } = await client.abi.encode_message(deployOptions);
-    await get_tokens_from_giver(client, address, 100_000_000_000);
+    await get_tokens_from_giver(client, address, amount);
 
     await client.processing.process_message({
         send_events: false,

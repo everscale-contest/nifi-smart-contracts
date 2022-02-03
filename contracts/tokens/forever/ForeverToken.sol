@@ -18,6 +18,8 @@ struct StampInfo {
 
 contract ForeverToken is IForeverToken {
 
+    uint64 constant DEL_FOREVER = 0.1 ever;
+
     event TK_CO_nifi_for1_1(uint64 id, address newOwner);
     event TK_MG_nifi_for1_1(uint64 id, address newManager, uint32 expirationTime);
     event FOR_SC_nifi_for1_1(uint64 id,address token1Address, address token2Address, address token3Address, address token4Address, address sealAddress);
@@ -189,7 +191,7 @@ contract ForeverToken is IForeverToken {
         uint16 dataDepth = data.depth();
         uint256 hash = tvm.stateInitHash(StampContractInfo.STAMP_CODEHASH, dataHash, StampContractInfo.STAMP_CODEDEPTH, dataDepth);
         require(msg.sender==address(hash),106);
-        
+
         if (_stamps.length<4) {
 
             _stamps.push(StampInfo(msg.sender,owner,seal,place));
@@ -206,10 +208,10 @@ contract ForeverToken is IForeverToken {
                     }
                 }
                 if (bError || pos!=15){
-                    IStampToken(_stamps[0].stamp).delForever();
-                    IStampToken(_stamps[1].stamp).delForever();
-                    IStampToken(_stamps[2].stamp).delForever();
-                    IStampToken(_stamps[3].stamp).delForever();
+                    IStampToken(_stamps[0].stamp).delForever{value: DEL_FOREVER}();
+                    IStampToken(_stamps[1].stamp).delForever{value: DEL_FOREVER}();
+                    IStampToken(_stamps[2].stamp).delForever{value: DEL_FOREVER}();
+                    IStampToken(_stamps[3].stamp).delForever{value: DEL_FOREVER}();
                     emit FOR_EX_nifi_for1_1{dest: SwiftAddress.value()}(_id);
                     selfdestruct(_owner);
                 } else {

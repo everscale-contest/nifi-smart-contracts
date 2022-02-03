@@ -7,7 +7,7 @@ import "../../libraries/SwiftAddress.sol";
 import "Art2Token.sol";
 
 contract Art2Series {
-    
+
     address static _root;
     uint64 static _id;
     address _manager;
@@ -73,15 +73,15 @@ contract Art2Series {
         address manager,
         uint32  managerUnlockTime
     )
-        public 
-        internalMsg   
+        public
+        internalMsg
         returns(
             address addr
         )
     {
         require(_totalSupply<_limit,103);
         require(msg.sender == _manager,102);
-        require(msg.value > 0.2 ton,105);
+        require(msg.value >= 0.25 ton,105);
         _totalSupply++;
         uint128 value = msg.value;
         addr = new Art2Token{
@@ -96,7 +96,7 @@ contract Art2Series {
             }
         }(_manager, manager, managerUnlockTime, _creator, _creatorFees, _hash);
         emit TK_MT_nifi_art2_1{dest: SwiftAddress.value()}(_id,_totalSupply);
-        
+
     }
 
 
