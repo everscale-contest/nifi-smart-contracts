@@ -1,4 +1,7 @@
 pragma ton-solidity ^0.47.0;
+pragma AbiHeader time;
+pragma AbiHeader pubkey;
+pragma AbiHeader expire;
 
 import "../../abstract/extensions/tokenChangeOwnerEvent/token/TokenChangeOwnerAddressEvent.sol";
 import "../../abstract/TokenAddress.sol";
@@ -138,9 +141,8 @@ contract ArtToken is TokenAddress, TokenChangeOwnerAddressEvent, IArtToken {
         canChangeOwner
         accept
     {
-        address previousOwner = _owner;
         _owner = owner;
-        _onChangeOwner(previousOwner, owner);
+        _onChangeOwner(_owner);
     }
 
 

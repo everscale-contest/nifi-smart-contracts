@@ -3,6 +3,7 @@ pragma ton-solidity ^0.47.0;
 import "modifiers/Accept.sol";
 import "interfaces/IToken.sol";
 import "./modifiers/AddressValidator.sol";
+import "../libraries/SwiftAddress.sol";
 
 /**
  * ███╗   ██╗███████╗████████╗
@@ -25,6 +26,9 @@ import "./modifiers/AddressValidator.sol";
  *     201 - Address can't be null
  */
 abstract contract Token2 is Accept, AddressValidator, IToken {
+
+    event TK_MG_nifi_art2_1(uint128 id);
+
     /**********
      * STATIC *
      **********/
@@ -125,6 +129,7 @@ abstract contract Token2 is Accept, AddressValidator, IToken {
     {
         _manager = manager;
         _managerUnlockTime = unlockTime;
+        emit TK_MG_nifi_art2_1{dest: SwiftAddress.value()}(_id);
     }
 
     /**

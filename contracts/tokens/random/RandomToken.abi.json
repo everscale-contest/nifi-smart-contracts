@@ -103,6 +103,14 @@
 			],
 			"outputs": [
 			]
+		},
+		{
+			"name": "TK_MG_nifi_art1_1",
+			"inputs": [
+				{"name":"id","type":"uint128"}
+			],
+			"outputs": [
+			]
 		}
 	]
 }

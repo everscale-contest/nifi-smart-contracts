@@ -1,6 +1,6 @@
 {
 	"ABI version": 2,
-	"header": ["time"],
+	"header": ["pubkey", "time", "expire"],
 	"functions": [
 		{
 			"name": "constructor",
@@ -16,24 +16,39 @@
 			]
 		},
 		{
-			"name": "receiveArtInfo",
+			"name": "changeOwner",
+			"inputs": [
+				{"name":"owner","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "receiveArtHash",
 			"inputs": [
 				{"name":"_answer_id","type":"uint32"}
 			],
 			"outputs": [
-				{"name":"creator","type":"address"},
-				{"name":"creatorFees","type":"uint32"},
 				{"name":"hash","type":"uint256"}
 			]
 		},
 		{
-			"name": "getArtInfo",
+			"name": "getArtHash",
 			"inputs": [
 			],
 			"outputs": [
-				{"name":"creator","type":"address"},
-				{"name":"creatorFees","type":"uint32"},
 				{"name":"hash","type":"uint256"}
+			]
+		},
+		{
+			"name": "getInfo",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"root","type":"address"},
+				{"name":"series","type":"address"},
+				{"name":"seriesId","type":"uint64"},
+				{"name":"id","type":"uint64"}
 			]
 		},
 		{
@@ -62,52 +77,9 @@
 			]
 		},
 		{
-			"name": "changeOwner",
-			"inputs": [
-				{"name":"owner","type":"address"}
-			],
-			"outputs": [
-			]
-		},
-		{
-			"name": "receiveInfo",
-			"inputs": [
-				{"name":"_answer_id","type":"uint32"}
-			],
-			"outputs": [
-				{"name":"root","type":"address"},
-				{"name":"id","type":"uint128"},
-				{"name":"publicKey","type":"uint256"},
-				{"name":"owner","type":"address"},
-				{"name":"manager","type":"address"},
-				{"name":"managerUnlockTime","type":"uint32"}
-			]
-		},
-		{
-			"name": "getInfo",
-			"inputs": [
-			],
-			"outputs": [
-				{"name":"root","type":"address"},
-				{"name":"id","type":"uint128"},
-				{"name":"publicKey","type":"uint256"},
-				{"name":"owner","type":"address"},
-				{"name":"manager","type":"address"},
-				{"name":"managerUnlockTime","type":"uint32"}
-			]
-		},
-		{
 			"name": "lockManager",
 			"inputs": [
 				{"name":"manager","type":"address"},
-				{"name":"unlockTime","type":"uint32"}
-			],
-			"outputs": [
-			]
-		},
-		{
-			"name": "lock",
-			"inputs": [
 				{"name":"unlockTime","type":"uint32"}
 			],
 			"outputs": [
@@ -123,16 +95,28 @@
 	],
 	"data": [
 		{"key":1,"name":"_root","type":"address"},
-		{"key":2,"name":"_id","type":"uint128"},
-		{"key":3,"name":"_serie","type":"address"}
+		{"key":2,"name":"_series","type":"address"},
+		{"key":3,"name":"_seriesId","type":"uint64"},
+		{"key":4,"name":"_id","type":"uint64"}
 	],
 	"events": [
 		{
-			"name": "ChangeOwnerEvent",
+			"name": "TK_CO_nifi_art2_1",
 			"inputs": [
-				{"name":"id","type":"uint128"},
-				{"name":"previousOwner","type":"address"},
-				{"name":"owner","type":"address"}
+				{"name":"seriesId","type":"uint64"},
+				{"name":"id","type":"uint64"},
+				{"name":"newOwner","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "TK_MG_nifi_art2_1",
+			"inputs": [
+				{"name":"seriesId","type":"uint64"},
+				{"name":"id","type":"uint64"},
+				{"name":"newManager","type":"address"},
+				{"name":"expirationTime","type":"uint32"}
 			],
 			"outputs": [
 			]

@@ -2,7 +2,9 @@ const BidContract = {
     abi: {
         "ABI version": 2,
         "header": [
-            "time"
+            "pubkey",
+            "time",
+            "expire"
         ],
         "functions": [
             {
@@ -73,7 +75,7 @@ const BidContract = {
                     },
                     {
                         "name": "id",
-                        "type": "uint128"
+                        "type": "uint64"
                     },
                     {
                         "name": "creator",
@@ -103,84 +105,34 @@ const BidContract = {
             {
                 "key": 2,
                 "name": "_id",
-                "type": "uint128"
+                "type": "uint64"
             }
         ],
         "events": [
             {
-                "name": "BidCreated",
+                "name": "BID_AC_nifi_bid_1",
                 "inputs": [
                     {
                         "name": "id",
-                        "type": "uint128"
-                    },
-                    {
-                        "name": "creator",
-                        "type": "address"
-                    },
-                    {
-                        "name": "token",
-                        "type": "address"
-                    },
-                    {
-                        "name": "price",
-                        "type": "uint128"
-                    },
-                    {
-                        "name": "endTime",
-                        "type": "uint32"
+                        "type": "uint64"
                     }
                 ],
                 "outputs": []
             },
             {
-                "name": "BidAccepted",
+                "name": "BID_CL_nifi_bid_1",
                 "inputs": [
                     {
                         "name": "id",
-                        "type": "uint128"
-                    },
-                    {
-                        "name": "creator",
-                        "type": "address"
-                    },
-                    {
-                        "name": "token",
-                        "type": "address"
-                    },
-                    {
-                        "name": "price",
-                        "type": "uint128"
-                    }
-                ],
-                "outputs": []
-            },
-            {
-                "name": "BidFinished",
-                "inputs": [
-                    {
-                        "name": "id",
-                        "type": "uint128"
-                    },
-                    {
-                        "name": "creator",
-                        "type": "address"
-                    },
-                    {
-                        "name": "token",
-                        "type": "address"
-                    },
-                    {
-                        "name": "price",
-                        "type": "uint128"
+                        "type": "uint64"
                     }
                 ],
                 "outputs": []
             }
         ]
     },
-    tvc: "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",
-    code: "te6ccgECIAEABeoABCSK7VMg4wMgwP/jAiDA/uMC8gsdAgEfAsSNCGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAT4aSHbPNMAAZ+BAgDXGCD5AVj4QvkQ8qje0z8B+EMhufK0IPgjgQPoqIIIG3dAoLnytPhj0x8B2zz4R27yfAoDAUIi0NMD+kAw+GmpOADcIccA3CHXDR/yvCHdAds8+Edu8nwDAiggghBbQLY5u+MCIIIQXzRR/7rjAgYEA44w+EJu4wDR2zwmjjIo0NMB+kAwMcjPhyDOcc8LYV5BVVDIz5N80Uf+zst/VTDIzlUgyM7Lf8sfzc3NyXD7AJJfBuLjAH/4ZxwFFgAY+Er4S/hM+E34T/hOBFAgghAZ6ilEuuMCIIIQRliORrrjAiCCEFAdUYq64wIgghBbQLY5uuMCFRANBwP8MPhCbuMA+Ebyc3/4ZvpBldTR0PpA3/pBldTR0PpA39cNf5XU0dDTf9/XDR+V1NHQ0x/f0Yj4SfhKxwXy6GT4ACP4bCL4bSH4b18g+G74T/hN+Ez4S4vcAAAAAAAAAAAAAAAAGMjOVUDIz5GhYP3iy3/OVSDIzst/yx/NzclwCgkIARL7AF8E2zx/+GcWADBNZXRob2QgZm9yIHRoZSByb290IG9ubHkCFu1E0NdJwgGKjoDiHAsB1HDtRND0BXEhgED0Do4kjQhgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAE3/hqciGAQPQOk9cLf5Fw4vhrjQhgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAE+GwMAICNCGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAT4bXD4bnD4b3D4cIBA9A7yvdcL//hicPhjcPhmAxww+EJu4wDR2zzbPH/4ZxwOFgGkiPgj+E6BA4SgtR++8uho+AD4T/hN+Ez4S4vcAAAAAAAAAAAAAAAAGMjOVTDIz5Cj5B9Oy3/OWcjOy3/Nzclw+wD4TMjPhQjOgG/PQMmBAKD7AA8AJE9mZmVyIG5vdCBmaW5pc2hlZAMcMPhCbuMA0ds84wB/+GccERYDnohopv5gwwDy6GaI+CP4Trny6GeIaKb+YIIQEeGjALzy6Gn4TXDIz4WAygBzz0DOjQWAAAAAAAAAAAAAAAAAADftOf8M9RSiQM8WyYBA+wAUExIASE5lZWQgbW9yZSB0aGFuIDAuMyB0b24gZm9yIG9wZXJhdGlvbgAsT2ZmZXIgYWxyZWFkeSBmaW5pc2hlZAAyUmVjaXZlIG9ubHkgaW5uZXIgbWVzc2FnZQN6MPhCbuMA+kGV1NHQ+kDf+kGV1NHQ+kDf1w0fldTR0NMf3/pBldTR0PpA39cNH5XU0dDTH9/R2zzbPH/4ZxwXFgBi+FD4T/hO+E34TPhL+Er4RvhD+ELIy//LP8oAzlVQyMt/zlUwyM7LH8t/y3/NzcntVAT6iPhJ+E3HBfLoZYgi+CjHBfLoaogh+E6BA4SgtR+88uhr+CdvECPCAI4iUwOBJxCphLV/IMIAjhJTBcjPhYjOAfoCgGvPQMlx+wDeMN74TPhNyM+FiM6NBE5iWgAAAAAAAAAAAAAAAAAAwM8WAcjPkIXszCLOzclw+wD4TcgbGhkYAPbPhYjOjQVOYloAAAAAAAAAAAAAAAAAAC5ic1tAzxbJcPsAIIAUqQT4SsjPhYjOAfoCgGvPQMlx+wD4T/hN+Ez4S4vcAAAAAAAAAAAAAAAAGMjOVTDIz5DOnF4Sy3/OWcjOy3/Nzclw+wAlyM+FCM6Ab89AyYEAoPsAXwYAMldyb25nIG1hbmFnZXIgdW5sb2NrIHRpbWUAGldyb25nIG1hbmFnZXIAMk1ldGhvZCBmb3IgdGhlIHRva2VuIG9ubHkAZO1E0NP/0z/SAPpA1NHQ03/6QNTR0PpA0x/Tf9N/0fhw+G/4bvht+Gz4a/hq+Gb4Y/hiAgr0pCD0oR8eABRzb2wgMC40Ny4wAAA=",
-    codeHash: "90d01087938eca995fbf5262512980b60a40e1e50f9bda16051a03b00b146ac9",
+    tvc: "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",
+    code: "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",
+    codeHash: "b6ed811af8eacd1df2c884cc18e9779baf2ec4b22c7d03d15f09ecc1b28ac1a8",
 };
 export default BidContract;

@@ -3,6 +3,7 @@ pragma ton-solidity ^0.47.0;
 import "modifiers/Accept.sol";
 import "interfaces/IToken.sol";
 import "./modifiers/AddressValidator.sol";
+import "../libraries/SwiftAddress.sol";
 
 /**
  * ███╗   ██╗███████╗████████╗
@@ -25,11 +26,14 @@ import "./modifiers/AddressValidator.sol";
  *     201 - Address can't be null
  */
 abstract contract Token is Accept, AddressValidator, IToken {
+
+    event TK_MG_nifi_art1_1(uint64 id, address newManager, uint32 expirationTime);
+
     /**********
      * STATIC *
      **********/
     address static _root;
-    uint128 static _id;
+    uint64 static _id;
 
 
 
@@ -126,23 +130,8 @@ abstract contract Token is Accept, AddressValidator, IToken {
     {
         _manager = manager;
         _managerUnlockTime = unlockTime;
+        emit TK_MG_nifi_art1_1{dest: SwiftAddress.value()}(_id, _manager, _managerUnlockTime);
     }
-
-    /**
-     * Owner can lock manager. To prevent manager from replacing during trading, he is locked.
-     * If manager is already locked, call revert().
-     * unlockTime ... UNIX time. Time when manager can be unlocked.
-     */
-    function lock(uint32 unlockTime)
-        override
-        external
-        onlyUnlockedOwnerOrLockedManager
-        unlockTimeIsValid(unlockTime)
-        accept
-    {
-        _managerUnlockTime = unlockTime;
-    }
-
 
 
     /**********************************

@@ -1,6 +1,6 @@
 {
 	"ABI version": 2,
-	"header": ["time"],
+	"header": ["pubkey", "time", "expire"],
 	"functions": [
 		{
 			"name": "constructor",
@@ -35,7 +35,7 @@
 			"name": "receiveTokenAddress",
 			"inputs": [
 				{"name":"_answer_id","type":"uint32"},
-				{"name":"id","type":"uint128"}
+				{"name":"id","type":"uint64"}
 			],
 			"outputs": [
 				{"name":"addr","type":"address"}
@@ -44,7 +44,7 @@
 		{
 			"name": "getTokenAddress",
 			"inputs": [
-				{"name":"id","type":"uint128"}
+				{"name":"id","type":"uint64"}
 			],
 			"outputs": [
 				{"name":"addr","type":"address"}
@@ -121,7 +121,7 @@
 			"outputs": [
 				{"name":"name","type":"bytes"},
 				{"name":"symbol","type":"bytes"},
-				{"name":"totalSupply","type":"uint128"},
+				{"name":"totalSupply","type":"uint64"},
 				{"name":"publicKey","type":"uint256"}
 			]
 		},
@@ -132,7 +132,7 @@
 			"outputs": [
 				{"name":"name","type":"bytes"},
 				{"name":"symbol","type":"bytes"},
-				{"name":"totalSupply","type":"uint128"},
+				{"name":"totalSupply","type":"uint64"},
 				{"name":"publicKey","type":"uint256"}
 			]
 		},
@@ -148,5 +148,20 @@
 	"data": [
 	],
 	"events": [
+		{
+			"name": "AUC_CT_nifi_auc_1",
+			"inputs": [
+				{"name":"id","type":"uint64"},
+				{"name":"tokenAddress","type":"address"},
+				{"name":"startBid","type":"uint128"},
+				{"name":"stepBid","type":"uint128"},
+				{"name":"startTime","type":"uint32"},
+				{"name":"endTime","type":"uint32"},
+				{"name":"auctionCreator","type":"address"},
+				{"name":"showcaseFees","type":"uint32"}
+			],
+			"outputs": [
+			]
+		}
 	]
 }

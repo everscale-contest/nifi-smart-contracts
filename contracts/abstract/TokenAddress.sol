@@ -79,7 +79,7 @@ abstract contract TokenAddress is Token, ITokenAddress {
      */
     function receiveInfo() override external view responsible returns(
             address root,
-            uint128 id,
+            uint64 id,
             uint256 publicKey,
             address owner,
             address manager,
@@ -105,7 +105,7 @@ abstract contract TokenAddress is Token, ITokenAddress {
      */
     function getInfo() public view returns(
             address root,
-            uint128 id,
+            uint64 id,
             uint256 publicKey,
             address owner,
             address manager,
@@ -137,7 +137,7 @@ abstract contract TokenAddress is Token, ITokenAddress {
      * previousOwner ... Previous address of token owner.
      * owner ........... New address of token owner.
      */
-    function _onChangeOwner(address previousOwner, address owner) virtual internal;
+    function _onChangeOwner(address previousOwner) virtual internal;
 
     /**
      * Revert() if owner or manager can't change owner address.

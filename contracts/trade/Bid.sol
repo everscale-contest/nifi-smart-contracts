@@ -1,8 +1,12 @@
 pragma ton-solidity >= 0.44.0;
+pragma AbiHeader time;
+pragma AbiHeader pubkey;
+pragma AbiHeader expire;
 
 import "../abstract/interfaces/IToken.sol";
 import "../abstract/interfaces/ITokenAddress.sol";
 import "../abstract/modifiers/Accept.sol";
+import "../libraries/SwiftAddress.sol";
 
 interface ITradeToken {
     
@@ -30,16 +34,15 @@ contract Bid is Accept {
     /**********
      * EVENTS *
      **********/
-    event BidCreated(uint128 id, address creator, address token, uint128 price, uint32 endTime);
-    event BidAccepted(uint128 id, address creator, address token, uint128 price);
-    event BidFinished(uint128 id, address creator, address token, uint128 price);
+    event BID_AC_nifi_bid_1(uint64 id);
+    event BID_CL_nifi_bid_1(uint64 id);
     
 
     /**********
      * STATIC *
      **********/
     address static _root;
-    uint128 static _id;
+    uint64 static _id;
 
 
 
@@ -112,7 +115,6 @@ contract Bid is Accept {
         _token = token;
         _price = price;
         _endTime = endTime;
-        emit BidCreated(_id, _creator, _token, _price, _endTime);
     }
 
 
@@ -152,7 +154,7 @@ contract Bid is Accept {
         IToken(_token).unlock();
 
         _root.transfer({value: balance/20, flag: 1, bounce: true});
-        emit BidAccepted(_id, _creator, _token, _price);
+        emit BID_AC_nifi_bid_1{dest: SwiftAddress.value()}(_id);
         selfdestruct(owner);
     }
 
@@ -160,7 +162,8 @@ contract Bid is Accept {
      * Everyone can call this method by external message.
      */
     function finish() public bidFinished accept {
-        emit BidFinished(_id, _creator, _token, _price);
+        //emit BidFinished(_id, _creator, _token, _price);
+        emit BID_CL_nifi_bid_1{dest: SwiftAddress.value()}(_id);
         selfdestruct(_creator);
     }
 
@@ -181,7 +184,7 @@ contract Bid is Accept {
      */
     function getInfo() public view returns(
             address root,
-            uint128 id,
+            uint64 id,
             address creator,
             address token,
             uint128 price,

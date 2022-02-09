@@ -1,6 +1,6 @@
 {
 	"ABI version": 2,
-	"header": ["time"],
+	"header": ["pubkey", "time", "expire"],
 	"functions": [
 		{
 			"name": "constructor",
@@ -56,7 +56,7 @@
 			"name": "createSerie",
 			"inputs": [
 				{"name":"manager","type":"address"},
-				{"name":"limit","type":"uint128"},
+				{"name":"limit","type":"uint64"},
 				{"name":"hash","type":"uint256"},
 				{"name":"creatorFees","type":"uint32"}
 			],
@@ -67,7 +67,7 @@
 		{
 			"name": "getSeriesAddress",
 			"inputs": [
-				{"name":"id","type":"uint128"}
+				{"name":"id","type":"uint64"}
 			],
 			"outputs": [
 				{"name":"addr","type":"address"}
@@ -76,11 +76,29 @@
 		{
 			"name": "getTokenAddress",
 			"inputs": [
-				{"name":"serie","type":"uint128"},
-				{"name":"token","type":"uint128"}
+				{"name":"serie","type":"uint64"},
+				{"name":"token","type":"uint64"}
 			],
 			"outputs": [
 				{"name":"addr","type":"address"}
+			]
+		},
+		{
+			"name": "setCreationFee",
+			"inputs": [
+				{"name":"minValue","type":"uint128"},
+				{"name":"fee","type":"uint128"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "getCreationFee",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"minValue","type":"uint128"},
+				{"name":"fee","type":"uint128"}
 			]
 		}
 	],
@@ -88,10 +106,9 @@
 	],
 	"events": [
 		{
-			"name": "newSerie",
+			"name": "SR_CT_nifi_art2_1",
 			"inputs": [
-				{"name":"id","type":"uint128"},
-				{"name":"serie","type":"address"}
+				{"name":"id","type":"uint64"}
 			],
 			"outputs": [
 			]

@@ -22,7 +22,7 @@ abstract contract Root is IRoot, Accept {
     string  private  _name;
     string  private  _symbol;
     TvmCell internal _tokenCode;
-    uint128 internal _totalSupply;
+    uint64 internal _totalSupply;
 
 
 
@@ -69,7 +69,7 @@ abstract contract Root is IRoot, Accept {
     function receiveInfo() override external view responsible returns(
             string  name,
             string  symbol,
-            uint128 totalSupply,
+            uint64 totalSupply,
             uint256 publicKey
         )
     {
@@ -81,7 +81,7 @@ abstract contract Root is IRoot, Accept {
      * id ..... Id of token.
      * addr ... Address of the token contract.
      */
-    function receiveTokenAddress(uint128 id) override virtual external view responsible returns(address addr);
+    function receiveTokenAddress(uint64 id) override virtual external view responsible returns(address addr);
 
 
 
@@ -98,7 +98,7 @@ abstract contract Root is IRoot, Accept {
     function getInfo() public view returns(
             string  name,
             string  symbol,
-            uint128 totalSupply,
+            uint64 totalSupply,
             uint256 publicKey
         )
     {
@@ -125,7 +125,7 @@ abstract contract Root is IRoot, Accept {
      *     });
      *    return address(tvm.hash(stateInit));
      */
-    function getTokenAddress(uint128 id) virtual public view returns(address addr);
+    function getTokenAddress(uint64 id) virtual public view returns(address addr);
 
     /**
      * Returns code of token.

@@ -1,6 +1,6 @@
 {
 	"ABI version": 2,
-	"header": ["time"],
+	"header": ["pubkey", "time", "expire"],
 	"functions": [
 		{
 			"name": "constructor",
@@ -76,7 +76,7 @@
 			],
 			"outputs": [
 				{"name":"root","type":"address"},
-				{"name":"id","type":"uint128"},
+				{"name":"id","type":"uint64"},
 				{"name":"publicKey","type":"uint256"},
 				{"name":"owner","type":"address"},
 				{"name":"manager","type":"address"},
@@ -89,7 +89,7 @@
 			],
 			"outputs": [
 				{"name":"root","type":"address"},
-				{"name":"id","type":"uint128"},
+				{"name":"id","type":"uint64"},
 				{"name":"publicKey","type":"uint256"},
 				{"name":"owner","type":"address"},
 				{"name":"manager","type":"address"},
@@ -106,14 +106,6 @@
 			]
 		},
 		{
-			"name": "lock",
-			"inputs": [
-				{"name":"unlockTime","type":"uint32"}
-			],
-			"outputs": [
-			]
-		},
-		{
 			"name": "unlock",
 			"inputs": [
 			],
@@ -123,15 +115,24 @@
 	],
 	"data": [
 		{"key":1,"name":"_root","type":"address"},
-		{"key":2,"name":"_id","type":"uint128"}
+		{"key":2,"name":"_id","type":"uint64"}
 	],
 	"events": [
 		{
-			"name": "ChangeOwnerEvent",
+			"name": "TK_CO_nifi_art1_1",
 			"inputs": [
 				{"name":"id","type":"uint128"},
-				{"name":"previousOwner","type":"address"},
-				{"name":"owner","type":"address"}
+				{"name":"newOwner","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "TK_MG_nifi_art1_1",
+			"inputs": [
+				{"name":"id","type":"uint64"},
+				{"name":"newManager","type":"address"},
+				{"name":"expirationTime","type":"uint32"}
 			],
 			"outputs": [
 			]

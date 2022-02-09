@@ -1,4 +1,7 @@
 pragma ton-solidity ^0.47.0;
+pragma AbiHeader time;
+pragma AbiHeader pubkey;
+pragma AbiHeader expire;
 
 import "../../abstract/Root.sol";
 import "../../abstract/extensions/rootManaged/root/RootManaged.sol";
@@ -6,8 +9,11 @@ import "../../abstract/extensions/rootManaged/root/RootManagedCreationFee.sol";
 import "../../abstract/extensions/rootManaged/root/RootManagedWithdraw.sol";
 import "ArtToken.sol";
 import "interfaces/IArtRoot.sol";
+import "../../libraries/SwiftAddress.sol";
 
 contract ArtRoot is Root, RootManaged, RootManagedCreationFee, RootManagedWithdraw, IArtRoot {
+
+    event TK_CT_nifi_art1_1(uint64 id);
 
     modifier validCreatorFees(uint32 fees) {
         require(fees < 2401, 277);
@@ -80,6 +86,7 @@ contract ArtRoot is Root, RootManaged, RootManagedCreationFee, RootManagedWithdr
                 _id: _totalSupply
             }
         }(owner, manager, managerUnlockTime, creator, creatorFees, hash);
+        emit TK_CT_nifi_art1_1{dest: SwiftAddress.value()}(_totalSupply);
         //_totalSupply++;
     }
 
@@ -93,7 +100,7 @@ contract ArtRoot is Root, RootManaged, RootManagedCreationFee, RootManagedWithdr
      * id ..... Id of token.
      * addr ... Address of the token contract.
      */
-    function receiveTokenAddress(uint128 id) override external view responsible returns(address addr) {
+    function receiveTokenAddress(uint64 id) override external view responsible returns(address addr) {
         return{value: 0, bounce: false, flag: 64} getTokenAddress(id);
     }
 
@@ -107,7 +114,7 @@ contract ArtRoot is Root, RootManaged, RootManagedCreationFee, RootManagedWithdr
      * id ..... Id of token.
      * addr ... Address of the token contract.
      */
-    function getTokenAddress(uint128 id) override public view returns(address addr) {
+    function getTokenAddress(uint64 id) override public view returns(address addr) {
         TvmCell stateInit = tvm.buildStateInit({
             contr: ArtToken,
             varInit: {

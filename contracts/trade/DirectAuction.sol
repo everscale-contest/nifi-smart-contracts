@@ -1,10 +1,14 @@
 pragma ton-solidity >= 0.44.0;
+pragma AbiHeader time;
+pragma AbiHeader pubkey;
+pragma AbiHeader expire;
 
 import "../abstract/interfaces/IToken.sol";
 import "../abstract/interfaces/ITokenAddress.sol";
 import "../abstract/modifiers/Accept.sol";
+import "../libraries/SwiftAddress.sol";
 
-interface ITradeToken {    
+interface ITradeToken {
     function receiveTradeInfo() external view responsible returns(
             address owner,
             address creator,
@@ -25,8 +29,9 @@ contract DirectAuction is Accept {
     /**********
      * EVENTS *
      **********/
-    event BidEvent(uint128 id, address creator, address token, address bider, uint128 value);
-    event FinishEvent(uint128 id, address creator, address token, address bider, uint128 value);
+    event AUC_BS_nifi_auc_1(uint64 id, uint128 bidValue, address bidCreator);
+    event AUC_SC_nifi_auc_1(uint64 id, uint128 finalBidValue, address bidCreator);
+    event AUC_EX_nifi_auc_1(uint64 id);
 
 
 
@@ -44,7 +49,7 @@ contract DirectAuction is Accept {
      * STATIC *
      **********/
     address static _root;
-    uint128 static _id;
+    uint64 static _id;
 
 
 
@@ -155,15 +160,15 @@ contract DirectAuction is Accept {
 
         _curBid.value = msg.value - _feeBid;
         _curBid.bider = msg.sender;
-        emit BidEvent(_id, _creator, _token, _curBid.bider, _curBid.value);
+        emit AUC_BS_nifi_auc_1{dest: SwiftAddress.value()}(_id,_curBid.value,_curBid.bider);
     }
 
     /**
      * Everyone can call this method by external message.
      */
-    function finish() public auctionFinished canAskFinish accept {   
+    function finish() public auctionFinished canAskFinish accept {
         _askFinish = now+120;
-        ITradeToken(_token).receiveTradeInfo{value: 0.06 ton, bounce: false, flag: 0, callback: DirectAuction.onReceiveTradeInfo}();        
+        ITradeToken(_token).receiveTradeInfo{value: 0.06 ton, bounce: false, flag: 0, callback: DirectAuction.onReceiveTradeInfo}();
     }
 
     /**
@@ -176,9 +181,7 @@ contract DirectAuction is Accept {
             address manager,
             uint32  managerUnlockTime
     ) public onlyToken {
-        require(manager == address(this), 106, "Wrong manager");
-        //require(managerUnlockTime > now+60, 107, "Wrong manager unlock time");
-        if (managerUnlockTime > now+60){
+        if ((manager == address(this)) && (managerUnlockTime > now+60)){
             uint128 balance = address(this).balance;
 
             if (creatorFees>0) {
@@ -194,20 +197,22 @@ contract DirectAuction is Accept {
             }
 
             if (_curBid.bider != address(0)) {
+                emit AUC_SC_nifi_auc_1{dest: SwiftAddress.value()}(_id,_curBid.value,_curBid.bider);
                 ITokenAddress(_token).changeOwner(_curBid.bider);
+            }else {
+                emit AUC_EX_nifi_auc_1{dest: SwiftAddress.value()}(_id);
             }
 
             IToken(_token).unlock();
 
-            _root.transfer({value: address(this).balance/20, flag: 1, bounce: true});
-            emit FinishEvent(_id, _creator, _token, _curBid.bider, _curBid.value);
+            _root.transfer({value: balance/20, flag: 1, bounce: true});//send 5%
             selfdestruct(owner);
         }else{
             if (_curBid.bider != address(0)) {
                 _curBid.bider.transfer({value: _curBid.value, flag: 1, bounce: true});
             }
             IToken(_token).unlock();
-            emit FinishEvent(_id, _creator, _token, address(0), 0);
+            emit AUC_EX_nifi_auc_1{dest: SwiftAddress.value()}(_id);
             selfdestruct(owner);
         }
 
@@ -234,7 +239,7 @@ contract DirectAuction is Accept {
      */
     function getInfo() public view returns(
             address root,
-            uint128 id,
+            uint64 id,
             address creator,
             address token,
             uint128 startBid,

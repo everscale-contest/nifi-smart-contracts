@@ -2,7 +2,9 @@ const Art2TokenContract = {
     abi: {
         "ABI version": 2,
         "header": [
-            "time"
+            "pubkey",
+            "time",
+            "expire"
         ],
         "functions": [
             {
@@ -36,7 +38,17 @@ const Art2TokenContract = {
                 "outputs": []
             },
             {
-                "name": "receiveArtInfo",
+                "name": "changeOwner",
+                "inputs": [
+                    {
+                        "name": "owner",
+                        "type": "address"
+                    }
+                ],
+                "outputs": []
+            },
+            {
+                "name": "receiveArtHash",
                 "inputs": [
                     {
                         "name": "_answer_id",
@@ -45,13 +57,15 @@ const Art2TokenContract = {
                 ],
                 "outputs": [
                     {
-                        "name": "creator",
-                        "type": "address"
-                    },
-                    {
-                        "name": "creatorFees",
-                        "type": "uint32"
-                    },
+                        "name": "hash",
+                        "type": "uint256"
+                    }
+                ]
+            },
+            {
+                "name": "getArtHash",
+                "inputs": [],
+                "outputs": [
                     {
                         "name": "hash",
                         "type": "uint256"
@@ -59,20 +73,24 @@ const Art2TokenContract = {
                 ]
             },
             {
-                "name": "getArtInfo",
+                "name": "getInfo",
                 "inputs": [],
                 "outputs": [
                     {
-                        "name": "creator",
+                        "name": "root",
                         "type": "address"
                     },
                     {
-                        "name": "creatorFees",
-                        "type": "uint32"
+                        "name": "series",
+                        "type": "address"
                     },
                     {
-                        "name": "hash",
-                        "type": "uint256"
+                        "name": "seriesId",
+                        "type": "uint64"
+                    },
+                    {
+                        "name": "id",
+                        "type": "uint64"
                     }
                 ]
             },
@@ -134,97 +152,12 @@ const Art2TokenContract = {
                 ]
             },
             {
-                "name": "changeOwner",
-                "inputs": [
-                    {
-                        "name": "owner",
-                        "type": "address"
-                    }
-                ],
-                "outputs": []
-            },
-            {
-                "name": "receiveInfo",
-                "inputs": [
-                    {
-                        "name": "_answer_id",
-                        "type": "uint32"
-                    }
-                ],
-                "outputs": [
-                    {
-                        "name": "root",
-                        "type": "address"
-                    },
-                    {
-                        "name": "id",
-                        "type": "uint128"
-                    },
-                    {
-                        "name": "publicKey",
-                        "type": "uint256"
-                    },
-                    {
-                        "name": "owner",
-                        "type": "address"
-                    },
-                    {
-                        "name": "manager",
-                        "type": "address"
-                    },
-                    {
-                        "name": "managerUnlockTime",
-                        "type": "uint32"
-                    }
-                ]
-            },
-            {
-                "name": "getInfo",
-                "inputs": [],
-                "outputs": [
-                    {
-                        "name": "root",
-                        "type": "address"
-                    },
-                    {
-                        "name": "id",
-                        "type": "uint128"
-                    },
-                    {
-                        "name": "publicKey",
-                        "type": "uint256"
-                    },
-                    {
-                        "name": "owner",
-                        "type": "address"
-                    },
-                    {
-                        "name": "manager",
-                        "type": "address"
-                    },
-                    {
-                        "name": "managerUnlockTime",
-                        "type": "uint32"
-                    }
-                ]
-            },
-            {
                 "name": "lockManager",
                 "inputs": [
                     {
                         "name": "manager",
                         "type": "address"
                     },
-                    {
-                        "name": "unlockTime",
-                        "type": "uint32"
-                    }
-                ],
-                "outputs": []
-            },
-            {
-                "name": "lock",
-                "inputs": [
                     {
                         "name": "unlockTime",
                         "type": "uint32"
@@ -246,38 +179,65 @@ const Art2TokenContract = {
             },
             {
                 "key": 2,
-                "name": "_id",
-                "type": "uint128"
+                "name": "_series",
+                "type": "address"
             },
             {
                 "key": 3,
-                "name": "_serie",
-                "type": "address"
+                "name": "_seriesId",
+                "type": "uint64"
+            },
+            {
+                "key": 4,
+                "name": "_id",
+                "type": "uint64"
             }
         ],
         "events": [
             {
-                "name": "ChangeOwnerEvent",
+                "name": "TK_CO_nifi_art2_1",
                 "inputs": [
                     {
+                        "name": "seriesId",
+                        "type": "uint64"
+                    },
+                    {
                         "name": "id",
-                        "type": "uint128"
+                        "type": "uint64"
                     },
                     {
-                        "name": "previousOwner",
+                        "name": "newOwner",
+                        "type": "address"
+                    }
+                ],
+                "outputs": []
+            },
+            {
+                "name": "TK_MG_nifi_art2_1",
+                "inputs": [
+                    {
+                        "name": "seriesId",
+                        "type": "uint64"
+                    },
+                    {
+                        "name": "id",
+                        "type": "uint64"
+                    },
+                    {
+                        "name": "newManager",
                         "type": "address"
                     },
                     {
-                        "name": "owner",
-                        "type": "address"
+                        "name": "expirationTime",
+                        "type": "uint32"
                     }
                 ],
                 "outputs": []
             }
         ]
     },
-    tvc: "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",
-    code: "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",
-    codeHash: "a797bf6ac66a512db28db8f421b40de3cef0df4f51848707da09e2a6c31789da",
+    tvc: "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",
+    code: "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",
+    codeHash: "00522fd7bca589c7cccd1c78781dfdbc7de8887b77a84f65e5c671c0b6cf92fb",
 };
 export default Art2TokenContract;

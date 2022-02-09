@@ -1,6 +1,6 @@
 {
 	"ABI version": 2,
-	"header": ["time"],
+	"header": ["pubkey", "time", "expire"],
 	"functions": [
 		{
 			"name": "constructor",
@@ -49,7 +49,7 @@
 			],
 			"outputs": [
 				{"name":"root","type":"address"},
-				{"name":"id","type":"uint128"},
+				{"name":"id","type":"uint64"},
 				{"name":"creator","type":"address"},
 				{"name":"token","type":"address"},
 				{"name":"startBid","type":"uint128"},
@@ -63,29 +63,33 @@
 	],
 	"data": [
 		{"key":1,"name":"_root","type":"address"},
-		{"key":2,"name":"_id","type":"uint128"}
+		{"key":2,"name":"_id","type":"uint64"}
 	],
 	"events": [
 		{
-			"name": "BidEvent",
+			"name": "AUC_BS_nifi_auc_1",
 			"inputs": [
-				{"name":"id","type":"uint128"},
-				{"name":"creator","type":"address"},
-				{"name":"token","type":"address"},
-				{"name":"bider","type":"address"},
-				{"name":"value","type":"uint128"}
+				{"name":"id","type":"uint64"},
+				{"name":"bidValue","type":"uint128"},
+				{"name":"bidCreator","type":"address"}
 			],
 			"outputs": [
 			]
 		},
 		{
-			"name": "FinishEvent",
+			"name": "AUC_SC_nifi_auc_1",
 			"inputs": [
-				{"name":"id","type":"uint128"},
-				{"name":"creator","type":"address"},
-				{"name":"token","type":"address"},
-				{"name":"bider","type":"address"},
-				{"name":"value","type":"uint128"}
+				{"name":"id","type":"uint64"},
+				{"name":"finalBidValue","type":"uint128"},
+				{"name":"bidCreator","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "AUC_EX_nifi_auc_1",
+			"inputs": [
+				{"name":"id","type":"uint64"}
 			],
 			"outputs": [
 			]

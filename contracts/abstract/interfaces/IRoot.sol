@@ -14,7 +14,7 @@ interface IRoot {
     function receiveInfo() external view responsible returns(
             string  name,
             string  symbol,
-            uint128 totalSupply,
+            uint64 totalSupply,
             uint256 publicKey
         );
 
@@ -23,5 +23,5 @@ interface IRoot {
      * id ..... Id of token.
      * addr ... Address of the token contract.
      */
-    function receiveTokenAddress(uint128 id) external view responsible returns(address addr);
+    function receiveTokenAddress(uint64 id) external view responsible returns(address addr);
 }
