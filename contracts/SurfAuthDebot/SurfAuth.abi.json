@@ -4,6 +4,14 @@
 	"header": ["pubkey", "time", "expire"],
 	"functions": [
 		{
+			"name": "setIcon",
+			"inputs": [
+				{"name":"icon","type":"bytes"}
+			],
+			"outputs": [
+			]
+		},
+		{
 			"name": "onAuth",
 			"inputs": [
 				{"name":"hash","type":"uint256"}
@@ -320,6 +328,7 @@
 		{"name":"m_dst","type":"address"},
 		{"name":"m_amount","type":"uint128"},
 		{"name":"m_payload","type":"cell"},
-		{"name":"m_otp","type":"string"}
+		{"name":"m_otp","type":"string"},
+		{"name":"m_icon","type":"bytes"}
 	]
 }

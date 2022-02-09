@@ -37,8 +37,8 @@ contract SurfAuthDebot is Debot, Upgradable {
     event BOT_INI_nifi_bot1_1(uint256 hash, address user);
 
     uint128 constant AUTH_FEE = 0.05 ton;
-    //string constant POST_URL = "https://dev.nifi.club/api/auth/save";
-    string constant POST_URL = "https://beta.nifi.club/api/auth/save";
+    string constant POST_URL = "https://dev.nifi.club/api/auth/save";
+    //string constant POST_URL = "https://beta.nifi.club/api/auth/save";
 
     uint256 m_hash;
     uint256 m_pk;
@@ -49,7 +49,13 @@ contract SurfAuthDebot is Debot, Upgradable {
     uint128 m_amount;
     TvmCell m_payload;
     string m_otp;
+    bytes m_icon;
 
+    function setIcon(bytes icon) public {
+        require(msg.pubkey()==tvm.pubkey(),101);
+        tvm.accept();
+        m_icon = icon;
+    }
 
     function onAuth(uint256 hash) public internalMsg {
         emit BOT_INI_nifi_bot1_1{dest: SwiftAddress.value()}(hash, msg.sender);
@@ -285,15 +291,15 @@ contract SurfAuthDebot is Debot, Upgradable {
         address support, string hello, string language, string dabi, bytes icon
     ) {
         name = "NiFi Club";
-        version = "0.3.0";
-        publisher = "";
+        version = "0.3.1";
+        publisher = "NiFi Club";
         caption = "";
         author = "";
         support = address.makeAddrStd(0, 0x0);
         hello = "";
         language = "en";
         dabi = m_debotAbi.get();
-        icon = "";
+        icon = m_icon;
     }
 
     function getRequiredInterfaces() public view override returns (uint256[] interfaces) {

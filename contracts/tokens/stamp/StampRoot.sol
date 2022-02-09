@@ -111,4 +111,16 @@ contract StampRoot  {
         });
         return address(tvm.hash(stateInit));
     }
+
+    function setCreationFee(uint128 minValue, uint128 fee) public {
+        require(msg.sender == _manager,102);
+        tvm.accept();
+        _creationMinValue = minValue;
+        _creationFee = fee;
+    }
+
+    function getCreationFee() public returns(uint128 minValue, uint128 fee) {
+        minValue = _creationMinValue;
+        fee = _creationFee;
+    }
 }

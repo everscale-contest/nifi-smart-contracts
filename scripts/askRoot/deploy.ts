@@ -21,8 +21,10 @@ async function run(): Promise<void> {
     console.log(rootKeys.public)
     console.log(rootKeys.secret)*/
     const rootKeys: KeyPair =
-    {public: '5c4e2691bd84acca584c8ebd158f3f6f91df5d12f6c8771a01a30b1d1fc836a2',
-    secret: 'a265524169d2781e3aca21f84eb4182f87d2116291aebfb43b3caad4f4eae07e'}
+    {"public":"a32b6119b77e79ee370e173a3383e517d2d235c796bd38198af22b6673300cb8",
+        "secret":"5707985ddf6b95a2a11d8503dbc52fee5be330dbc0020023a1180f08aaaef843"}
+/*    {"public":"327acc64d5ce7a9e1ac480461339605efb1d2a75c447179343e4f85745884eae",
+        "secret":"b19ec2cf5845136a0564e7b9065efb18bd24ad0ae8209282d89642a9042e5b24"}*/
     /*{public: 'bb1080f7951262ebc58e6c0ad5c191c583e08a1f2456c7c0871ca8836322d4cd',
     secret: '4fa3037a5419e1d4742b758b6d5252c020d4197bf5ae59b386044ba8c0a3d867'}*/
     /*{public: 'fade393f0ad3476a669c22939f266a8282ceb6cf03036defc02dd5568960478f',
@@ -45,7 +47,7 @@ async function run(): Promise<void> {
     const balance: number = parseInt(await askRoot.getBalance())
     if (balance === 0) {
         await TerminalContractInfo.log('SENDING...')
-        await giver.sendTransaction(await askRoot.calculateAddress(), config.net.deploy.contracts.bidRoot.giverDeposit)
+        await giver.sendTransaction(await askRoot.calculateAddress(), config.net.deploy.contracts.askRoot.giverDeposit)
         await askRoot.waitForTransaction()
         await TerminalContractInfo.log(colors.green('SENT'))
         await TerminalContractInfo.log()
@@ -59,14 +61,13 @@ async function run(): Promise<void> {
     if (!canDeploy)
         process.exit()
 
-    const offerRootConfig: any = config.net.deploy.contracts.bidRoot
+    const askRootConfig: any = config.net.deploy.contracts.askRoot
     await askRoot.deploy(
-        offerRootConfig.manager,
-        offerRootConfig.creationMinValue,
-        offerRootConfig.creationFee,
-        offerRootConfig.creationAndStorageFee,
-        Ton.hex.string(offerRootConfig.name),
-        Ton.hex.string(offerRootConfig.symbol)
+        askRootConfig.manager,
+        askRootConfig.creationMinValue,
+        askRootConfig.creationFee,
+        Ton.hex.string(askRootConfig.name),
+        Ton.hex.string(askRootConfig.symbol)
     )
     await TerminalContractInfo.log(colors.green('DEPLOYED'))
     await TerminalContractInfo.log()

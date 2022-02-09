@@ -5,21 +5,21 @@ const make: Make = new Make({
         //'contracts/tokens/random/RandomRoot',
         //'contracts/tokens/random/RandomToken',
 
-        /*'contracts/tokens/art/ArtRoot',
+        'contracts/tokens/art/ArtRoot',
         'contracts/tokens/art/ArtToken',
 
         'contracts/tokens/art2/Art2Root',
         'contracts/tokens/art2/Art2Token',
         'contracts/tokens/art2/Art2Series',
-*/
 
-        'contracts/tokens/collection/CollectionToken',
+
+  /*      'contracts/tokens/collection/CollectionToken',
         'contracts/tokens/collection/Collection',
-        'contracts/tokens/collection/CollectionRoot',
+        'contracts/tokens/collection/CollectionRoot',*/
 
         //'contracts/tokens/ticket/TicketToken',
         //'contracts/tokens/ticket/TicketRoot',
-/*
+
         'contracts/trade/DirectAuctionRoot',
         'contracts/trade/DirectAuction',
 
@@ -27,7 +27,7 @@ const make: Make = new Make({
         'contracts/trade/Bid',
 
         'contracts/trade/AskRoot',
-        'contracts/trade/Ask'*/
+        'contracts/trade/Ask'
     ],
     wrap: [
         /*'library/ton/contracts/SafeMultisigWallet/SafeMultisigWallet',
@@ -35,7 +35,7 @@ const make: Make = new Make({
     ],
     //compiler: '0.47.0',
     //linker: '0.13.88'
-    compiler: '0.52.0',
-    linker: '0.13.97'
+    compiler: '0.47.0',
+    linker: '0.14.27'
 })
 make.run().then()

@@ -179,8 +179,6 @@ contract ForeverToken is IForeverToken {
 
 
     function addStamp(uint64 id, address owner,address seal,uint8 place) public override {
-        //todo check constant address into lib
-        require(now > _managerUnlockTime, 105);
         require(_owner == owner,107);
         TvmCell data = tvm.buildDataInit({
             contr: StampToken,

@@ -1,6 +1,0 @@
-test
-*.log
-!*.sh
-.solc_imports
-*.keys.json
-

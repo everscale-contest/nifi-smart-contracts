@@ -107,8 +107,8 @@ export default {
                     giverDeposit: 100_000_000,
 
                     manager: '0:ab5f48c154f672d2f4c30c4473251e14a05199d1df1300263d8f5b0e80e3e387',
-                    creationMinValue: 300_000_000,
-                    creationFee: 200_000_000,
+                    creationMinValue: 350_000_000,
+                    creationFee: 100_000_000,
                     name: 'Art',
                     symbol: 'ART'
                 },
@@ -117,8 +117,8 @@ export default {
                     giverDeposit: 100_000_000,
 
                     manager: '0:ab5f48c154f672d2f4c30c4473251e14a05199d1df1300263d8f5b0e80e3e387',
-                    creationMinValue: 300_000_000,
-                    creationFee: 200_000_000,
+                    creationMinValue: 350_000_000,
+                    creationFee: 100_000_000,
                     name: 'Art2',
                     symbol: 'ART2'
                 },
@@ -133,7 +133,7 @@ export default {
                     symbol: 'AUCTION'
                 },
                 bidRoot: {
-                    keyFile: __dirname + '/../keys/OfferRoot.keys.json',
+                    keyFile: __dirname + '/../keys/BidRoot.keys.json',
                     giverDeposit: 100_000_000,
 
                     manager: '0:ab5f48c154f672d2f4c30c4473251e14a05199d1df1300263d8f5b0e80e3e387',
@@ -142,6 +142,17 @@ export default {
                     creationAndStorageFee : 0,
                     name: 'Bid',
                     symbol: 'BID'
+                },
+                askRoot: {
+                    keyFile: __dirname + '/../keys/AskRoot.keys.json',
+                    giverDeposit: 100_000_000,
+
+                    manager: '0:ab5f48c154f672d2f4c30c4473251e14a05199d1df1300263d8f5b0e80e3e387',
+                    creationMinValue: 200_000_000,
+                    creationFee: 100_000_000,
+                    creationAndStorageFee : 0,
+                    name: 'Ask',
+                    symbol: 'ASK'
                 },
                 stampRoot: {
                     keyFile: __dirname + '/../keys/StampRoot.keys.json',

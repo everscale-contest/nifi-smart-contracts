@@ -75,11 +75,13 @@ async function writeSealContractInfo (sealRoot, pubkey, sealTockenCodeHash, seal
         }
     });
     try {
-
+        console.log('net: '+config.endpoints.toString());
         let root_json = JSON.parse(fs.readFileSync("../root.json").toString());
 
-        const rootKeys = await client.crypto.generate_random_sign_keys();
-        console.log('root keys:'+JSON.stringify(root_json));
+        //const rootKeys = await client.crypto.generate_random_sign_keys();
+        const rootKeys = {public:"a32b6119b77e79ee370e173a3383e517d2d235c796bd38198af22b6673300cb8",
+        secret:"5707985ddf6b95a2a11d8503dbc52fee5be330dbc0020023a1180f08aaaef843"}
+        //console.log('root keys:'+JSON.stringify(root_json));
 
         root_json.keys = rootKeys;
         root_json.seal="";

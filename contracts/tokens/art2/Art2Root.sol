@@ -9,7 +9,7 @@ import "Art2Series.sol";
 
 contract Art2Root  {
 
-    address _manager;    
+    address _manager;
     uint128 _creationFee;
     uint128 _creationMinValue;
     string _name;
@@ -86,11 +86,11 @@ contract Art2Root  {
             }
         }(manager, _name, _symbol, limit, _tokenCode, hash, creatorFees);
         emit SR_CT_nifi_art2_1{dest: SwiftAddress.value()}(_totalSupply);
-        
-    }
-        
 
-   
+    }
+
+
+
     function getSeriesAddress(uint64 id) public view returns(address addr) {
         TvmCell stateInit = tvm.buildStateInit({
             contr: Art2Series,
@@ -128,5 +128,17 @@ contract Art2Root  {
         });
 
         return address(tvm.hash(stateInit1));
+    }
+
+    function setCreationFee(uint128 minValue, uint128 fee) public {
+        require(msg.sender == _manager,102);
+        tvm.accept();
+        _creationMinValue = minValue;
+        _creationFee = fee;
+    }
+
+    function getCreationFee() public returns(uint128 minValue, uint128 fee) {
+        minValue = _creationMinValue;
+        fee = _creationFee;
     }
 }

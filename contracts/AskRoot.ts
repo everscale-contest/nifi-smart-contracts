@@ -23,7 +23,6 @@ export default class AskRoot extends Contract {
         manager: string,
         creationMinValue: number,
         creationFee: number,
-        creationAndStorageFee:number,
         name: string,
         symbol: string
     ): Promise<boolean> {
@@ -31,7 +30,6 @@ export default class AskRoot extends Contract {
             manager: manager,
             creationMinValue: creationMinValue,
             creationFee: creationFee,
-            creationAndStorageFee: creationAndStorageFee,
             name: name,
             symbol: symbol,
             tokenCode: AskContract.code

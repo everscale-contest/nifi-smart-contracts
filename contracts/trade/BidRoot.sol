@@ -5,12 +5,12 @@ pragma AbiHeader expire;
 
 import "../abstract/Root.sol";
 import "../abstract/extensions/rootManaged/root/RootManaged.sol";
-import "../abstract/extensions/rootManaged/root/RootManagedCreationAndStorageFee.sol";
+import "../abstract/extensions/rootManaged/root/RootManagedCreationFee.sol";
 import "../abstract/extensions/rootManaged/root/RootManagedWithdraw.sol";
 import "Bid.sol";
 import "../libraries/SwiftAddress.sol";
 
-contract BidRoot is Root, RootManaged, RootManagedCreationAndStorageFee, RootManagedWithdraw {
+contract BidRoot is Root, RootManaged, RootManagedCreationFee, RootManagedWithdraw {
 
     event BID_CT_nifi_bid_1(uint64 id, address tokenAddress, uint128 bidValue, uint32 endTime, address bidCreator);
     /***************
@@ -25,7 +25,6 @@ contract BidRoot is Root, RootManaged, RootManagedCreationAndStorageFee, RootMan
         address manager,
         uint128 creationMinValue,
         uint128 creationFee,
-        uint128 creationAndStorageFee,
         string  name,
         string  symbol,
         TvmCell tokenCode
@@ -33,7 +32,7 @@ contract BidRoot is Root, RootManaged, RootManagedCreationAndStorageFee, RootMan
         public
         Root(name, symbol, tokenCode)
         RootManaged(manager)
-        RootManagedCreationAndStorageFee(creationMinValue, creationFee, creationAndStorageFee)
+        RootManagedCreationFee(creationMinValue, creationFee)
     {
     }
 
