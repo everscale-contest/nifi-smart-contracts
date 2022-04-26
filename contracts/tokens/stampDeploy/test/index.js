@@ -1,17 +1,19 @@
 const {TonClient} = require("@tonclient/core")
 const {libNode} = require("@tonclient/lib-node")
-const {SealRootContract} = require ('../../seal/SealRootContract')
-const {SealTokenContract} = require ('../../seal/SealTokenContract')
-const {StampRootContract} = require ('../../stamp/StampRootContract')
-const {StampTokenContract} = require ('../../stamp/StampTokenContract')
-const {ForeverRootContract} = require ('../../forever/ForeverRootContract')
-const {ForeverTokenContract} = require ('../../forever/ForeverTokenContract')
+const {SealRootContract} = require ('../../seal/1/SealRootContract')
+const {SealTokenContract} = require ('../../seal/1/SealTokenContract')
+const {StampRootContract} = require ('../../stamp/1/StampRootContract')
+const {StampTokenContract} = require ('../../stamp/1/StampTokenContract')
+const {ForeverRootContract} = require ('../../forever/1/ForeverRootContract')
+const {ForeverTokenContract} = require ('../../forever/1/ForeverTokenContract')
 const {SafeMultisigWallet} = require('../utils/SafeMultisigWallet')
 const {config} = require('../config')
 const fs = require('fs');
 const { MsigKeys } = require('../utils/msig.keys.js')
 const { Msig } = require('../utils/msig.js')
 const { transfer } = require('../utils/transfer.js')
+
+const { deployMultisig } = require('../utils/deployMsig.js')
 
 TonClient.useBinaryLibrary(libNode)
 
@@ -331,8 +333,9 @@ async function setForever(client,stamp,forever,amount) {
     }
 }
 
-function checkExp(exp,prefix,text) {
+function checkExp(json,exp,prefix,text) {
     if(exp) {
+        console.log(JSON.stringify(json))
         console.error(prefix+" "+text);
         process.exit(1)
     }
@@ -344,22 +347,23 @@ async function simpleTest(client, root_json) {
     const sealRoot = root_json.seal;
     const foreverRoot = root_json.forever;
     const stamp1 =await createToken(client,stampRoot,StampRootContract,DEPLOY_VALUE,"0x1111112")
+    //console.log('stamp1',stamp1)
 
     const seal1 =await createToken(client,sealRoot,SealRootContract,DEPLOY_VALUE,"0x1111121")
+    //console.log('seal1',seal1)
 
     const forever1 =await createToken(client,foreverRoot,ForeverRootContract,DEPLOY_VALUE,"0x1111131")
-
     await requestEndrose(client,stamp1,seal1,2|1,500_000_000,650_000_000)
     await sleep(1000);
     await endrose(client,seal1,stamp1,1,2900000000)
     await sleep(1000);
     let get_res = await callGet(client,StampTokenContract,stamp1,'getSeal',{})
-    checkExp(get_res.corner!=1,"simpleTest" , "1 endrose failed");
+    checkExp(get_res,get_res.corner!=1,"simpleTest" , "1 endrose failed");
 
     await setForever(client,stamp1,forever1,210000000)
     await sleep(1000);
     get_res = await callGet(client,ForeverTokenContract,forever1,'getStamps',{})
-    checkExp(get_res.stamps.length!=1,"simpleTest" , "1 setForever failed");
+    checkExp(get_res,get_res.stamps.length!=1,"simpleTest" , "1 setForever failed");
     console.log("simpleTest PASS")
 }
 
@@ -374,14 +378,14 @@ async function cancelEndroseTest(client, root_json) {
     await requestEndrose(client,stamp1,seal1,2|1,500_000_000,650_000_000)
     await sleep(1000);
     let get_res = await callGet(client,StampTokenContract,stamp1,'getSeal',{})
-    checkExp(get_res.corner!=0,"simpleTest" , "1 requestEndrose failed");
-    checkExp(get_res.seal!=seal1,"simpleTest" , "1 requestEndrose failed");
+    checkExp(get_res,get_res.corner!=0,"cancelEndroseTest" , "1 requestEndrose failed");
+    checkExp(get_res,get_res.seal!=seal1,"cancelEndroseTest" , "1 requestEndrose failed");
 
     await cancelEndrose(client,stamp1,110000000)
     await sleep(1000);
     get_res = await callGet(client,StampTokenContract,stamp1,'getSeal',{})
-    checkExp(get_res.corner!=0,"simpleTest" , "1 requestEndrose failed");
-    checkExp(get_res.seal!=null,"simpleTest" , "1 requestEndrose failed");
+    checkExp(get_res,get_res.corner!=0,"cancelEndroseTest" , "1 requestEndrose failed");
+    checkExp(get_res,get_res.seal!=null,"cancelEndroseTest" , "1 requestEndrose failed");
 
     console.log("cancelEndroseTest PASS")
 }
@@ -401,7 +405,7 @@ async function niceForeverTest(client, root_json) {
     await endrose(client,seal1,stamp1,1,290000000)
     await sleep(1000);
     let get_res = await callGet(client,StampTokenContract,stamp1,'getSeal',{})
-    checkExp(get_res.corner!=1,"niceForeverTest" , "1 endrose failed");
+    checkExp(get_res,get_res.corner!=1,"niceForeverTest" , "1 endrose failed");
 
     const stamp2 =await createToken(client,stampRoot,StampRootContract,DEPLOY_VALUE,"0x1111112")
     await requestEndrose(client,stamp2,seal1,2|1,500_000_000,650_000_000)
@@ -409,7 +413,7 @@ async function niceForeverTest(client, root_json) {
     await endrose(client,seal1,stamp2,2,290000000)
     await sleep(1000);
     get_res = await callGet(client,StampTokenContract,stamp2,'getSeal',{})
-    checkExp(get_res.corner!=2,"niceForeverTest" , "2 endrose failed");
+    checkExp(get_res,get_res.corner!=2,"niceForeverTest" , "2 endrose failed");
 
     const stamp3 =await createToken(client,stampRoot,StampRootContract,DEPLOY_VALUE,"0x1111112")
     await requestEndrose(client,stamp3,seal1,4,500_000_000,650_000_000)
@@ -417,7 +421,7 @@ async function niceForeverTest(client, root_json) {
     await endrose(client,seal1,stamp3,4,290000000)
     await sleep(1000);
     get_res = await callGet(client,StampTokenContract,stamp3,'getSeal',{})
-    checkExp(get_res.corner!=4,"niceForeverTest" , "3 endrose failed");
+    checkExp(get_res,get_res.corner!=4,"niceForeverTest" , "3 endrose failed");
 
     const stamp4 =await createToken(client,stampRoot,StampRootContract,DEPLOY_VALUE,"0x1111112")
     await requestEndrose(client,stamp4,seal1,8,500_000_000,650_000_000)
@@ -425,12 +429,12 @@ async function niceForeverTest(client, root_json) {
     await endrose(client,seal1,stamp4,8,290000000)
     await sleep(1000);
     get_res = await callGet(client,StampTokenContract,stamp4,'getSeal',{})
-    checkExp(get_res.corner!=8,"niceForeverTest" , "4 endrose failed");
+    checkExp(get_res,get_res.corner!=8,"niceForeverTest" , "4 endrose failed");
 
     await setForever(client,stamp1,forever1,210000000)
     await sleep(1000);
     get_res = await callGet(client,ForeverTokenContract,forever1,'getStamps',{})
-    checkExp(get_res.stamps.length!=1,"niceForeverTest" , "1 setForever failed");
+    checkExp(get_res,get_res.stamps.length!=1,"niceForeverTest" , "1 setForever failed");
 
     await setForever(client,stamp2,forever1,210000000)
     await sleep(1000);
@@ -439,7 +443,7 @@ async function niceForeverTest(client, root_json) {
     await setForever(client,stamp4,forever1,210000000)
     await sleep(1000);
     get_res = await callGet(client,ForeverTokenContract,forever1,'getStamps',{})
-    checkExp(get_res.stamps.length!=4,"niceForeverTest" , "Forever failed");
+    checkExp(get_res,get_res.stamps.length!=4,"niceForeverTest" , "Forever failed");
 
     const stamp5 =await createToken(client,stampRoot,StampRootContract,DEPLOY_VALUE,"0x1111112")
     await requestEndrose(client,stamp5,seal1,8,500_000_000,650_000_000)
@@ -447,11 +451,11 @@ async function niceForeverTest(client, root_json) {
     await endrose(client,seal1,stamp5,8,290000000)
     await sleep(1000);
     get_res = await callGet(client,StampTokenContract,stamp5,'getSeal',{})
-    checkExp(get_res.corner!=8,"niceForeverTest" , "5 endrose failed");
+    checkExp(get_res,get_res.corner!=8,"niceForeverTest" , "5 endrose failed");
     await setForever(client,stamp5,forever1,210000000)
     await sleep(1000);
     get_res = await callGet(client,StampTokenContract,stamp5,'getForever',{})
-    checkExp(get_res.forever != null,"niceForeverTest" , "5 setForever failed");
+    checkExp(get_res,get_res.forever != null,"niceForeverTest" , "5 setForever failed");
 
     console.log("niceForeverTest PASS")
 }
@@ -471,7 +475,7 @@ async function badForeverCornerTest(client, root_json) {
     await endrose(client,seal1,stamp1,1,290000000)
     await sleep(1000);
     let get_res = await callGet(client,StampTokenContract,stamp1,'getSeal',{})
-    checkExp(get_res.corner!=1,"badForeverCornerTest" , "1 endrose failed");
+    checkExp(get_res,get_res.corner!=1,"badForeverCornerTest" , "1 endrose failed");
 
     const stamp2 =await createToken(client,stampRoot,StampRootContract,DEPLOY_VALUE,"0x1111112")
     await requestEndrose(client,stamp2,seal1,2|1,500_000_000,650_000_000)
@@ -479,7 +483,7 @@ async function badForeverCornerTest(client, root_json) {
     await endrose(client,seal1,stamp2,2,290000000)
     await sleep(1000);
     get_res = await callGet(client,StampTokenContract,stamp2,'getSeal',{})
-    checkExp(get_res.corner!=2,"badForeverCornerTest" , "2 endrose failed");
+    checkExp(get_res,get_res.corner!=2,"badForeverCornerTest" , "2 endrose failed");
 
     const stamp3 =await createToken(client,stampRoot,StampRootContract,DEPLOY_VALUE,"0x1111112")
     await requestEndrose(client,stamp3,seal1,4,500_000_000,650_000_000)
@@ -487,7 +491,7 @@ async function badForeverCornerTest(client, root_json) {
     await endrose(client,seal1,stamp3,4,290000000)
     await sleep(1000);
     get_res = await callGet(client,StampTokenContract,stamp3,'getSeal',{})
-    checkExp(get_res.corner!=4,"badForeverCornerTest" , "3 endrose failed");
+    checkExp(get_res,get_res.corner!=4,"badForeverCornerTest" , "3 endrose failed");
 
     const stamp4 =await createToken(client,stampRoot,StampRootContract,DEPLOY_VALUE,"0x1111112")
     await requestEndrose(client,stamp4,seal1,4,500_000_000,650_000_000)
@@ -495,12 +499,12 @@ async function badForeverCornerTest(client, root_json) {
     await endrose(client,seal1,stamp4,4,290000000)
     await sleep(1000);
     get_res = await callGet(client,StampTokenContract,stamp4,'getSeal',{})
-    checkExp(get_res.corner!=4,"badForeverCornerTest" , "4 endrose failed");
+    checkExp(get_res,get_res.corner!=4,"badForeverCornerTest" , "4 endrose failed");
 
     await setForever(client,stamp1,forever1,210000000)
     await sleep(1000);
     get_res = await callGet(client,ForeverTokenContract,forever1,'getStamps',{})
-    checkExp(get_res.stamps.length!=1,"badForeverCornerTest" , "1 setForever failed");
+    checkExp(get_res,get_res.stamps.length!=1,"badForeverCornerTest" , "1 setForever failed");
 
     await setForever(client,stamp2,forever1,210000000)
     await sleep(1000);
@@ -509,17 +513,17 @@ async function badForeverCornerTest(client, root_json) {
     await setForever(client,stamp4,forever1,210000000)
     await sleep(1000);
     get_res = await callGet(client,ForeverTokenContract,forever1,'getStamps',{})
-    checkExp(get_res!="no account","badForeverCornerTest" , "Forever failed");
+    checkExp(get_res,get_res!="no account","badForeverCornerTest" , "Forever failed");
 
     sleep(1000);
     get_res = await callGet(client,StampTokenContract,stamp1,'getForever',{})
-    checkExp(get_res.forever != null,"badForeverCornerTest" , "1 delForever failed");
+    checkExp(get_res,get_res.forever != null,"badForeverCornerTest" , "1 delForever failed");
     get_res = await callGet(client,StampTokenContract,stamp2,'getForever',{})
-    checkExp(get_res.forever != null,"badForeverCornerTest" , "2 delForever failed");
+    checkExp(get_res,get_res.forever != null,"badForeverCornerTest" , "2 delForever failed");
     get_res = await callGet(client,StampTokenContract,stamp3,'getForever',{})
-    checkExp(get_res.forever != null,"badForeverCornerTest" , "3 delForever failed");
+    checkExp(get_res,get_res.forever != null,"badForeverCornerTest" , "3 delForever failed");
     get_res = await callGet(client,StampTokenContract,stamp4,'getForever',{})
-    checkExp(get_res.forever != null,"badForeverCornerTest" , "4 delForever failed");
+    checkExp(get_res,get_res.forever != null,"badForeverCornerTest" , "4 delForever failed");
 
     console.log("badForeverCornerTest PASS")
 }
@@ -540,7 +544,7 @@ async function badForeverSealTest(client, root_json) {
     await endrose(client,seal1,stamp1,1,290000000)
     await sleep(1000);
     let get_res = await callGet(client,StampTokenContract,stamp1,'getSeal',{})
-    checkExp(get_res.corner!=1,"badForeverSealTest" , "1 endrose failed");
+    checkExp(get_res,get_res.corner!=1,"badForeverSealTest" , "1 endrose failed");
 
     const stamp2 =await createToken(client,stampRoot,StampRootContract,DEPLOY_VALUE,"0x1111112")
     await requestEndrose(client,stamp2,seal1,2|1,500_000_000,650_000_000)
@@ -548,7 +552,7 @@ async function badForeverSealTest(client, root_json) {
     await endrose(client,seal1,stamp2,2,290000000)
     await sleep(1000);
     get_res = await callGet(client,StampTokenContract,stamp2,'getSeal',{})
-    checkExp(get_res.corner!=2,"badForeverSealTest" , "2 endrose failed");
+    checkExp(get_res,get_res.corner!=2,"badForeverSealTest" , "2 endrose failed");
 
     const stamp3 =await createToken(client,stampRoot,StampRootContract,DEPLOY_VALUE,"0x1111112")
     await requestEndrose(client,stamp3,seal1,4,500_000_000,650_000_000)
@@ -556,7 +560,7 @@ async function badForeverSealTest(client, root_json) {
     await endrose(client,seal1,stamp3,4,290000000)
     await sleep(1000);
     get_res = await callGet(client,StampTokenContract,stamp3,'getSeal',{})
-    checkExp(get_res.corner!=4,"badForeverSealTest" , "3 endrose failed");
+    checkExp(get_res,get_res.corner!=4,"badForeverSealTest" , "3 endrose failed");
 
     const stamp4 =await createToken(client,stampRoot,StampRootContract,DEPLOY_VALUE,"0x1111112")
     await requestEndrose(client,stamp4,seal2,8,500_000_000,650_000_000)
@@ -564,12 +568,12 @@ async function badForeverSealTest(client, root_json) {
     await endrose(client,seal2,stamp4,8,290000000)
     await sleep(1000);
     get_res = await callGet(client,StampTokenContract,stamp4,'getSeal',{})
-    checkExp(get_res.corner!=8,"badForeverSealTest" , "4 endrose failed");
+    checkExp(get_res,get_res.corner!=8,"badForeverSealTest" , "4 endrose failed");
 
     await setForever(client,stamp1,forever1,210000000)
     await sleep(1000);
     get_res = await callGet(client,ForeverTokenContract,forever1,'getStamps',{})
-    checkExp(get_res.stamps.length!=1,"badForeverSealTest" , "1 setForever failed");
+    checkExp(get_res,get_res.stamps.length!=1,"badForeverSealTest" , "1 setForever failed");
 
     await setForever(client,stamp2,forever1,210000000)
     await sleep(1000);
@@ -578,17 +582,17 @@ async function badForeverSealTest(client, root_json) {
     await setForever(client,stamp4,forever1,210000000)
     await sleep(1000);
     get_res = await callGet(client,ForeverTokenContract,forever1,'getStamps',{})
-    checkExp(get_res!="no account","badForeverSealTest" , "Forever failed");
+    checkExp(get_res,get_res!="no account","badForeverSealTest" , "Forever failed");
 
     sleep(1000);
     get_res = await callGet(client,StampTokenContract,stamp1,'getForever',{})
-    checkExp(get_res.forever != null,"badForeverSealTest" , "1 delForever failed");
+    checkExp(get_res,get_res.forever != null,"badForeverSealTest" , "1 delForever failed");
     get_res = await callGet(client,StampTokenContract,stamp2,'getForever',{})
-    checkExp(get_res.forever != null,"badForeverSealTest" , "2 delForever failed");
+    checkExp(get_res,get_res.forever != null,"badForeverSealTest" , "2 delForever failed");
     get_res = await callGet(client,StampTokenContract,stamp3,'getForever',{})
-    checkExp(get_res.forever != null,"badForeverSealTest" , "3 delForever failed");
+    checkExp(get_res,get_res.forever != null,"badForeverSealTest" , "3 delForever failed");
     get_res = await callGet(client,StampTokenContract,stamp4,'getForever',{})
-    checkExp(get_res.forever != null,"badForeverSealTest" , "4 delForever failed");
+    checkExp(get_res,get_res.forever != null,"badForeverSealTest" , "4 delForever failed");
 
     console.log("badForeverSealTest PASS")
 }
@@ -626,7 +630,7 @@ async function badEndroseTest(client, root_json) {
     let get_res = await callGet(client,StampTokenContract,stamp1,'getSeal',{})
     //console.log(get_res)
     //console.log("stamp1",stamp1)
-    checkExp(get_res.corner!=0,"simpleTest" , "1 badEndroseTest failed");
+    checkExp(get_res,get_res.corner!=0,"simpleTest" , "1 badEndroseTest failed");
 }
 
 async function calcStorageFee(client, root_json) {
@@ -653,8 +657,8 @@ async function changeCreationFee(client, root_json){
     const stampRoot = root_json.stamp;
 
     let get_res = await callGet(client,StampRootContract,stampRoot,'getCreationFee',{})
-    checkExp(get_res.minValue!=350_000_000,"changeCreationFee" , "1 changeCreationFee failed");
-    checkExp(get_res.fee!=100_000_000,"changeCreationFee" , "2 changeCreationFee failed");
+    checkExp(get_res,get_res.minValue!=350_000_000,"changeCreationFee" , "1 changeCreationFee failed");
+    checkExp(get_res,get_res.fee!=100_000_000,"changeCreationFee" , "2 changeCreationFee failed");
 
     const abi = {
         type: 'Contract',
@@ -679,8 +683,8 @@ async function changeCreationFee(client, root_json){
     transfer(client, stampRoot, 100000000, body.body)
     await sleep(1000);
     get_res = await callGet(client,StampRootContract,stampRoot,'getCreationFee',{})
-    checkExp(get_res.minValue!=500_000_000,"changeCreationFee" , "3 changeCreationFee failed");
-    checkExp(get_res.fee!=300_000_000,"changeCreationFee" , "4 changeCreationFee failed");
+    checkExp(get_res,get_res.minValue!=500_000_000,"changeCreationFee" , "3 changeCreationFee failed");
+    checkExp(get_res,get_res.fee!=300_000_000,"changeCreationFee" , "4 changeCreationFee failed");
     console.log("changeCreationFee PASS")
 }
 
@@ -695,6 +699,9 @@ async function changeCreationFee(client, root_json){
     try {
 
         let root_json = JSON.parse(fs.readFileSync("../root.json").toString());
+        //const res = await deployMultisig (client, MsigKeys, 1000_000_000_000);
+        //console.log(res.address);
+        //console.log('ok');
         await simpleTest(client, root_json)
         await niceForeverTest(client, root_json)
         await badForeverCornerTest(client, root_json)
@@ -702,7 +709,7 @@ async function changeCreationFee(client, root_json){
         await badEndroseTest(client, root_json)
         await badForeverSealTest(client, root_json)
         //await calcStorageFee(client, root_json)
-        //await changeCreationFee(client, root_json)
+        await changeCreationFee(client, root_json)
 
     } catch (err) {
         console.error(err)

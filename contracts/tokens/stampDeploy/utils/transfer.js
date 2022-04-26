@@ -30,7 +30,7 @@ async function transfer (client, dst, amount, payload) {
 
     try {
         await client.processing.process_message(params);
-        //console.log(`Evers transfered to ${dst}`);
+        console.log(`Evers transfered to ${dst}`);
     } catch (error) {
     console.error(error);
   }

@@ -1,7 +1,7 @@
 module.exports = {
     Msig: {
-        //address : "0:5832aaf6f19af360129ba3fa1079a1c2104f6d502afb3525640fe7a945abcc62",
-        address : "0:ab5f48c154f672d2f4c30c4473251e14a05199d1df1300263d8f5b0e80e3e387",
+        address : "0:5832aaf6f19af360129ba3fa1079a1c2104f6d502afb3525640fe7a945abcc62",
+        //address : "0:ab5f48c154f672d2f4c30c4473251e14a05199d1df1300263d8f5b0e80e3e387",
         abi: {
             "ABI version": 2,
             "header": [

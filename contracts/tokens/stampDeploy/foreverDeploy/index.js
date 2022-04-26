@@ -1,7 +1,7 @@
 const {TonClient} = require("@tonclient/core")
 const {libNode} = require("@tonclient/lib-node")
-const {ForeverRootContract} = require ('../../forever/ForeverRootContract')
-const {ForeverTokenContract} = require ('../../forever/ForeverTokenContract')
+const {ForeverRootContract} = require ('../../forever/1/ForeverRootContract')
+const {ForeverTokenContract} = require ('../../forever/1/ForeverTokenContract')
 const {transfer} = require('../utils/transfer')
 const {config} = require('../config')
 const fs = require('fs');
@@ -62,6 +62,7 @@ async function deployForeverRoot (client,rootKeys) {
     });
     try {
 
+        //generated in seal deploy
         let root_json = JSON.parse(fs.readFileSync("../root.json").toString());
 
         const foreverRoot = await deployForeverRoot(client,root_json.keys)
