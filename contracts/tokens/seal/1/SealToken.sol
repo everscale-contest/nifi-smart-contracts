@@ -27,11 +27,11 @@ contract SealToken {
     uint32  _managerUnlockTime;
 
     address _creator;
-    uint32  _creatorFees;
+    uint32  _creatorPercentReward;
     uint256 _hash;
 
-    uint128 _feeEndroseStamp;
-    uint128 _feeEndroseRoot;
+    uint128 _endorseStampCost;
+    uint128 _endorseRootFixIncome;
 
     modifier onlyRoot() {
         require(msg.sender == _root, 101, "Method for the root only");
@@ -88,26 +88,26 @@ contract SealToken {
         address manager,
         uint32  managerUnlockTime,
         address creator,
-        uint32  creatorFees,
+        uint32  creatorPercentReward,
         uint256 hash,
-        uint128 feeEndroseStamp,
-        uint128 feeEndroseRoot
+        uint128 endorseStampCost,
+        uint128 endorseRootFixIncome
     )
         public
         onlyRoot
-        validCreatorFees(creatorFees)
+        validCreatorFees(creatorPercentReward)
         addressIsNotNull(creator)
         addressIsNotNull(owner)
         accept
     {
         _creator = creator;
-        _creatorFees = creatorFees;
+        _creatorPercentReward = creatorPercentReward;
         _hash = hash;
         _owner = owner;
         _manager = manager;
         _managerUnlockTime = managerUnlockTime;
-        _feeEndroseStamp = feeEndroseStamp;
-        _feeEndroseRoot = feeEndroseRoot;
+        _endorseStampCost = endorseStampCost;
+        _endorseRootFixIncome = endorseRootFixIncome;
     }
 
     function changeOwner(address owner)
@@ -120,13 +120,13 @@ contract SealToken {
         emit TK_CO_nifi_seal_1{dest: SwiftAddress.value()}(_id, _owner);
     }
 
-    function receiveArtInfo() public view responsible returns(address creator, uint32  creatorFees, uint256 hash) {
+    function receiveArtInfo() public view responsible returns(address creator, uint32  creatorPercentReward, uint256 hash) {
         return{value: 0, bounce: false, flag: 64} getArtInfo();
     }
 
-    function getArtInfo() public view returns(address creator, uint32  creatorFees, uint256 hash) {
+    function getArtInfo() public view returns(address creator, uint32  creatorPercentReward, uint256 hash) {
         creator = _creator;
-        creatorFees = _creatorFees;
+        creatorPercentReward = _creatorPercentReward;
         hash = _hash;
     }
 
@@ -138,17 +138,17 @@ contract SealToken {
     function receiveTradeInfo() public view responsible returns(
             address owner,
             address creator,
-            uint32  creatorFees,
+            uint32  creatorPercentReward,
             address manager,
             uint32  managerUnlockTime
         ) {
         return{value: 0, bounce: false, flag: 64} getTradeInfo();
     }
 
-    function getTradeInfo() public view returns(address owner, address creator, uint32 creatorFees, address manager, uint32 managerUnlockTime) {
+    function getTradeInfo() public view returns(address owner, address creator, uint32 creatorPercentReward, address manager, uint32 managerUnlockTime) {
         owner = _owner;
         creator = _creator;
-        creatorFees = _creatorFees;
+        creatorPercentReward = _creatorPercentReward;
         manager = _manager;
         managerUnlockTime = _managerUnlockTime;
     }
@@ -169,16 +169,20 @@ contract SealToken {
         _managerUnlockTime = 0;
     }
 
-    function endrose(address stamp, uint8 place) public onlyOwner {
-         require(msg.value>=_feeEndroseRoot+_feeEndroseStamp, 111);
-         require(place==CORNER_SW || place==CORNER_SE || place==CORNER_NW || place==CORNER_NE, 112 );
-         IStampToken(stamp).endrose{value: _feeEndroseStamp, flag: 0, bounce: true}(_id,place,_owner);
-         _root.transfer({value: _feeEndroseRoot, flag: 0, bounce: true});
+    function endorse(address stamp, uint8 place) public onlyOwner {
+        uint128 minEndorseFee = _endorseRootFixIncome + _endorseStampCost;
+        require(msg.value >= minEndorseFee, 111);
+
+        require(place==CORNER_SW || place==CORNER_SE || place==CORNER_NW || place==CORNER_NE, 112 );
+
+        IStampToken(stamp).endorse{value: _endorseStampCost, flag: 0, bounce: true}(_id,place,_owner);
+
+       _root.transfer({value: 0, flag: 64, bounce: true});
     }
 
-    function getFee() public view returns(uint128 feeEndroseStamp, uint128 feeEndroseRoot) {
-        feeEndroseStamp = _feeEndroseStamp;
-        feeEndroseRoot = _feeEndroseRoot;
+    function getParameters() public view returns(uint128 endorseStampCost, uint128 endorseRootFixIncome) {
+        endorseStampCost = _endorseStampCost;
+        endorseRootFixIncome = _endorseRootFixIncome;
     }
 
 }

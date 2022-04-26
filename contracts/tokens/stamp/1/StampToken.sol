@@ -8,6 +8,7 @@ import "IStampToken.sol";
 import "../../forever/1/IForeverToken.sol";
 import "../../seal/1/SealToken.sol";
 import "SealContractInfoLib.sol";
+import "../Constants.sol";
 
 contract StampToken is IStampToken {
 
@@ -30,7 +31,7 @@ contract StampToken is IStampToken {
     uint32  _managerUnlockTime;
 
     address _creator;
-    uint32  _creatorFees;
+    uint32  _creatorPercentReward;
     uint256 _hash;
 
     uint8 _sealPlace;
@@ -41,12 +42,12 @@ contract StampToken is IStampToken {
 
     optional(address) _forever;
 
-    uint128 _sealFee;
-    uint128 _sealRxFee;
-    uint128 _rootFee;
-    uint128 _forAddFee;
-    uint128 _forAddRootFee;
-    uint16 _endrosePercentFee;
+    uint128 _minSealFee;
+    uint128 _minSealRxFee;
+    uint128 _requestEndorseFixIncome;
+    uint128 _minForAddFee;
+    uint128 _forAddFixIncome;
+    uint16 _endorsePercentFee;
 
     modifier onlyRoot() {
         require(msg.sender == _root, 101, "Method for the root only");
@@ -103,35 +104,35 @@ contract StampToken is IStampToken {
         address manager,
         uint32  managerUnlockTime,
         address creator,
-        uint32  creatorFees,
+        uint32  creatorPercentReward,
         uint256 hash,
-        uint128 sealFee,
-        uint128 sealRxFee,
-        uint128 rootFee,
-        uint128 forAddFee,
-        uint128 forAddRootFee,
-        uint16 endrosePercentFee
+        uint128 minSealFee,
+        uint128 minSealRxFee,
+        uint128 requestEndorseFixIncome,
+        uint128 minForAddFee,
+        uint128 forAddFixIncome,
+        uint16 endorsePercentFee
     )
         public
         onlyRoot
-        validCreatorFees(creatorFees)
+        validCreatorFees(creatorPercentReward)
         addressIsNotNull(creator)
         addressIsNotNull(owner)
         accept
     {
         _creator = creator;
-        _creatorFees = creatorFees;
+        _creatorPercentReward = creatorPercentReward;
         _hash = hash;
         _owner = owner;
         _manager = manager;
         _managerUnlockTime = managerUnlockTime;
 
-        _sealFee = sealFee;
-        _sealRxFee = sealRxFee;
-        _rootFee = rootFee;
-        _forAddFee = forAddFee;
-        _forAddRootFee = forAddRootFee;
-        _endrosePercentFee = endrosePercentFee;
+        _minSealFee = minSealFee;
+        _minSealRxFee = minSealRxFee;
+        _requestEndorseFixIncome = requestEndorseFixIncome;
+        _minForAddFee = minForAddFee;
+        _forAddFixIncome = forAddFixIncome;
+        _endorsePercentFee = endorsePercentFee;
     }
 
     function changeOwner(address owner)
@@ -144,13 +145,13 @@ contract StampToken is IStampToken {
         emit TK_CO_nifi_stamp1_1{dest: SwiftAddress.value()}(_id, _owner);
     }
 
-    function receiveArtInfo() public view responsible returns(address creator, uint32  creatorFees, uint256 hash) {
+    function receiveArtInfo() public view responsible returns(address creator, uint32  creatorPercentReward, uint256 hash) {
         return{value: 0, bounce: false, flag: 64} getArtInfo();
     }
 
-    function getArtInfo() public view returns(address creator, uint32  creatorFees, uint256 hash) {
+    function getArtInfo() public view returns(address creator, uint32  creatorPercentReward, uint256 hash) {
         creator = _creator;
-        creatorFees = _creatorFees;
+        creatorPercentReward = _creatorPercentReward;
         hash = _hash;
     }
 
@@ -171,17 +172,17 @@ contract StampToken is IStampToken {
     function receiveTradeInfo() public view responsible returns(
             address owner,
             address creator,
-            uint32  creatorFees,
+            uint32  creatorPercentReward,
             address manager,
             uint32  managerUnlockTime
         ) {
         return{value: 0, bounce: false, flag: 64} getTradeInfo();
     }
 
-    function getTradeInfo() public view returns(address owner, address creator, uint32 creatorFees, address manager, uint32 managerUnlockTime) {
+    function getTradeInfo() public view returns(address owner, address creator, uint32 creatorPercentReward, address manager, uint32 managerUnlockTime) {
         owner = _owner;
         creator = _creator;
-        creatorFees = _creatorFees;
+        creatorPercentReward = _creatorPercentReward;
         manager = _manager;
         managerUnlockTime = _managerUnlockTime;
     }
@@ -203,26 +204,34 @@ contract StampToken is IStampToken {
     }
 
     function requestEndorse(address seal, uint8 places, uint128 price) public onlyOwner {
-        require(msg.value>=_sealFee+_rootFee+price, 109);
+        uint128 startingBalance = address(this).balance - msg.value;
+
+        uint128 minRequestEndorseFee = _minSealFee + _requestEndorseFixIncome;
+        require(msg.value >= minRequestEndorseFee + price, 109);
         require(_sealPlace == 0, 110);
         _seal.set(seal);
         _sealValue = price;
         _sealPosiblePlaces = places;
         emit TK_RQ_nifi_stamp1_1{dest: SwiftAddress.value()}(_id, _seal.get(), places, uint64(_sealValue));
-        _root.transfer({value: _rootFee, flag: 1, bounce: true});
+
+        uint128 shouldBeSentToRoot = address(this).balance - startingBalance - price - Constants.MIN_GAS_COST;
+
+        if (shouldBeSentToRoot > Constants.MIN_GAS_COST) {
+            _root.transfer({value: shouldBeSentToRoot, flag: 0, bounce: true});
+        }
     }
 
-    function cancelEndrose() public  onlyOwner {
+    function cancelEndorse() public  onlyOwner {
         require(_sealPlace == 0, 110);
         require(_seal.hasValue(), 111);
-        require(msg.value>=_sealRxFee,112);
+        require(msg.value>=_minSealRxFee,112);
         _seal.reset();
         _owner.transfer(_sealValue,true);
         emit TK_RX_nifi_stamp1_1{dest: SwiftAddress.value()}(_id);
         _root.transfer({value: 0, flag: 64, bounce: true});
     }
 
-    function endrose(uint64 id, uint8 place, address receiver) public override {
+    function endorse(uint64 id, uint8 place, address sealOwner) public override {
         require(_seal.hasValue() && msg.sender==_seal.get(), 111);
         require((place&_sealPosiblePlaces)!=0,113);
         TvmCell data = tvm.buildDataInit({
@@ -237,23 +246,23 @@ contract StampToken is IStampToken {
         tvm.accept();
         _sealPlace = place;
         emit TK_EN_nifi_stamp1_1{dest: SwiftAddress.value()}(_id,_seal.get(),_sealPlace);
-        if (_endrosePercentFee>0) {
-            uint128 send = math.muldiv( _sealValue, _endrosePercentFee, 10000);
-            _root.transfer({value: send, flag: 0, bounce: true});
-            receiver.transfer({value: _sealValue-send, flag: 0, bounce: true});
+        if (_endorsePercentFee>0) {
+            uint128 shouldBeSentToRoot = math.muldiv( _sealValue, _endorsePercentFee, 10000);
+            _root.transfer({value: shouldBeSentToRoot, flag: 0, bounce: true});
+            sealOwner.transfer({value: _sealValue-shouldBeSentToRoot, flag: 0, bounce: true});
         } else {
-            receiver.transfer(_sealValue,true);
+            sealOwner.transfer(_sealValue,true);
         }
     }
 
     function setForever(address forever) public onlyOwner {
         //todo check value & comissions
-        require(msg.value>=_forAddFee,112);
+        require(msg.value>=_minForAddFee,112);
         require(!_forever.hasValue(),115);
         require(_seal.hasValue(),114);
         require(_sealPlace!=0,116);
         _forever.set(forever);
-        _root.transfer({value: _forAddRootFee, flag: 0, bounce: true});
+        _root.transfer({value: _forAddFixIncome, flag: 0, bounce: true});
         emit TK_FE_nifi_stamp1_1{dest: SwiftAddress.value()}(_id,forever);
         IForeverToken(forever).addStamp{value: 0, flag: 64}(_id,_owner,_seal.get(),_sealPlace);
     }
@@ -264,12 +273,18 @@ contract StampToken is IStampToken {
         emit TK_FD_nifi_stamp1_1{dest: SwiftAddress.value()}(_id,msg.sender);
     }
 
-    function getFee() public returns(uint128 sealFee, uint128 sealRxFee, uint128 rootFee, uint128 forAddFee, uint128 forAddRootFee) {
-        sealFee = _sealFee;
-        sealRxFee = _sealRxFee;
-        rootFee = _rootFee;
-        forAddFee = _forAddFee;
-        forAddRootFee = _forAddRootFee;
+    function getParameters() public returns(
+        uint128 minSealFee,
+        uint128 minSealRxFee,
+        uint128 requestEndorseFixIncome,
+        uint128 minForAddFee,
+        uint128 forAddFixIncome
+    ) {
+        minSealFee = _minSealFee;
+        minSealRxFee = _minSealRxFee;
+        requestEndorseFixIncome = _requestEndorseFixIncome;
+        minForAddFee = _minForAddFee;
+        forAddFixIncome = _forAddFixIncome;
     }
 
 }

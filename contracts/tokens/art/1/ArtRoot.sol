@@ -30,8 +30,9 @@ contract ArtRoot is Root, RootManaged, RootManagedCreationFee, RootManagedWithdr
      */
     constructor(
         address manager,
-        uint128 creationMinValue,
-        uint128 creationFee,
+        uint128 minCreationValue,
+        uint128 creationFixIncome,
+        uint128 creationTopup,
         string  name,
         string  symbol,
         TvmCell tokenCode
@@ -39,7 +40,7 @@ contract ArtRoot is Root, RootManaged, RootManagedCreationFee, RootManagedWithdr
         public
         Root(name, symbol, tokenCode)
         RootManaged(manager)
-        RootManagedCreationFee(creationMinValue, creationFee)
+        RootManagedCreationFee(minCreationValue, creationFixIncome, creationTopup)
     {}
 
 
@@ -56,7 +57,7 @@ contract ArtRoot is Root, RootManaged, RootManagedCreationFee, RootManagedWithdr
      *                       If you don't want to set the manager, use 0.
      * addr ................ Address of the token contract.
      * creator ............. Address of creator.
-     * creatorFees ......... Creator fee. e.g. 1 = 0.01%. 1 is minimum. 10_000 is maximum.
+     * creatorPercentReward ......... Creator fee. e.g. 1 = 0.01%. 1 is minimum. 10_000 is maximum.
      * hash ................ Hash of data that associated with token.
      */
     function create(
@@ -64,28 +65,28 @@ contract ArtRoot is Root, RootManaged, RootManagedCreationFee, RootManagedWithdr
         address manager,
         uint32  managerUnlockTime,
         address creator,
-        uint32  creatorFees,
+        uint32  creatorPercentReward,
         uint256 hash
     )
         override
         external
-        validCreatorFees(creatorFees)
+        validCreatorFees(creatorPercentReward)
         returns(
             address addr
         )
     {
-        require(msg.value >= _creationMinValue,278);
-        uint128 value = msg.value - _creationFee;
+        require(msg.value >= _minCreationValue,278);
+
         _totalSupply++;
         addr = new ArtToken{
             code: _tokenCode,
-            value: value,
+            value: _creationTopup,
             pubkey: tvm.pubkey(),
             varInit: {
                 _root: address(this),
                 _id: _totalSupply
             }
-        }(owner, manager, managerUnlockTime, creator, creatorFees, hash);
+        }(owner, manager, managerUnlockTime, creator, creatorPercentReward, hash);
         emit TK_CT_nifi_art1_1{dest: SwiftAddress.value()}(_totalSupply);
         //_totalSupply++;
     }

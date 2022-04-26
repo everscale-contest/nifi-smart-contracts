@@ -18,7 +18,8 @@ contract Art2Series {
     uint64 _totalSupply;
     uint64 _limit;
     uint256 _hash;
-    uint32 _creatorFees;
+    uint32 _creatorPercentReward;
+    uint128 _mintTopup;
 
 
     event TK_MT_nifi_art2_1(uint64 seriesId, uint64 id);
@@ -38,7 +39,8 @@ contract Art2Series {
         uint64 limit,
         TvmCell tokenCode,
         uint256 hash,
-        uint32 creatorFees
+        uint32 creatorPercentReward,
+        uint128 mintTopup
     )
         public onlyRoot
     {
@@ -49,7 +51,8 @@ contract Art2Series {
         _tokenCode = tokenCode;
         _limit = limit;
         _hash = hash;
-        _creatorFees = creatorFees;
+        _creatorPercentReward = creatorPercentReward;
+        _mintTopup = mintTopup;
     }
 
 
@@ -66,7 +69,7 @@ contract Art2Series {
      *                       If you don't want to set the manager, use 0.
      * addr ................ Address of the token contract.
      * creator ............. Address of creator.
-     * creatorFees ......... Creator fee. e.g. 1 = 0.01%. 1 is minimum. 10_000 is maximum.
+     * creatorPercentReward ......... Creator fee. e.g. 1 = 0.01%. 1 is minimum. 10_000 is maximum.
      * hash ................ Hash of data that associated with token.
      */
     function create(
@@ -83,10 +86,10 @@ contract Art2Series {
         require(msg.sender == _manager,102);
         require(msg.value >= 0.25 ton,105);
         _totalSupply++;
-        uint128 value = msg.value;
+
         addr = new Art2Token{
             code: _tokenCode,
-            value: value,
+            value: _mintTopup,
             pubkey: tvm.pubkey(),
             varInit: {
                 _root: _root,
@@ -94,7 +97,7 @@ contract Art2Series {
                 _seriesId: _id,
                 _id: _totalSupply
             }
-        }(_manager, manager, managerUnlockTime, _creator, _creatorFees, _hash);
+        }(_manager, manager, managerUnlockTime, _creator, _creatorPercentReward, _hash);
         emit TK_MT_nifi_art2_1{dest: SwiftAddress.value()}(_id,_totalSupply);
 
     }
@@ -148,7 +151,7 @@ contract Art2Series {
         _manager = newManager;
     }
 
-    function getInfo() public view returns(uint64 id, string  name, string  symbol, uint64 totalSupply, uint64 limit, uint256 hash, address creator, uint32 creatorFees){
+    function getInfo() public view returns(uint64 id, string  name, string  symbol, uint64 totalSupply, uint64 limit, uint256 hash, address creator, uint32 creatorPercentReward){
         id = _id;
         name = _name;
         symbol = _symbol;
@@ -156,7 +159,7 @@ contract Art2Series {
         limit = _limit;
         hash = _hash;
         creator = _creator;
-        creatorFees = _creatorFees;
+        creatorPercentReward = _creatorPercentReward;
     }
 
     function withdraw(address addr, uint128 value, bool bounce) public view {

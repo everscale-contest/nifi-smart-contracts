@@ -27,7 +27,7 @@ contract CollectionToken {
     uint32  _managerUnlockTime;
 
     address _creator;
-    uint32 _creatorFees;
+    uint32 _creatorPercentReward;
 
     uint32 _index;
 
@@ -73,7 +73,7 @@ contract CollectionToken {
     constructor(
         address owner,
         address creator,
-        uint32  creatorFees,
+        uint32  creatorPercentReward,
         uint32 index
     )
         public
@@ -84,7 +84,7 @@ contract CollectionToken {
     {
         _owner = owner;
         _creator = creator;
-        _creatorFees = creatorFees;
+        _creatorPercentReward = creatorPercentReward;
         _index = index;
     }
 
@@ -112,17 +112,17 @@ contract CollectionToken {
     function receiveTradeInfo() public view responsible returns(
             address owner,
             address creator,
-            uint32  creatorFees,
+            uint32  creatorPercentReward,
             address manager,
             uint32  managerUnlockTime
         ) {
         return{value: 0, bounce: false, flag: 64} getTradeInfo();
     }
 
-    function getTradeInfo() public view returns(address owner, address creator, uint32 creatorFees, address manager, uint32 managerUnlockTime) {
+    function getTradeInfo() public view returns(address owner, address creator, uint32 creatorPercentReward, address manager, uint32 managerUnlockTime) {
         owner = _owner;
         creator = _creator;
-        creatorFees = _creatorFees;
+        creatorPercentReward = _creatorPercentReward;
         manager = _manager;
         managerUnlockTime = _managerUnlockTime;
     }

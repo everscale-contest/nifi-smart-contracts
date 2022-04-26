@@ -56,8 +56,8 @@ contract TicketRoot is
      ***************/
     /**
      * manager ............. Contract that governs token contract.
-     * creationMinValue .... The minimum value that needs to be sent to the root to create a token.
-     * creationFee ......... Payment for the work of the contract, plus money for the developers.
+     * minCreationFee .... The minimum value that needs to be sent to the root to create a token.
+     * creationFixIncome ......... Payment for the work of the contract, plus money for the developers.
      * limit ............... Maximum count of ticket.
      * freezingTimeStart ... UNIX time. Start of time when the owner cannot be changed.
      * freezingTimeEnd ..... UNIX time. End of time when the owner cannot be changed.
@@ -67,8 +67,8 @@ contract TicketRoot is
      */
     constructor(
         address manager,
-        uint128 creationMinValue,
-        uint128 creationFee,
+        uint128 minCreationFee,
+        uint128 creationFixIncome,
         uint128 limit,
         uint32  freezingTimeStart,
         uint32  freezingTimeEnd,
@@ -79,7 +79,7 @@ contract TicketRoot is
         public
         Root(name, symbol, tokenCode)
         RootManaged(manager)
-        RootManagedCreationFee(creationMinValue, creationFee)
+        RootManagedCreationFee(minCreationFee, creationFixIncome)
     {
         _limit = limit;
         _freezingTimeStart = freezingTimeStart;
@@ -106,7 +106,7 @@ contract TicketRoot is
             address addr
         )
     {
-        uint128 value = msg.value - _creationFee;
+        uint128 value = msg.value - _creationFixIncome;
         addr = new TicketToken{
             code: _tokenCode,
             value: value,

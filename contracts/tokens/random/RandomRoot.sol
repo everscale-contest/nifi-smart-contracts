@@ -13,16 +13,16 @@ contract RandomRoot is Root, RootManaged, RootManagedCreationFee, RootManagedWit
      ***************/
     /**
      * manager ............ Contract that governs token contract.
-     * creationMinValue ... The minimum value that needs to be sent to the root to create a token.
-     * creationFee ........ Payment for the work of the contract, plus money for the developers.
+     * minCreationFee ... The minimum value that needs to be sent to the root to create a token.
+     * creationFixIncome ........ Payment for the work of the contract, plus money for the developers.
      * name ............... UTF8-encoded name of token. e.g. "CryptoKitties"
      * symbol ............. UTF8-encoded symbol of token. e.g. "CK"
      * tokenCode .......... Code of token contract.
      */
     constructor(
         address manager,
-        uint128 creationMinValue,
-        uint128 creationFee,
+        uint128 minCreationFee,
+        uint128 creationFixIncome,
         string  name,
         string  symbol,
         TvmCell tokenCode
@@ -30,7 +30,7 @@ contract RandomRoot is Root, RootManaged, RootManagedCreationFee, RootManagedWit
         public
         Root(name, symbol, tokenCode)
         RootManaged(manager)
-        RootManagedCreationFee(creationMinValue, creationFee)
+        RootManagedCreationFee(minCreationFee, creationFixIncome)
     {}
 
 
@@ -55,7 +55,7 @@ contract RandomRoot is Root, RootManaged, RootManagedCreationFee, RootManagedWit
             address addr
         )
     {
-        uint128 value = msg.value - _creationFee;
+        uint128 value = msg.value - _creationFixIncome;
         addr = new RandomToken{
             code: _tokenCode,
             value: value,

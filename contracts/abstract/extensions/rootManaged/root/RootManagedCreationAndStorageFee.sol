@@ -12,8 +12,8 @@ abstract contract RootManagedCreationAndStorageFee is RootManaged, IRootManagedC
     /*************
      * VARIABLES *
      *************/
-    uint128 internal _creationMinValue;
-    uint128 internal _creationFee;
+    uint128 internal _minCreationFee;
+    uint128 internal _creationFixIncome;
     uint128 internal _creationAndStorageFee;
 
 
@@ -22,12 +22,12 @@ abstract contract RootManagedCreationAndStorageFee is RootManaged, IRootManagedC
      * MODIFIERS *
      *************/
     modifier creationPaymentIsEnough() {
-        require(msg.value >= _creationMinValue, 1100, "Need more money");
+        require(msg.value >= _minCreationFee, 1100, "Need more money");
         _;
     }
 
     modifier creationPaymentIsEnoughPrice(uint128 price) {
-        require(msg.value - _creationFee - _creationAndStorageFee  >= price, 1101, "Invalid price value");
+        require(msg.value - _creationFixIncome - _creationAndStorageFee  >= price, 1101, "Invalid price value");
         _;
     }
 
@@ -37,13 +37,13 @@ abstract contract RootManagedCreationAndStorageFee is RootManaged, IRootManagedC
      * CONSTRUCTOR *
      ***************/
     /**
-     * minValue ... The minimum value that needs to be sent to the root to create a token.
-     * fee ........ Payment for the work of the contract, plus money for the developers.
+     * minCreationFee ... The minimum value that needs to be sent to the root to create a token.
+     * creationFixIncome ........ Payment for the work of the contract, plus money for the developers.
      * storageFee . Payment for create and store offer.
      */
-    constructor(uint128 minValue, uint128 fee, uint128 storageFee) public accept {
-        _creationMinValue = minValue;
-        _creationFee = fee;
+    constructor(uint128 minCreationFee, uint128 creationFixIncome, uint128 storageFee) public accept {
+        _minCreationFee = minCreationFee;
+        _creationFixIncome = creationFixIncome;
         _creationAndStorageFee = storageFee;
     }
 
@@ -55,13 +55,13 @@ abstract contract RootManagedCreationAndStorageFee is RootManaged, IRootManagedC
     /**
      * Manager can change values, which are needed to create a token.
      * Be careful to set the correct values, otherwise the contract will not work.
-     * minValue ... The minimum value that needs to be sent to the root to create a token.
-     * fee ........ Payment for the work of the contract, plus money for the developers.
+     * minCreationFee ... The minimum value that needs to be sent to the root to create a token.
+     * creationFixIncome ........ Payment for the work of the contract, plus money for the developers.
      * storageFee . Payment for create and store offer.
      */
-    function setCreationFee(uint128 minValue, uint128 fee, uint128 storageFee) override external onlyManager accept {
-        _creationMinValue = minValue;
-        _creationFee = fee;
+    function setCreationParameters(uint128 minCreationFee, uint128 creationFixIncome, uint128 storageFee) override external onlyManager accept {
+        _minCreationFee = minCreationFee;
+        _creationFixIncome = creationFixIncome;
         _creationAndStorageFee = storageFee;
     }
 
@@ -72,12 +72,12 @@ abstract contract RootManagedCreationAndStorageFee is RootManaged, IRootManagedC
      *************/
     /**
      * Returns values, which are needed to create a token.
-     * minValue ... The minimum value that needs to be sent to the root to create a token.
-     * fee ........ Payment for the work of the contract, plus money for the developers.
+     * minCreationFee ... The minimum value that needs to be sent to the root to create a token.
+     * creationFixIncome ........ Payment for the work of the contract, plus money for the developers.
      * storageFee . Payment for create and store offer.
      */
-    function receiveCreationFee() override external view responsible returns(uint128 minValue, uint128 fee, uint128 storageFee) {
-        return{value: 0, bounce: false, flag: 64} getCreationFee();
+    function receiveCreationFee() override external view responsible returns(uint128 minCreationFee, uint128 creationFixIncome, uint128 storageFee) {
+        return{value: 0, bounce: false, flag: 64} getCreationParameters();
     }
 
 
@@ -87,13 +87,13 @@ abstract contract RootManagedCreationAndStorageFee is RootManaged, IRootManagedC
      ***********/
     /**
      * Returns values, which are needed to create a token.
-     * minValue ... The minimum value that needs to be sent to the root to create a token.
-     * fee ........ Payment for the work of the contract, plus money for the developers.
+     * minCreationFee ... The minimum value that needs to be sent to the root to create a token.
+     * creationFixIncome ........ Payment for the work of the contract, plus money for the developers.
      * storageFee . Payment for create and store offer.
      */
-    function getCreationFee() public view returns(uint128 minValue, uint128 fee, uint128 storageFee) {
-        minValue = _creationMinValue;
-        fee = _creationFee;
+    function getCreationParameters() public view returns(uint128 minCreationFee, uint128 creationFixIncome, uint128 storageFee) {
+        minCreationFee = _minCreationFee;
+        creationFixIncome = _creationFixIncome;
         storageFee = _creationAndStorageFee;
     }
 }

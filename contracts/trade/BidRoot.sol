@@ -23,8 +23,8 @@ contract BidRoot is Root, RootManaged, RootManagedCreationFee, RootManagedWithdr
      */
     constructor(
         address manager,
-        uint128 creationMinValue,
-        uint128 creationFee,
+        uint128 minCreationFee,
+        uint128 creationFixIncome,
         string  name,
         string  symbol,
         TvmCell tokenCode
@@ -32,7 +32,7 @@ contract BidRoot is Root, RootManaged, RootManagedCreationFee, RootManagedWithdr
         public
         Root(name, symbol, tokenCode)
         RootManaged(manager)
-        RootManagedCreationFee(creationMinValue, creationFee)
+        RootManagedCreationFee(minCreationFee, creationFixIncome)
     {
     }
 
@@ -55,7 +55,7 @@ contract BidRoot is Root, RootManaged, RootManagedCreationFee, RootManagedWithdr
             address addr
         )
     {
-        uint128 value = msg.value - _creationFee;
+        uint128 value = msg.value - _creationFixIncome;
         _totalSupply++;
         addr = new Bid{
             code: _tokenCode,

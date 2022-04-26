@@ -10,8 +10,10 @@ import "Art2Series.sol";
 contract Art2Root  {
 
     address _manager;
-    uint128 _creationFee;
-    uint128 _creationMinValue;
+    uint128 _creationFixIncome;
+    uint128 _minCreationFee;
+    uint128 _creationTopup;
+    uint128 _mintTopup;
     string _name;
     string _symbol;
     TvmCell _tokenCode;
@@ -30,8 +32,9 @@ contract Art2Root  {
      ***************/
     constructor(
         address manager,
-        uint128 creationMinValue,
-        uint128 creationFee,
+        uint128 minCreationFee,
+        uint128 creationFixIncome,
+        uint128 creationTopup,
         string  name,
         string  symbol,
         TvmCell seriesCode,
@@ -42,8 +45,9 @@ contract Art2Root  {
         require(msg.pubkey() == tvm.pubkey(),101);
         tvm.accept();
         _manager = manager;
-        _creationMinValue = creationMinValue;
-        _creationFee = creationFee;
+        _minCreationFee = minCreationFee;
+        _creationFixIncome = creationFixIncome;
+        _creationTopup = creationTopup;
         _name = name;
         _symbol = symbol;
         _seriesCode = seriesCode;
@@ -72,19 +76,19 @@ contract Art2Root  {
         addr.transfer(value, bounce);
     }
 
-    function createSerie(address manager, uint64 limit, uint256 hash, uint32 creatorFees) public validCreatorFees(creatorFees) internalMsg returns(address addr){
-        require(msg.value >= _creationMinValue,278);
-        uint128 value = msg.value - _creationFee;
+    function createSerie(address manager, uint64 limit, uint256 hash, uint32 creatorPercentReward) public validCreatorFees(creatorPercentReward) internalMsg returns(address addr){
+        require(msg.value >= _minCreationFee,278);
+
         _totalSupply++;
         addr = new Art2Series{
             code: _seriesCode,
-            value: value,
+            value: _creationTopup,
             pubkey: tvm.pubkey(),
             varInit: {
                 _root: address(this),
                 _id: _totalSupply
             }
-        }(manager, _name, _symbol, limit, _tokenCode, hash, creatorFees);
+        }(manager, _name, _symbol, limit, _tokenCode, hash, creatorPercentReward, _mintTopup);
         emit SR_CT_nifi_art2_1{dest: SwiftAddress.value()}(_totalSupply);
 
     }
@@ -130,15 +134,29 @@ contract Art2Root  {
         return address(tvm.hash(stateInit1));
     }
 
-    function setCreationFee(uint128 minValue, uint128 fee) public {
+    function setCreationParameters(
+        uint128 minCreationFee,
+        uint128 creationFixIncome,
+        uint128 creationTopup,
+        uint128 mintTopup
+    ) public {
         require(msg.sender == _manager,102);
         tvm.accept();
-        _creationMinValue = minValue;
-        _creationFee = fee;
+        _minCreationFee = minCreationFee;
+        _creationFixIncome = creationFixIncome;
+        _creationTopup = creationTopup;
+        _mintTopup = mintTopup;
     }
 
-    function getCreationFee() public returns(uint128 minValue, uint128 fee) {
-        minValue = _creationMinValue;
-        fee = _creationFee;
+    function getCreationParameters() public returns(
+        uint128 minCreationFee,
+        uint128 creationFixIncome,
+        uint128 creationTopup,
+        uint128 mintTopup
+    ) {
+        minCreationFee = _minCreationFee;
+        creationFixIncome = _creationFixIncome;
+        creationTopup = _creationTopup;
+        mintTopup = _mintTopup;
     }
 }

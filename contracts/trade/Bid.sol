@@ -13,7 +13,7 @@ interface ITradeToken {
     function receiveTradeInfo() external view responsible returns(
             address owner,
             address creator,
-            uint32  creatorFees,
+            uint32  creatorPercentReward,
             address manager,
             uint32  managerUnlockTime
         );
@@ -135,7 +135,7 @@ contract Bid is Accept {
     function onReceiveTradeInfo(
             address owner,
             address creator,
-            uint32  creatorFees,
+            uint32  creatorPercentReward,
             address manager,
             uint32  managerUnlockTime
     ) public onlyToken {
@@ -144,8 +144,8 @@ contract Bid is Accept {
 
         uint128 balance = address(this).balance;
 
-        if (creatorFees>0) {
-            uint128 fee = math.muldiv(balance,creatorFees,10000);
+        if (creatorPercentReward>0) {
+            uint128 fee = math.muldiv(balance,creatorPercentReward,10000);
             if (fee>0)
                 creator.transfer({value: fee, flag: 1, bounce: true});
         }

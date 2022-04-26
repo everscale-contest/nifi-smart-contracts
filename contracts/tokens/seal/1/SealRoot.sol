@@ -9,14 +9,14 @@ import "SealToken.sol";
 contract SealRoot  {
 
     address _manager;
-    uint128 _creationFee;
-    uint128 _creationMinValue;
+    uint128 _creationFixIncome;
+    uint128 _minCreationFee;
     string _name;
     string _symbol;
     TvmCell _tokenCode;
     uint64 _totalSupply;
-    uint128 _feeEndroseStamp;
-    uint128 _feeEndroseRoot;
+    uint128 _endorseStampCost;
+    uint128 _endorseRootFixIncome;
 
     event TK_CT_nifi_seal_1(uint64 id);
 
@@ -30,8 +30,8 @@ contract SealRoot  {
      ***************/
     constructor(
         address manager,
-        uint128 creationMinValue,
-        uint128 creationFee,
+        uint128 minCreationFee,
+        uint128 creationFixIncome,
         string  name,
         string  symbol,
         TvmCell tokenCode
@@ -41,13 +41,13 @@ contract SealRoot  {
         require(msg.pubkey() == tvm.pubkey(),101);
         tvm.accept();
         _manager = manager;
-        _creationMinValue = creationMinValue;
-        _creationFee = creationFee;
+        _minCreationFee = minCreationFee;
+        _creationFixIncome = creationFixIncome;
         _name = name;
         _symbol = symbol;
         _tokenCode = tokenCode;
-        _feeEndroseStamp = 0.1 ever;
-        _feeEndroseRoot = 0.1 ever;
+        _endorseStampCost = 0.1 ever;
+        _endorseRootFixIncome = 0.1 ever;
     }
 
     function getManager() public view returns(address){
@@ -77,17 +77,17 @@ contract SealRoot  {
         address manager,
         uint32  managerUnlockTime,
         address creator,
-        uint32  creatorFees,
+        uint32  creatorPercentReward,
         uint256 hash
     )
         public
-        validCreatorFees(creatorFees)
+        validCreatorFees(creatorPercentReward)
         returns(
             address addr
         )
     {
-        require(msg.value >= _creationMinValue,278);
-        uint128 value = msg.value - _creationFee;
+        require(msg.value >= _minCreationFee,278);
+        uint128 value = msg.value - _creationFixIncome;
         _totalSupply++;
         addr = new SealToken{
             code: _tokenCode,
@@ -97,7 +97,7 @@ contract SealRoot  {
                 _root: address(this),
                 _id: _totalSupply
             }
-        }(owner, manager, managerUnlockTime, creator, creatorFees, hash, _feeEndroseStamp, _feeEndroseRoot);
+        }(owner, manager, managerUnlockTime, creator, creatorPercentReward, hash, _endorseStampCost, _endorseRootFixIncome);
         emit TK_CT_nifi_seal_1{dest: SwiftAddress.value()}(_totalSupply);
         //_totalSupply++;
     }
@@ -116,22 +116,22 @@ contract SealRoot  {
         return address(tvm.hash(stateInit));
     }
 
-    function setCreationFee(uint128 minValue, uint128 fee) public {
+    function setCreationParameters(uint128 minCreationFee, uint128 creationFixIncome) public {
         require(msg.sender == _manager,102);
         tvm.accept();
-        _creationMinValue = minValue;
-        _creationFee = fee;
+        _minCreationFee = minCreationFee;
+        _creationFixIncome = creationFixIncome;
     }
 
-    function getCreationFee() public returns(uint128 minValue, uint128 fee) {
-        minValue = _creationMinValue;
-        fee = _creationFee;
+    function getCreationParameters() public returns(uint128 minCreationFee, uint128 creationFixIncome) {
+        minCreationFee = _minCreationFee;
+        creationFixIncome = _creationFixIncome;
     }
 
-    function setSealFee(uint128 feeEndroseStamp, uint128 feeEndroseRoot) public {
+    function setParameters(uint128 endorseStampCost, uint128 endorseRootFixIncome) public {
         require(msg.sender == _manager,102);
         tvm.accept();
-        _feeEndroseStamp = feeEndroseStamp;
-        _feeEndroseRoot = feeEndroseRoot;
+        _endorseStampCost = endorseStampCost;
+        _endorseRootFixIncome = endorseRootFixIncome;
     }
 }

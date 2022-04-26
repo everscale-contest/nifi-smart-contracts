@@ -22,8 +22,8 @@ contract Collection {
     uint32 _totalSupply;
     uint32 _ready2Mint;
     uint64 _limit;
-    uint32 _creatorFees;
-    uint128 _mintCost;
+    uint32 _creatorPercentReward;
+    uint128 _minMintFee;
 
     string[] _level1;
     string[] _level2;
@@ -57,8 +57,8 @@ contract Collection {
         string  symbol,
         uint64 limit,
         TvmCell tokenCode,
-        uint32 creatorFees,
-        uint128 mintCost,
+        uint32 creatorPercentReward,
+        uint128 minMintFee,
         string[] level1,
         string[] level2,
         string[] level3,
@@ -75,8 +75,8 @@ contract Collection {
         _symbol = symbol;
         _tokenCode = tokenCode;
         _limit = limit;
-        _creatorFees = creatorFees;
-        _mintCost = mintCost;
+        _creatorPercentReward = creatorPercentReward;
+        _minMintFee = minMintFee;
         _level1 = level1;
         _level2 = level2;
         _level3 = level3;
@@ -117,7 +117,7 @@ contract Collection {
                 _id4: id4,
                 _id5: id5
             }
-        }(owner,_creator,_creatorFees, mintId);
+        }(owner,_creator,_creatorPercentReward, mintId);
         if (owner == _creator) {
             if (msg.value-GAS-TOKEN_MINT_GAS>0.01 ton) {
                 _root.transfer({value: msg.value-GAS-TOKEN_MINT_GAS, bounce: true, flag: 0});
@@ -136,7 +136,7 @@ contract Collection {
 
     function mintToken() public {
         require(now > _startTime, 112);
-        require((msg.value >= _mintCost) || ((msg.sender == _creator)&&(msg.value >= CREATOR_MINT_MIN)),105);
+        require((msg.value >= _minMintFee) || ((msg.sender == _creator)&&(msg.value >= CREATOR_MINT_MIN)),105);
         _manager.transfer(msg.value, false);
         _ready2Mint++;
         emit SRC_PY_nifi_col1_1{dest: NotificationAddress.value()}(_id, _ready2Mint, msg.value, msg.sender);
@@ -173,16 +173,16 @@ contract Collection {
         _manager = newManager;
     }
 
-    function getInfo() public view functionID(0xa) returns(uint64 id, string  name, string  symbol, uint64 totalSupply, uint64 limit, address creator, uint32 creatorFees, string hash, uint128 mintCost , uint32 startTime){
+    function getInfo() public view functionID(0xa) returns(uint64 id, string  name, string  symbol, uint64 totalSupply, uint64 limit, address creator, uint32 creatorPercentReward, string hash, uint128 minMintFee , uint32 startTime){
         id = _id;
         name = _name;
         symbol = _symbol;
         totalSupply = _totalSupply;
         limit = _limit;
         creator = _creator;
-        creatorFees = _creatorFees;
+        creatorPercentReward = _creatorPercentReward;
         hash = _hash;
-	mintCost = _mintCost;
+        minMintFee = _minMintFee;
         startTime = _startTime;
     }
 

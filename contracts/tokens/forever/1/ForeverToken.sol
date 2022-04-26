@@ -34,12 +34,12 @@ contract ForeverToken is IForeverToken {
     uint32  _managerUnlockTime;
 
     address _creator;
-    uint32  _creatorFees;
+    uint32  _creatorPercentReward;
     uint256 _hash;
 
     StampInfo[] _stamps;
 
-    uint128 _delForeverFee;
+    uint128 _delForeverCost;
 
     modifier onlyRoot() {
         require(msg.sender == _root, 101, "Method for the root only");
@@ -96,24 +96,24 @@ contract ForeverToken is IForeverToken {
         address manager,
         uint32  managerUnlockTime,
         address creator,
-        uint32  creatorFees,
+        uint32  creatorPercentReward,
         uint256 hash,
-        uint128 delForeverFee
+        uint128 delForeverCost
     )
         public
         onlyRoot
-        validCreatorFees(creatorFees)
+        validCreatorFees(creatorPercentReward)
         addressIsNotNull(creator)
         addressIsNotNull(owner)
         accept
     {
         _creator = creator;
-        _creatorFees = creatorFees;
+        _creatorPercentReward = creatorPercentReward;
         _hash = hash;
         _owner = owner;
         _manager = manager;
         _managerUnlockTime = managerUnlockTime;
-        _delForeverFee = delForeverFee;
+        _delForeverCost = delForeverCost;
     }
 
     function changeOwner(address owner)
@@ -126,13 +126,13 @@ contract ForeverToken is IForeverToken {
         emit TK_CO_nifi_for1_1{dest: SwiftAddress.value()}(_id, _owner);
     }
 
-    function receiveArtInfo() public view responsible returns(address creator, uint32  creatorFees, uint256 hash) {
+    function receiveArtInfo() public view responsible returns(address creator, uint32  creatorPercentReward, uint256 hash) {
         return{value: 0, bounce: false, flag: 64} getArtInfo();
     }
 
-    function getArtInfo() public view returns(address creator, uint32  creatorFees, uint256 hash) {
+    function getArtInfo() public view returns(address creator, uint32  creatorPercentReward, uint256 hash) {
         creator = _creator;
-        creatorFees = _creatorFees;
+        creatorPercentReward = _creatorPercentReward;
         hash = _hash;
     }
 
@@ -144,17 +144,17 @@ contract ForeverToken is IForeverToken {
     function receiveTradeInfo() public view responsible returns(
             address owner,
             address creator,
-            uint32  creatorFees,
+            uint32  creatorPercentReward,
             address manager,
             uint32  managerUnlockTime
         ) {
         return{value: 0, bounce: false, flag: 64} getTradeInfo();
     }
 
-    function getTradeInfo() public view returns(address owner, address creator, uint32 creatorFees, address manager, uint32 managerUnlockTime) {
+    function getTradeInfo() public view returns(address owner, address creator, uint32 creatorPercentReward, address manager, uint32 managerUnlockTime) {
         owner = _owner;
         creator = _creator;
-        creatorFees = _creatorFees;
+        creatorPercentReward = _creatorPercentReward;
         manager = _manager;
         managerUnlockTime = _managerUnlockTime;
     }
@@ -208,10 +208,10 @@ contract ForeverToken is IForeverToken {
                     }
                 }
                 if (bError || pos!=15){
-                    IStampToken(_stamps[0].stamp).delForever{value: _delForeverFee}();
-                    IStampToken(_stamps[1].stamp).delForever{value: _delForeverFee}();
-                    IStampToken(_stamps[2].stamp).delForever{value: _delForeverFee}();
-                    IStampToken(_stamps[3].stamp).delForever{value: _delForeverFee}();
+                    IStampToken(_stamps[0].stamp).delForever{value: _delForeverCost}();
+                    IStampToken(_stamps[1].stamp).delForever{value: _delForeverCost}();
+                    IStampToken(_stamps[2].stamp).delForever{value: _delForeverCost}();
+                    IStampToken(_stamps[3].stamp).delForever{value: _delForeverCost}();
                     emit FOR_EX_nifi_for1_1{dest: SwiftAddress.value()}(_id);
                     selfdestruct(_owner);
                 } else {
@@ -223,8 +223,8 @@ contract ForeverToken is IForeverToken {
         }
     }
 
-    function getFee() public view returns(uint128 delForeverFee) {
-        delForeverFee = _delForeverFee;
+    function getParameters() public view returns(uint128 delForeverCost) {
+        delForeverCost = _delForeverCost;
     }
 
 

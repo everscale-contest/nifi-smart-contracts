@@ -12,8 +12,8 @@ contract CollectionRoot  {
     event SRC_CT_nifi_col1_1(uint64 id);
 
     address _manager;
-    uint128 _creationFee;
-    uint128 _creationMinValue;
+    uint128 _creationFixIncome;
+    uint128 _minCreationFee;
     string _name;
     string _symbol;
     TvmCell _colTokenCode;
@@ -27,8 +27,8 @@ contract CollectionRoot  {
 
     constructor(
         address manager,
-        uint128 creationMinValue,
-        uint128 creationFee,
+        uint128 minCreationFee,
+        uint128 creationFixIncome,
         string  name,
         string  symbol,
         TvmCell collectionCode,
@@ -39,8 +39,8 @@ contract CollectionRoot  {
         require(msg.pubkey() == tvm.pubkey(),101);
         tvm.accept();
         _manager = manager;
-        _creationMinValue = creationMinValue;
-        _creationFee = creationFee;
+        _minCreationFee = minCreationFee;
+        _creationFixIncome = creationFixIncome;
         _name = name;
         _symbol = symbol;
         _collectionCode = collectionCode;
@@ -74,8 +74,8 @@ contract CollectionRoot  {
         string  name,
         string  symbol,
         uint64 limit,
-        uint32 creatorFees,
-        uint128 mintCost,
+        uint32 creatorPercentReward,
+        uint128 minMintFee,
         string[] level1,
         string[] level2,
         string[] level3,
@@ -83,10 +83,10 @@ contract CollectionRoot  {
         string[] level5,
         string hash,
         uint32 startTime
-    ) public validCreatorFees(creatorFees) internalMsg returns(address addr){
-        require(msg.value >= _creationMinValue,278);
-        require(mintCost >= 0.5 ton, 279);
-        uint128 value = msg.value - _creationFee;
+    ) public validCreatorFees(creatorPercentReward) internalMsg returns(address addr){
+        require(msg.value >= _minCreationFee,278);
+        require(minMintFee >= 0.5 ton, 279);
+        uint128 value = msg.value - _creationFixIncome;
         _totalSupply++;
 
         addr = new Collection{
@@ -97,7 +97,7 @@ contract CollectionRoot  {
                 _root: address(this),
                 _id: _totalSupply
             }
-        }(creator, _manager, name, symbol, limit, _colTokenCode, creatorFees, mintCost, level1, level2, level3, level4, level5, hash, startTime);
+        }(creator, _manager, name, symbol, limit, _colTokenCode, creatorPercentReward, minMintFee, level1, level2, level3, level4, level5, hash, startTime);
         emit SRC_CT_nifi_col1_1{dest: NotificationAddress.value()}(_totalSupply);
     }
 
