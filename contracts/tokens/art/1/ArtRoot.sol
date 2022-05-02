@@ -31,7 +31,6 @@ contract ArtRoot is Root, RootManaged, RootManagedCreationFee, RootManagedWithdr
     constructor(
         address manager,
         uint128 minCreationValue,
-        uint128 creationFixIncome,
         uint128 creationTopup,
         string  name,
         string  symbol,
@@ -40,7 +39,7 @@ contract ArtRoot is Root, RootManaged, RootManagedCreationFee, RootManagedWithdr
         public
         Root(name, symbol, tokenCode)
         RootManaged(manager)
-        RootManagedCreationFee(minCreationValue, creationFixIncome, creationTopup)
+        RootManagedCreationFee(minCreationValue, creationTopup)
     {}
 
 

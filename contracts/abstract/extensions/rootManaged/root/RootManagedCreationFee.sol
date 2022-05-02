@@ -12,7 +12,6 @@ abstract contract RootManagedCreationFee is RootManaged, IRootManagedCreationFee
      * VARIABLES *
      *************/
     uint128 internal _minCreationFee;
-    uint128 internal _creationFixIncome;
     uint128 internal _creationTopup;
 
 
@@ -36,11 +35,9 @@ abstract contract RootManagedCreationFee is RootManaged, IRootManagedCreationFee
      */
     constructor(
         uint128 minCreationFee,
-        uint128 creationFixIncome,
         uint128 creationTopup
     ) public accept {
         _minCreationFee = minCreationFee;
-        _creationFixIncome = creationFixIncome;
         _creationTopup = creationTopup;
     }
 
@@ -57,11 +54,9 @@ abstract contract RootManagedCreationFee is RootManaged, IRootManagedCreationFee
      */
     function setCreationParameters(
         uint128 minCreationFee,
-        uint128 creationFixIncome,
         uint128 creationTopup
     ) override external onlyManager accept {
         _minCreationFee = minCreationFee;
-        _creationFixIncome = creationFixIncome;
         _creationTopup = creationTopup;
     }
 
@@ -77,7 +72,6 @@ abstract contract RootManagedCreationFee is RootManaged, IRootManagedCreationFee
      */
     function receiveCreationParameters() override external view responsible returns(
         uint128 minCreationFee,
-        uint128 creationFixIncome,
         uint128 creationTopup
     ) {
         return{value: 0, bounce: false, flag: 64} getCreationParameters();
@@ -95,11 +89,9 @@ abstract contract RootManagedCreationFee is RootManaged, IRootManagedCreationFee
      */
     function getCreationParameters() public view returns(
         uint128 minCreationFee,
-        uint128 creationFixIncome,
         uint128 creationTopup
     ) {
         minCreationFee = _minCreationFee;
-        creationFixIncome = _creationFixIncome;
         creationTopup = _creationTopup;
     }
 }

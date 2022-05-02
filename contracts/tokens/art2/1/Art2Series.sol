@@ -84,7 +84,7 @@ contract Art2Series {
     {
         require(_totalSupply<_limit,103);
         require(msg.sender == _manager,102);
-        require(msg.value >= 0.25 ton,105);
+        require(msg.value >= _mintTopup+0.02 ton,105);
         _totalSupply++;
 
         addr = new Art2Token{
@@ -99,6 +99,7 @@ contract Art2Series {
             }
         }(_manager, manager, managerUnlockTime, _creator, _creatorPercentReward, _hash);
         emit TK_MT_nifi_art2_1{dest: SwiftAddress.value()}(_id,_totalSupply);
+        _root.transfer({value: 0, flag: 64, bounce: true});
 
     }
 

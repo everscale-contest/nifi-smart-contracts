@@ -10,7 +10,6 @@ import "Art2Series.sol";
 contract Art2Root  {
 
     address _manager;
-    uint128 _creationFixIncome;
     uint128 _minCreationFee;
     uint128 _creationTopup;
     uint128 _mintTopup;
@@ -33,8 +32,8 @@ contract Art2Root  {
     constructor(
         address manager,
         uint128 minCreationFee,
-        uint128 creationFixIncome,
         uint128 creationTopup,
+        uint128 mintTopup,
         string  name,
         string  symbol,
         TvmCell seriesCode,
@@ -43,11 +42,12 @@ contract Art2Root  {
         public
     {
         require(msg.pubkey() == tvm.pubkey(),101);
+        require(minCreationFee > creationTopup,102);
         tvm.accept();
         _manager = manager;
         _minCreationFee = minCreationFee;
-        _creationFixIncome = creationFixIncome;
         _creationTopup = creationTopup;
+        _mintTopup = mintTopup;
         _name = name;
         _symbol = symbol;
         _seriesCode = seriesCode;

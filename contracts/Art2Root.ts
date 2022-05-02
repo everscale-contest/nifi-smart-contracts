@@ -1,6 +1,6 @@
-import Art2RootContracts from './tokens/art2/Art2Root'
-import Art2TokenContract from './tokens/art2/Art2Token'
-import Art2SeriesContract from './tokens/art2/Art2Series'
+import Art2RootContracts from './tokens/art2/1/Art2Root'
+import Art2TokenContract from './tokens/art2/1/Art2Token'
+import Art2SeriesContract from './tokens/art2/1/Art2Series'
 import {DecodedMessageBody, KeyPair} from '@tonclient/core/dist/modules'
 import Contract from '../library/ton/base/Contract'
 import KitInterface from '../library/ton/utils/interfaces/KitInterface'
@@ -22,15 +22,17 @@ export default class Art2Root extends Contract {
      **********/
     public async deploy(
         manager: string,
-        creationMinValue: number,
-        creationFee: number,
+        minCreationFee: number,        
+        creationTopup: number,
+        mintTopup: number,
         name: string,
         symbol: string
     ): Promise<boolean> {
         return await this._deploy({
             manager: manager,
-            creationMinValue: creationMinValue,
-            creationFee: creationFee,
+            minCreationFee: minCreationFee,
+            creationTopup: creationTopup,
+            mintTopup: mintTopup,
             name: name,
             symbol: symbol,
             seriesCode: Art2SeriesContract.code,

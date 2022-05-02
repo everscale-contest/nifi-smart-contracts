@@ -55,8 +55,9 @@ async function run(): Promise<void> {
     const artRootConfig: any = config.net.deploy.contracts.art2Root
     await art2Root.deploy(
         artRootConfig.manager,
-        artRootConfig.creationMinValue,
-        artRootConfig.creationFee,
+        artRootConfig.minCreationValue,
+        artRootConfig.creationTopup,
+        artRootConfig.mintTopup,
         Ton.hex.string(artRootConfig.name),
         Ton.hex.string(artRootConfig.symbol)
     )
