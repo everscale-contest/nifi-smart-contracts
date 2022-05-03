@@ -141,6 +141,7 @@ contract Art2Root  {
         uint128 mintTopup
     ) public {
         require(msg.sender == _manager,102);
+        require(minCreationFee > creationTopup,103);
         tvm.accept();
         _minCreationFee = minCreationFee;
         _creationFixIncome = creationFixIncome;

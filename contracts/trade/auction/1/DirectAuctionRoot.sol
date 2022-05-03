@@ -24,7 +24,7 @@ contract ArtRoot is Root, RootManaged, RootManagedCreationFee, RootManagedWithdr
     constructor(
         address manager,
         uint128 minCreationFee,
-        uint128 creationFixIncome,
+        uint128 creationTopup,
         string  name,
         string  symbol,
         TvmCell tokenCode
@@ -32,7 +32,7 @@ contract ArtRoot is Root, RootManaged, RootManagedCreationFee, RootManagedWithdr
         public
         Root(name, symbol, tokenCode)
         RootManaged(manager)
-        RootManagedCreationFee(minCreationFee, creationFixIncome)
+        RootManagedCreationFee(minCreationFee, creationTopup)
     {}
 
 
@@ -60,11 +60,10 @@ contract ArtRoot is Root, RootManaged, RootManagedCreationFee, RootManagedWithdr
     {
         require(msg.value >= _minCreationFee,278);
 	    require(showcaseFees<1001,279);//<=10%
-        uint128 value = msg.value - _creationFixIncome;
         _totalSupply++;
         addr = new DirectAuction{
             code: _tokenCode,
-            value: value,
+            value: _creationTopup,
             pubkey: tvm.pubkey(),
             varInit: {
                 _root: address(this),

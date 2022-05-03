@@ -13,6 +13,8 @@ import "../libraries/SwiftAddress.sol";
 contract AskRoot is Root, RootManaged, RootManagedCreationFee, RootManagedWithdraw {
 
     event ASK_CT_nifi_ask_1(uint64 id, address token, address creator, uint128 price, uint32 endTime, uint32 showcaseFee);
+
+    uint128 private _percentIncome;
     /***************
      * CONSTRUCTOR *
      ***************/
@@ -24,19 +26,27 @@ contract AskRoot is Root, RootManaged, RootManagedCreationFee, RootManagedWithdr
     constructor(
         address manager,
         uint128 minCreationFee,
-        uint128 creationFixIncome,
+        uint128 creationTopup,
+        uint128 precentIncome,
         string  name,
         string  symbol,
-        TvmCell tokenCode
+        TvmCell tokenCode        
     )
         public
         Root(name, symbol, tokenCode)
         RootManaged(manager)
-        RootManagedCreationFee(minCreationFee, creationFixIncome)
+        RootManagedCreationFee(minCreationFee, creationTopup)
     {
+        _percentIncome = precentIncome;
     }
 
+    function setPrecentIncome(uint128 precentIncome) external onlyManager accept {
+        _percentIncome = precentIncome;
+    }
 
+    function getPrecentIncome() public view returns(uint128 precentIncome) {
+        percentIncome = _precentIncome;
+    }
 
     /************
      * EXTERNAL *
@@ -56,17 +66,16 @@ contract AskRoot is Root, RootManaged, RootManagedCreationFee, RootManagedWithdr
             address addr
         )
     {
-        uint128 value = msg.value - _creationFixIncome;
         _totalSupply++;
         addr = new Ask{
             code: _tokenCode,
-            value: value,
+            value: _creationTopup,
             pubkey: tvm.pubkey(),
             varInit: {
                 _root: address(this),
                 _id: _totalSupply
             }
-        }( creator, token, price, endTime, showcaseFee);
+        }( creator, token, price, endTime, showcaseFee, _percentIncome);
         emit ASK_CT_nifi_ask_1{dest: SwiftAddress.value()}(_totalSupply, token, creator, price, endTime, showcaseFee);
     }
 

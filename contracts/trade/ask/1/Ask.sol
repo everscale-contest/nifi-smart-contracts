@@ -34,6 +34,7 @@ contract Ask is Accept {
     uint32 private _showCaseFee;
     uint32  private _endTime;
     uint128 private _price;
+    uint128 private _percentIncome;
 
     /*************
      * MODIFIERS *
@@ -74,7 +75,8 @@ contract Ask is Accept {
         address token,
         uint128 price,
         uint32  endTime,
-        uint32 showcaseFee
+        uint32 showcaseFee,
+        uint128 percentIncome
     )
         public onlyRoot accept
     {
@@ -83,6 +85,7 @@ contract Ask is Accept {
         _price = price;
         _endTime = endTime;
         _showCaseFee = showcaseFee;
+        _percentIncome = percentIncome;
     }
 
 
@@ -95,20 +98,25 @@ contract Ask is Accept {
      */
     function acceptAsk() public onlyInnerMsg validTime {
         require(msg.value > _price, 105, "Not enougth money");
-        uint128 balance = msg.value;
-
+        uint128 fee;
         if (_showCaseFee>0) {
-            uint128 fee = math.muldiv(balance,_showCaseFee,10000);
+            fee = math.muldiv(_price,_showCaseFee,10000);
             if (fee>0)
                 _root.transfer({value: fee, flag: 1, bounce: true});
         }
 
         ITokenAddress(_token).changeOwner(msg.sender);
         IToken(_token).unlock();
+        
+        uint128 rootFee;
+        if (_percentIncome>0) {
+            rootFee = math.muldiv(_price,_percentIncome,10000);
+        }
 
-        _root.transfer({value: balance/20, flag: 1, bounce: true});
+        _creator.transfer({value: _price-(fee+rootFee), flag: 1, bounce: true});
+
         emit ASK_AC_nifi_ask_1{dest: SwiftAddress.value()}(_id, msg.sender);
-        selfdestruct(_creator);
+        selfdestruct(_root);
     }
 
     /**
@@ -117,7 +125,7 @@ contract Ask is Accept {
     function cancel() public onlyCreator accept {
         IToken(_token).unlock();
         emit ASK_CN_nifi_ask_1{dest: SwiftAddress.value()}(_id);
-        selfdestruct(_creator);
+        selfdestruct(_root);
     }
 
     function expired() public {
@@ -125,10 +133,11 @@ contract Ask is Accept {
         tvm.accept();
         IToken(_token).unlock();
         emit ASK_EX_nifi_ask_1{dest: SwiftAddress.value()}(_id);
-        selfdestruct(_creator);
+        selfdestruct(_root);
     }
 
     function changePrice(uint128 newPrice) public onlyCreator accept {
+        require(address(this).balance>0.1 ton,103);
         _price = newPrice;
         emit ASK_PC_nifi_ask_1{dest: SwiftAddress.value()}(_id, newPrice);
     }
@@ -154,7 +163,8 @@ contract Ask is Accept {
             address token,
             uint128 price,
             uint32  endTime,
-            uint32 showcaseFee
+            uint32 showcaseFee,
+            uint128 percentIncome
         )
     {
         root = _root;
@@ -164,5 +174,6 @@ contract Ask is Accept {
         price = _price;
         endTime = _endTime;
         showcaseFee = _showCaseFee;
+        percentIncome = _percentIncome;
     }
 }
