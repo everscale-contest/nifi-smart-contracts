@@ -1,0 +1,114 @@
+{
+	"ABI version": 2,
+	"version": "2.2",
+	"header": ["pubkey", "time", "expire"],
+	"functions": [
+		{
+			"name": "constructor",
+			"inputs": [
+				{"name":"creator","type":"address"},
+				{"name":"token","type":"address"},
+				{"name":"price","type":"uint128"},
+				{"name":"endTime","type":"uint32"},
+				{"name":"showcaseFee","type":"uint32"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "acceptAsk",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "cancel",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "expired",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "changePrice",
+			"inputs": [
+				{"name":"newPrice","type":"uint128"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "getInfo",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"root","type":"address"},
+				{"name":"id","type":"uint64"},
+				{"name":"creator","type":"address"},
+				{"name":"token","type":"address"},
+				{"name":"price","type":"uint128"},
+				{"name":"endTime","type":"uint32"},
+				{"name":"showcaseFee","type":"uint32"}
+			]
+		}
+	],
+	"data": [
+		{"key":1,"name":"_root","type":"address"},
+		{"key":2,"name":"_id","type":"uint64"}
+	],
+	"events": [
+		{
+			"name": "ASK_AC_nifi_ask_1",
+			"inputs": [
+				{"name":"id","type":"uint64"},
+				{"name":"newOwner","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "ASK_CN_nifi_ask_1",
+			"inputs": [
+				{"name":"id","type":"uint64"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "ASK_EX_nifi_ask_1",
+			"inputs": [
+				{"name":"id","type":"uint64"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "ASK_PC_nifi_ask_1",
+			"inputs": [
+				{"name":"id","type":"uint64"},
+				{"name":"newPrice","type":"uint128"}
+			],
+			"outputs": [
+			]
+		}
+	],
+	"fields": [
+		{"name":"_pubkey","type":"uint256"},
+		{"name":"_timestamp","type":"uint64"},
+		{"name":"_constructorFlag","type":"bool"},
+		{"name":"_root","type":"address"},
+		{"name":"_id","type":"uint64"},
+		{"name":"_creator","type":"address"},
+		{"name":"_token","type":"address"},
+		{"name":"_showCaseFee","type":"uint32"},
+		{"name":"_endTime","type":"uint32"},
+		{"name":"_price","type":"uint128"}
+	]
+}

@@ -3,11 +3,11 @@ set -e
 
 cd ..
 cd ..
-cd seal
-tondev sol compile SealToken.sol
-tondev sol compile SealRoot.sol
+cd seal/1
+everdev sol compile SealToken.sol
+everdev sol compile SealRoot.sol
 
-tondev js wrap SealToken.sol
-tondev js wrap SealRoot.sol
+everdev js wrap SealToken.sol
+everdev js wrap SealRoot.sol
 
 echo seal built

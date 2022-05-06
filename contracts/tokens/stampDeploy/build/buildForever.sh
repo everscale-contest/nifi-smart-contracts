@@ -3,11 +3,11 @@ set -e
 
 cd ..
 cd ..
-cd forever
-tondev sol compile ForeverToken.sol
-tondev sol compile ForeverRoot.sol
+cd forever/1
+everdev sol compile ForeverToken.sol
+everdev sol compile ForeverRoot.sol
 
-tondev js wrap ForeverToken.sol
-tondev js wrap ForeverRoot.sol
+everdev js wrap ForeverToken.sol
+everdev js wrap ForeverRoot.sol
 
 echo forever built
