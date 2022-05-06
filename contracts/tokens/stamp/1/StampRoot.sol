@@ -9,7 +9,6 @@ import "StampToken.sol";
 contract StampRoot  {
 
     address _manager;
-    uint128 _creationFixIncome;
     uint128 _stampCreationTopup;
     uint128 _minCreationFee;
     string _name;
@@ -36,8 +35,6 @@ contract StampRoot  {
      ***************/
     constructor(
         address manager,
-        uint128 minCreationFee,
-        uint128 creationFixIncome,
         string  name,
         string  symbol,
         TvmCell tokenCode
@@ -47,8 +44,6 @@ contract StampRoot  {
         require(msg.pubkey() == tvm.pubkey(),101);
         tvm.accept();
         _manager = manager;
-        _minCreationFee = minCreationFee;
-        _creationFixIncome = creationFixIncome;
         _name = name;
         _symbol = symbol;
         _tokenCode = tokenCode;
@@ -59,6 +54,8 @@ contract StampRoot  {
         _minForAddFee = 0.21 ever;
         _forAddFixIncome = 0.1 ever;
         _endorsePercentFee = 500; // 5%
+        //require (_minCreationFee>_stampCreationTopup)
+        _minCreationFee = 0.35 ever;
         _stampCreationTopup = 0.2 ever;
     }
 
@@ -135,9 +132,9 @@ contract StampRoot  {
         uint128 stampCreationTopup
     ) public {
         require(msg.sender == _manager,102);
+        require (_minCreationFee>_stampCreationTopup+0.1 ever,103);
         tvm.accept();
         _minCreationFee = minCreationFee;
-        _creationFixIncome = creationFixIncome;
         _stampCreationTopup = stampCreationTopup;
     }
 
@@ -147,7 +144,6 @@ contract StampRoot  {
         uint128 stampCreationTopup
     ) {
         minCreationFee = _minCreationFee;
-        creationFixIncome = _creationFixIncome;
         stampCreationTopup = _stampCreationTopup;
     }
 

@@ -5,12 +5,12 @@ pragma AbiHeader expire;
 
 import "../abstract/Root.sol";
 import "../abstract/extensions/rootManaged/root/RootManaged.sol";
-import "../abstract/extensions/rootManaged/root/RootManagedCreationFee.sol";
+import "../abstract/extensions/rootManaged/root/RootManagedCreationTradeFee.sol";
 import "../abstract/extensions/rootManaged/root/RootManagedWithdraw.sol";
 import "DirectAuction.sol";
 import "../libraries/SwiftAddress.sol";
 
-contract ArtRoot is Root, RootManaged, RootManagedCreationFee, RootManagedWithdraw {
+contract ArtRoot is Root, RootManaged, RootManagedCreationTradeFee, RootManagedWithdraw {
 
     event AUC_CT_nifi_auc_1(uint64 id, address tokenAddress, uint128 startBid, uint128 stepBid, uint32 startTime, uint32 endTime, address auctionCreator, uint32 showcaseFees);
     /***************
@@ -24,7 +24,7 @@ contract ArtRoot is Root, RootManaged, RootManagedCreationFee, RootManagedWithdr
     constructor(
         address manager,
         uint128 minCreationFee,
-        uint128 creationTopup,
+        uint128 creationFixIncome,
         string  name,
         string  symbol,
         TvmCell tokenCode
@@ -32,7 +32,7 @@ contract ArtRoot is Root, RootManaged, RootManagedCreationFee, RootManagedWithdr
         public
         Root(name, symbol, tokenCode)
         RootManaged(manager)
-        RootManagedCreationFee(minCreationFee, creationTopup)
+        RootManagedCreationTradeFee(minCreationFee, creationFixIncome)
     {}
 
 
@@ -61,9 +61,10 @@ contract ArtRoot is Root, RootManaged, RootManagedCreationFee, RootManagedWithdr
         require(msg.value >= _minCreationFee,278);
 	    require(showcaseFees<1001,279);//<=10%
         _totalSupply++;
+        uint128 value = msg.value - _creationFixIncome;
         addr = new DirectAuction{
             code: _tokenCode,
-            value: _creationTopup,
+            value: value,
             pubkey: tvm.pubkey(),
             varInit: {
                 _root: address(this),

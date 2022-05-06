@@ -1,5 +1,5 @@
-const {TonClient} = require("@tonclient/core")
-const {libNode} = require("@tonclient/lib-node")
+const {TonClient} = require("@eversdk/core")
+const {libNode} = require("@eversdk/lib-node")
 const {SealRootContract} = require ('../../seal/1/SealRootContract')
 const {SealTokenContract} = require ('../../seal/1/SealTokenContract')
 const {StampRootContract} = require ('../../stamp/1/StampRootContract')

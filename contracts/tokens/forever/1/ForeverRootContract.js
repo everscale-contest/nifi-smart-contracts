@@ -16,11 +16,11 @@ const ForeverRootContract = {
                         "type": "address"
                     },
                     {
-                        "name": "creationMinValue",
+                        "name": "minCreationFee",
                         "type": "uint128"
                     },
                     {
-                        "name": "creationFee",
+                        "name": "creationFixIncome",
                         "type": "uint128"
                     },
                     {
@@ -114,7 +114,7 @@ const ForeverRootContract = {
                         "type": "address"
                     },
                     {
-                        "name": "creatorFees",
+                        "name": "creatorPercentReward",
                         "type": "uint32"
                     },
                     {
@@ -145,49 +145,49 @@ const ForeverRootContract = {
                 ]
             },
             {
-                "name": "setCreationFee",
+                "name": "setCreationParameters",
                 "inputs": [
                     {
-                        "name": "minValue",
+                        "name": "minCreationFee",
                         "type": "uint128"
                     },
                     {
-                        "name": "fee",
+                        "name": "creationFixIncome",
                         "type": "uint128"
                     }
                 ],
                 "outputs": []
             },
             {
-                "name": "getCreationFee",
+                "name": "getCreationParameters",
                 "inputs": [],
                 "outputs": [
                     {
-                        "name": "minValue",
+                        "name": "minCreationFee",
                         "type": "uint128"
                     },
                     {
-                        "name": "fee",
+                        "name": "creationFixIncome",
                         "type": "uint128"
                     }
                 ]
             },
             {
-                "name": "setForeverFee",
+                "name": "setForeverParameters",
                 "inputs": [
                     {
-                        "name": "delForeverFee",
+                        "name": "delForeverCost",
                         "type": "uint128"
                     }
                 ],
                 "outputs": []
             },
             {
-                "name": "getForeverFee",
+                "name": "getForeverParameters",
                 "inputs": [],
                 "outputs": [
                     {
-                        "name": "delForeverFee",
+                        "name": "delForeverCost",
                         "type": "uint128"
                     }
                 ]
@@ -224,11 +224,11 @@ const ForeverRootContract = {
                 "type": "address"
             },
             {
-                "name": "_creationFee",
+                "name": "_creationFixIncome",
                 "type": "uint128"
             },
             {
-                "name": "_creationMinValue",
+                "name": "_minCreationFee",
                 "type": "uint128"
             },
             {
@@ -248,13 +248,13 @@ const ForeverRootContract = {
                 "type": "uint64"
             },
             {
-                "name": "_delForeverFee",
+                "name": "_delForeverCost",
                 "type": "uint128"
             }
         ]
     },
-    tvc: "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",
-    code: "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",
-    codeHash: "1a8937162bb3166e6ec3f425eabe9db2635662c3f93015a7c8a84fa2907b67e1",
+    tvc: "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",
+    code: "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",
+    codeHash: "da148715fe221dc252a62ad547f4e928f16ea5d27ee499a513fbfae1f1848235",
 };
 module.exports = { ForeverRootContract };

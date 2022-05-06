@@ -7,8 +7,6 @@
 			"name": "constructor",
 			"inputs": [
 				{"name":"manager","type":"address"},
-				{"name":"creationMinValue","type":"uint128"},
-				{"name":"creationFee","type":"uint128"},
 				{"name":"name","type":"string"},
 				{"name":"symbol","type":"string"},
 				{"name":"tokenCode","type":"cell"}
@@ -59,7 +57,7 @@
 				{"name":"manager","type":"address"},
 				{"name":"managerUnlockTime","type":"uint32"},
 				{"name":"creator","type":"address"},
-				{"name":"creatorFees","type":"uint32"},
+				{"name":"creatorPercentReward","type":"uint32"},
 				{"name":"hash","type":"uint256"}
 			],
 			"outputs": [
@@ -76,47 +74,49 @@
 			]
 		},
 		{
-			"name": "setCreationFee",
+			"name": "setCreationParameters",
 			"inputs": [
-				{"name":"minValue","type":"uint128"},
-				{"name":"fee","type":"uint128"}
+				{"name":"minCreationFee","type":"uint128"},
+				{"name":"creationFixIncome","type":"uint128"},
+				{"name":"stampCreationTopup","type":"uint128"}
 			],
 			"outputs": [
 			]
 		},
 		{
-			"name": "getCreationFee",
+			"name": "getCreationParameters",
 			"inputs": [
 			],
 			"outputs": [
-				{"name":"minValue","type":"uint128"},
-				{"name":"fee","type":"uint128"}
+				{"name":"minCreationFee","type":"uint128"},
+				{"name":"creationFixIncome","type":"uint128"},
+				{"name":"stampCreationTopup","type":"uint128"}
 			]
 		},
 		{
-			"name": "setStampFee",
+			"name": "setStampParameters",
 			"inputs": [
-				{"name":"sealFee","type":"uint128"},
-				{"name":"sealRxFee","type":"uint128"},
-				{"name":"rootFee","type":"uint128"},
-				{"name":"forAddFee","type":"uint128"},
-				{"name":"forAddRootFee","type":"uint128"},
-				{"name":"endrosePercentFee","type":"uint16"}
+				{"name":"minSealFee","type":"uint128"},
+				{"name":"minSealRxFee","type":"uint128"},
+				{"name":"requestEndorseFixIncome","type":"uint128"},
+				{"name":"minForAddFee","type":"uint128"},
+				{"name":"forAddFixIncome","type":"uint128"},
+				{"name":"endorsePercentFee","type":"uint16"}
 			],
 			"outputs": [
 			]
 		},
 		{
-			"name": "getStampFee",
+			"name": "getStampParameters",
 			"inputs": [
 			],
 			"outputs": [
-				{"name":"sealFee","type":"uint128"},
-				{"name":"sealRxFee","type":"uint128"},
-				{"name":"rootFee","type":"uint128"},
-				{"name":"forAddFee","type":"uint128"},
-				{"name":"forAddRootFee","type":"uint128"},
-				{"name":"endrosePercentFee","type":"uint16"}
+				{"name":"minSealFee","type":"uint128"},
+				{"name":"minSealRxFee","type":"uint128"},
+				{"name":"requestEndorseFixIncome","type":"uint128"},
+				{"name":"minForAddFee","type":"uint128"},
+				{"name":"forAddFixIncome","type":"uint128"},
+				{"name":"endorsePercentFee","type":"uint16"}
 			]
 		}
 	],
@@ -137,17 +137,17 @@
 		{"name":"_timestamp","type":"uint64"},
 		{"name":"_constructorFlag","type":"bool"},
 		{"name":"_manager","type":"address"},
-		{"name":"_creationFee","type":"uint128"},
-		{"name":"_creationMinValue","type":"uint128"},
+		{"name":"_stampCreationTopup","type":"uint128"},
+		{"name":"_minCreationFee","type":"uint128"},
 		{"name":"_name","type":"string"},
 		{"name":"_symbol","type":"string"},
 		{"name":"_tokenCode","type":"cell"},
 		{"name":"_totalSupply","type":"uint64"},
-		{"name":"_sealFee","type":"uint128"},
-		{"name":"_sealRxFee","type":"uint128"},
-		{"name":"_rootFee","type":"uint128"},
-		{"name":"_forAddFee","type":"uint128"},
-		{"name":"_forAddRootFee","type":"uint128"},
-		{"name":"_endrosePercentFee","type":"uint16"}
+		{"name":"_minSealFee","type":"uint128"},
+		{"name":"_minSealRxFee","type":"uint128"},
+		{"name":"_requestEndorseFixIncome","type":"uint128"},
+		{"name":"_minForAddFee","type":"uint128"},
+		{"name":"_forAddFixIncome","type":"uint128"},
+		{"name":"_endorsePercentFee","type":"uint16"}
 	]
 }

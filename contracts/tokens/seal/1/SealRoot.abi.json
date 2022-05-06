@@ -7,8 +7,8 @@
 			"name": "constructor",
 			"inputs": [
 				{"name":"manager","type":"address"},
-				{"name":"creationMinValue","type":"uint128"},
-				{"name":"creationFee","type":"uint128"},
+				{"name":"minCreationFee","type":"uint128"},
+				{"name":"creationFixIncome","type":"uint128"},
 				{"name":"name","type":"string"},
 				{"name":"symbol","type":"string"},
 				{"name":"tokenCode","type":"cell"}
@@ -59,7 +59,7 @@
 				{"name":"manager","type":"address"},
 				{"name":"managerUnlockTime","type":"uint32"},
 				{"name":"creator","type":"address"},
-				{"name":"creatorFees","type":"uint32"},
+				{"name":"creatorPercentReward","type":"uint32"},
 				{"name":"hash","type":"uint256"}
 			],
 			"outputs": [
@@ -76,28 +76,28 @@
 			]
 		},
 		{
-			"name": "setCreationFee",
+			"name": "setCreationParameters",
 			"inputs": [
-				{"name":"minValue","type":"uint128"},
-				{"name":"fee","type":"uint128"}
+				{"name":"minCreationFee","type":"uint128"},
+				{"name":"creationFixIncome","type":"uint128"}
 			],
 			"outputs": [
 			]
 		},
 		{
-			"name": "getCreationFee",
+			"name": "getCreationParameters",
 			"inputs": [
 			],
 			"outputs": [
-				{"name":"minValue","type":"uint128"},
-				{"name":"fee","type":"uint128"}
+				{"name":"minCreationFee","type":"uint128"},
+				{"name":"creationFixIncome","type":"uint128"}
 			]
 		},
 		{
-			"name": "setSealFee",
+			"name": "setParameters",
 			"inputs": [
-				{"name":"feeEndroseStamp","type":"uint128"},
-				{"name":"feeEndroseRoot","type":"uint128"}
+				{"name":"endorseStampCost","type":"uint128"},
+				{"name":"endorseRootFixIncome","type":"uint128"}
 			],
 			"outputs": [
 			]
@@ -120,13 +120,13 @@
 		{"name":"_timestamp","type":"uint64"},
 		{"name":"_constructorFlag","type":"bool"},
 		{"name":"_manager","type":"address"},
-		{"name":"_creationFee","type":"uint128"},
-		{"name":"_creationMinValue","type":"uint128"},
+		{"name":"_creationFixIncome","type":"uint128"},
+		{"name":"_minCreationFee","type":"uint128"},
 		{"name":"_name","type":"string"},
 		{"name":"_symbol","type":"string"},
 		{"name":"_tokenCode","type":"cell"},
 		{"name":"_totalSupply","type":"uint64"},
-		{"name":"_feeEndroseStamp","type":"uint128"},
-		{"name":"_feeEndroseRoot","type":"uint128"}
+		{"name":"_endorseStampCost","type":"uint128"},
+		{"name":"_endorseRootFixIncome","type":"uint128"}
 	]
 }

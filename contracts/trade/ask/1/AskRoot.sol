@@ -5,16 +5,15 @@ pragma AbiHeader expire;
 
 import "../abstract/Root.sol";
 import "../abstract/extensions/rootManaged/root/RootManaged.sol";
-import "../abstract/extensions/rootManaged/root/RootManagedCreationFee.sol";
+import "../abstract/extensions/rootManaged/root/RootManagedCreationTradeFee.sol";
 import "../abstract/extensions/rootManaged/root/RootManagedWithdraw.sol";
 import "Ask.sol";
 import "../libraries/SwiftAddress.sol";
 
-contract AskRoot is Root, RootManaged, RootManagedCreationFee, RootManagedWithdraw {
+contract AskRoot is Root, RootManaged, RootManagedCreationTradeFee, RootManagedWithdraw {
 
     event ASK_CT_nifi_ask_1(uint64 id, address token, address creator, uint128 price, uint32 endTime, uint32 showcaseFee);
 
-    uint128 private _percentIncome;
     /***************
      * CONSTRUCTOR *
      ***************/
@@ -26,16 +25,15 @@ contract AskRoot is Root, RootManaged, RootManagedCreationFee, RootManagedWithdr
     constructor(
         address manager,
         uint128 minCreationFee,
-        uint128 creationTopup,
-        uint128 precentIncome,
+        uint128 creationFixIncome,
         string  name,
         string  symbol,
-        TvmCell tokenCode        
+        TvmCell tokenCode
     )
         public
         Root(name, symbol, tokenCode)
         RootManaged(manager)
-        RootManagedCreationFee(minCreationFee, creationTopup)
+        RootManagedCreationTradeFee(minCreationFee, creationFixIncome)
     {
         _percentIncome = precentIncome;
     }
@@ -67,9 +65,10 @@ contract AskRoot is Root, RootManaged, RootManagedCreationFee, RootManagedWithdr
         )
     {
         _totalSupply++;
+        uint128 value = msg.value - _creationFixIncome;
         addr = new Ask{
             code: _tokenCode,
-            value: _creationTopup,
+            value: value,
             pubkey: tvm.pubkey(),
             varInit: {
                 _root: address(this),

@@ -16,14 +16,6 @@ const StampRootContract = {
                         "type": "address"
                     },
                     {
-                        "name": "creationMinValue",
-                        "type": "uint128"
-                    },
-                    {
-                        "name": "creationFee",
-                        "type": "uint128"
-                    },
-                    {
                         "name": "name",
                         "type": "string"
                     },
@@ -114,7 +106,7 @@ const StampRootContract = {
                         "type": "address"
                     },
                     {
-                        "name": "creatorFees",
+                        "name": "creatorPercentReward",
                         "type": "uint32"
                     },
                     {
@@ -145,89 +137,97 @@ const StampRootContract = {
                 ]
             },
             {
-                "name": "setCreationFee",
+                "name": "setCreationParameters",
                 "inputs": [
                     {
-                        "name": "minValue",
+                        "name": "minCreationFee",
                         "type": "uint128"
                     },
                     {
-                        "name": "fee",
+                        "name": "creationFixIncome",
+                        "type": "uint128"
+                    },
+                    {
+                        "name": "stampCreationTopup",
                         "type": "uint128"
                     }
                 ],
                 "outputs": []
             },
             {
-                "name": "getCreationFee",
+                "name": "getCreationParameters",
                 "inputs": [],
                 "outputs": [
                     {
-                        "name": "minValue",
+                        "name": "minCreationFee",
                         "type": "uint128"
                     },
                     {
-                        "name": "fee",
+                        "name": "creationFixIncome",
+                        "type": "uint128"
+                    },
+                    {
+                        "name": "stampCreationTopup",
                         "type": "uint128"
                     }
                 ]
             },
             {
-                "name": "setStampFee",
+                "name": "setStampParameters",
                 "inputs": [
                     {
-                        "name": "sealFee",
+                        "name": "minSealFee",
                         "type": "uint128"
                     },
                     {
-                        "name": "sealRxFee",
+                        "name": "minSealRxFee",
                         "type": "uint128"
                     },
                     {
-                        "name": "rootFee",
+                        "name": "requestEndorseFixIncome",
                         "type": "uint128"
                     },
                     {
-                        "name": "forAddFee",
+                        "name": "minForAddFee",
                         "type": "uint128"
                     },
                     {
-                        "name": "forAddRootFee",
+                        "name": "forAddFixIncome",
                         "type": "uint128"
                     },
                     {
-                        "name": "endrosePercentFee",
+                        "name": "endorsePercentFee",
                         "type": "uint16"
                     }
                 ],
                 "outputs": []
             },
             {
-                "name": "getStampFee",
+                "name": "getStampParameters",
                 "inputs": [],
                 "outputs": [
                     {
-                        "name": "sealFee",
+                        "name": "minSealFee",
                         "type": "uint128"
                     },
                     {
-                        "name": "sealRxFee",
+                        "name": "minSealRxFee",
                         "type": "uint128"
                     },
                     {
-                        "name": "rootFee",
+                        "name": "requestEndorseFixIncome",
                         "type": "uint128"
                     },
                     {
-                        "name": "forAddFee",
+                        "name": "minForAddFee",
                         "type": "uint128"
                     },
                     {
-                        "name": "forAddRootFee",
+                        "name": "forAddFixIncome",
                         "type": "uint128"
                     },
                     {
-                        "name": "endrosePercentFee",
+                        "name": "endorsePercentFee",
                         "type": "uint16"
                     }
                 ]
@@ -264,11 +264,11 @@ const StampRootContract = {
                 "type": "address"
             },
             {
-                "name": "_creationFee",
+                "name": "_stampCreationTopup",
                 "type": "uint128"
             },
             {
-                "name": "_creationMinValue",
+                "name": "_minCreationFee",
                 "type": "uint128"
             },
             {
@@ -288,33 +288,33 @@ const StampRootContract = {
                 "type": "uint64"
             },
             {
-                "name": "_sealFee",
+                "name": "_minSealFee",
                 "type": "uint128"
             },
             {
-                "name": "_sealRxFee",
+                "name": "_minSealRxFee",
                 "type": "uint128"
             },
             {
-                "name": "_rootFee",
+                "name": "_requestEndorseFixIncome",
                 "type": "uint128"
             },
             {
-                "name": "_forAddFee",
+                "name": "_minForAddFee",
                 "type": "uint128"
             },
             {
-                "name": "_forAddRootFee",
+                "name": "_forAddFixIncome",
                 "type": "uint128"
             },
             {
-                "name": "_endrosePercentFee",
+                "name": "_endorsePercentFee",
                 "type": "uint16"
             }
         ]
     },
-    tvc: "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",
-    code: "te6ccgECKQEABvAABCSK7VMg4wMgwP/jAiDA/uMC8gsmAgEoA8TtRNDXScMB+GaJ+Gkh2zzTAAGOHYECANcYIPkBAdMAAZTT/wMBkwL4QuIg+GX5EPKoldMAAfJ64tM/AfhDIbnytCD4I4ED6KiCCBt3QKC58rT4Y9MfAfgjvPK50x8B2zzyPBYUAwNS7UTQ10nDAfhmItDTA/pAMPhpqTgA3CHHAOMCIdcNH/K8IeMDAds88jwlJQMDPCCCECtKBNu74wIgghBlPEO7u+MCIIIQf5ggJ7vjAhcLBAM8IIIQZgzpEbrjAiCCEH6dYxa64wIgghB/mCAnuuMCCQcFA3Qw+Eby4Ez4Qm7jANHbPCKOISTQ0wH6QDAxyM+HIM6AYs9AXgHPk/5ggJ7Lf8t/yXD7AJFb4jDbPPIAJAYfAAj4TPhLA3Iw+Eby4Ez4Qm7jANM/0ds8IY4fI9DTAfpAMDHIz4cgznHPC2EByM+T+nWMWs7NyXD7AJEw4uMA8gAkCBEAcvhCyMv/cG2AQPRD+ChxWIBA9BYByMs/cliAQPRDyPQAyfhPyM+EgPQA9ADPgcn5AMjPigBAy//J0ANuMPhG8uBM+EJu4wDR2zwhjh8j0NMB+kAwMcjPhyDOcc8LYQHIz5OYM6RGzs3JcPsAkTDi4wDyACQKEQAE+EoEUCCCEDcXk6m64wIgghA3kP42uuMCIIIQQeZ1T7rjAiCCEGU8Q7u64wITEA4MA3Qw+Eby4Ez4Qm7jANHbPCOOISXQ0wH6QDAxyM+HIM6AYs9AXhHPk5TxDu7MzMt/yXD7AJJfA+LjAPIAJA0RAAz4TfhO+FADOjD4RvLgTPhCbuMAIZPU0dDe03/Tf9HbPDDbPPIAJA8fACD4SfhKxwXy4Gb4AAH4bPhrAzww+Eby4Ez4Qm7jACGT1NHQ3vpA03/SANHbPOMA8gAkEhEAKO1E0NP/0z8x+ENYyMv/yz/Oye1UAEL4SfhKxwXy4Gb4ABLIz4WAygDPhEDOAfoCgGvPQMlw+wAC3DD4Qm7jAPhG8nMhk9TR0N76QNN/03/U1NTR+EUgbpIwcN74Qrry4GX4AFUE+GpVA/hsVQL4a1j4bQH4bvhvggr68ID4cYIQBo53gPhyghAF9eEA+HOCEAyEWID4dIIQBfXhAPh1gQH0+HbbPPIAFB8CFu1E0NdJwgGOgOMNFSQCbnDtRND0BYlwIIhfIHBfYPh2+HX4dPhz+HL4cfhw+G/4bvht+Gz4a/hqgED0DvK91wv/+GJw+GMWKABDgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEARQIIIQCl0jS7rjAiCCEBmToM664wIgghAi/YR0uuMCIIIQK0oE27rjAh4cGhgDijD4RvLgTPhCbuMA0ds8Jo4rKNDTAfpAMDHIz4cgznHPC2FeUMjPkq0oE27Lf8t/y3/Lf8t/yw/NyXD7AJJfBuIw2zzyACQZHwAY+FH4UvhT+FT4VfhWA0ow+Eby4Ez4Qm7jACGT1NHQ3tN/03/Tf9N/03/TD9HbPDDbPPIAJBsfAE74SfhKxwXy4GYggScQu/LgZ/gAVQT4cVUD+HJVAvhzWPh0Afh1+HYDNjD4RvLgTPhCbuMAIZPU0dDe+kDR2zww2zzyACQdHwAa+En4SscF8uBm+AD4agOgMPhG8uBM+EJu4wAhk9TR0N76QNTR0PpA0x/U0dD6QNMf0//R2zwhjh8j0NMB+kAwMcjPhyDOcc8LYQHIz5IpdI0uzs3JcPsAkTDiMNs88gAkIB8AhPhW+FX4VPhT+FL4UfhQ+E/4TvhN+Ez4S/hK+EP4QsjL/8s/z4POVbDIy3/Lf8zMzMs/y3/Lf8t/y3/Lf8sPzcntVAH6UxGBCWG58uEVMGim/mD4TL7y4RZopv5g+EuhtX/4UKS1P/hw+Fb4VfhU+FP4UvhRVVZeQPhCyMv/cG2AQPRD+ChxWIBA9Bb4UMjLP3JYgED0Q8j0AMn4T8jPhID0APQAz4HJIPkAyM+KAEDL/8nQVcBVDS7Iz4WIzgH6AnMhAqDPC2oh2zzMz4NVsMjPkX6S9yrOVaDIzssfVYDIzssfy//Lf1VAyMt/y3/Lf8t/yw/Nzc3NyXD7APhQ2zzIz4cgzoIQLmDaeM8Lgcs/yXD7ACMiAEiNCFgAINq6GLmwcTnRuNEBIxngSnmyuAiJIuB5uWm44hkKiPwANNDSAAGT0gQx3tIAAZPSATHe9AT0BPQE0V8DAIbtRNDT/9M/0wAx+kDU0dDTf9N/1NTU0z/Tf9N/03/Tf9N/0w/R+Hb4dfh0+HP4cvhx+HD4b/hu+G34bPhr+Gr4Y/hiAAr4RvLgTAIK9KQg9KEoJwAUc29sIDAuNTguMgAA",
-    codeHash: "41706b8a83a73eee84cb78f23ddc29e28999eed8179a757ada5644fff9932a3e",
+    tvc: "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",
+    code: "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",
+    codeHash: "d9c9e03f3228aef5197e20592d9fa7b0c1d277d81f750f1cd152c40fb41675a3",
 };
 module.exports = { StampRootContract };

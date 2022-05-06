@@ -1,5 +1,5 @@
-const {TonClient} = require("@tonclient/core")
-const {libNode} = require("@tonclient/lib-node")
+const {TonClient} = require("@eversdk/core")
+const {libNode} = require("@eversdk/lib-node")
 const {ForeverRootContract} = require ('../../forever/1/ForeverRootContract')
 const {ForeverTokenContract} = require ('../../forever/1/ForeverTokenContract')
 const {transfer} = require('../utils/transfer')
@@ -25,8 +25,8 @@ async function deployForeverRoot (client,rootKeys) {
             function_name: 'constructor',
             input: {
                 manager: config.msgiManager,
-                creationMinValue: config.creationMinValue,
-                creationFee : config.creationFee,
+                minCreationFee: config.creationMinValue,
+                creationFixIncome : config.creationFee,
                 name : "ForeverRoot1",
                 symbol: "FOR1",
                 tokenCode: ForeverTokenContract.code,

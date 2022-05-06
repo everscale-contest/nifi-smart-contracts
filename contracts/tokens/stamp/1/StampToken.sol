@@ -8,7 +8,7 @@ import "IStampToken.sol";
 import "../../forever/1/IForeverToken.sol";
 import "../../seal/1/SealToken.sol";
 import "SealContractInfoLib.sol";
-import "../Constants.sol";
+import "../../Constants.sol";
 
 contract StampToken is IStampToken {
 
@@ -204,21 +204,13 @@ contract StampToken is IStampToken {
     }
 
     function requestEndorse(address seal, uint8 places, uint128 price) public onlyOwner {
-        uint128 startingBalance = address(this).balance - msg.value;
-
-        uint128 minRequestEndorseFee = _minSealFee + _requestEndorseFixIncome;
-        require(msg.value >= minRequestEndorseFee + price, 109);
+        require(msg.value>=_minSealFee + _requestEndorseFixIncome+price, 109);
         require(_sealPlace == 0, 110);
         _seal.set(seal);
         _sealValue = price;
         _sealPosiblePlaces = places;
         emit TK_RQ_nifi_stamp1_1{dest: SwiftAddress.value()}(_id, _seal.get(), places, uint64(_sealValue));
-
-        uint128 shouldBeSentToRoot = address(this).balance - startingBalance - price - Constants.MIN_GAS_COST;
-
-        if (shouldBeSentToRoot > Constants.MIN_GAS_COST) {
-            _root.transfer({value: shouldBeSentToRoot, flag: 0, bounce: true});
-        }
+        _root.transfer({value: 0, flag: 64, bounce: true});
     }
 
     function cancelEndorse() public  onlyOwner {

@@ -10,7 +10,7 @@ import "../abstract/extensions/rootManaged/root/RootManagedWithdraw.sol";
 import "Bid.sol";
 import "../libraries/SwiftAddress.sol";
 
-contract BidRoot is Root, RootManaged, RootManagedCreationFee, RootManagedWithdraw {
+contract BidRoot is Root, RootManaged, RootManagedCreationTradeFee, RootManagedWithdraw {
 
     event BID_CT_nifi_bid_1(uint64 id, address tokenAddress, uint128 bidValue, uint32 endTime, address bidCreator);
     /***************
@@ -32,7 +32,7 @@ contract BidRoot is Root, RootManaged, RootManagedCreationFee, RootManagedWithdr
         public
         Root(name, symbol, tokenCode)
         RootManaged(manager)
-        RootManagedCreationFee(minCreationFee, creationFixIncome)
+        RootManagedCreationTradeFee(minCreationFee, creationFixIncome)
     {
     }
 

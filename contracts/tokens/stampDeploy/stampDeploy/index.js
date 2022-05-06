@@ -1,5 +1,5 @@
-const {TonClient} = require("@tonclient/core")
-const {libNode} = require("@tonclient/lib-node")
+const {TonClient} = require("@eversdk/core")
+const {libNode} = require("@eversdk/lib-node")
 const {StampRootContract} = require ('../../stamp/1/StampRootContract')
 const {StampTokenContract} = require ('../../stamp/1/StampTokenContract')
 const {transfer} = require('../utils/transfer')
@@ -24,8 +24,6 @@ async function deployStampRoot (client,rootKeys) {
             function_name: 'constructor',
             input: {
                 manager: config.msgiManager,
-                creationMinValue: config.creationMinValue,
-                creationFee : config.creationFee,
                 name : "StampRoot1",
                 symbol: "STAMP1",
                 tokenCode: StampTokenContract.code,

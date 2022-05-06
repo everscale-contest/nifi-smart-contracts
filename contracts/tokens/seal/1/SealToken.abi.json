@@ -10,10 +10,10 @@
 				{"name":"manager","type":"address"},
 				{"name":"managerUnlockTime","type":"uint32"},
 				{"name":"creator","type":"address"},
-				{"name":"creatorFees","type":"uint32"},
+				{"name":"creatorPercentReward","type":"uint32"},
 				{"name":"hash","type":"uint256"},
-				{"name":"feeEndroseStamp","type":"uint128"},
-				{"name":"feeEndroseRoot","type":"uint128"}
+				{"name":"endorseStampCost","type":"uint128"},
+				{"name":"endorseRootFixIncome","type":"uint128"}
 			],
 			"outputs": [
 			]
@@ -33,7 +33,7 @@
 			],
 			"outputs": [
 				{"name":"creator","type":"address"},
-				{"name":"creatorFees","type":"uint32"},
+				{"name":"creatorPercentReward","type":"uint32"},
 				{"name":"hash","type":"uint256"}
 			]
 		},
@@ -43,7 +43,7 @@
 			],
 			"outputs": [
 				{"name":"creator","type":"address"},
-				{"name":"creatorFees","type":"uint32"},
+				{"name":"creatorPercentReward","type":"uint32"},
 				{"name":"hash","type":"uint256"}
 			]
 		},
@@ -64,7 +64,7 @@
 			"outputs": [
 				{"name":"owner","type":"address"},
 				{"name":"creator","type":"address"},
-				{"name":"creatorFees","type":"uint32"},
+				{"name":"creatorPercentReward","type":"uint32"},
 				{"name":"manager","type":"address"},
 				{"name":"managerUnlockTime","type":"uint32"}
 			]
@@ -76,7 +76,7 @@
 			"outputs": [
 				{"name":"owner","type":"address"},
 				{"name":"creator","type":"address"},
-				{"name":"creatorFees","type":"uint32"},
+				{"name":"creatorPercentReward","type":"uint32"},
 				{"name":"manager","type":"address"},
 				{"name":"managerUnlockTime","type":"uint32"}
 			]
@@ -98,7 +98,7 @@
 			]
 		},
 		{
-			"name": "endrose",
+			"name": "endorse",
 			"inputs": [
 				{"name":"stamp","type":"address"},
 				{"name":"place","type":"uint8"}
@@ -107,12 +107,12 @@
 			]
 		},
 		{
-			"name": "getFee",
+			"name": "getParameters",
 			"inputs": [
 			],
 			"outputs": [
-				{"name":"feeEndroseStamp","type":"uint128"},
-				{"name":"feeEndroseRoot","type":"uint128"}
+				{"name":"endorseStampCost","type":"uint128"},
+				{"name":"endorseRootFixIncome","type":"uint128"}
 			]
 		}
 	],
@@ -151,9 +151,9 @@
 		{"name":"_manager","type":"address"},
 		{"name":"_managerUnlockTime","type":"uint32"},
 		{"name":"_creator","type":"address"},
-		{"name":"_creatorFees","type":"uint32"},
+		{"name":"_creatorPercentReward","type":"uint32"},
 		{"name":"_hash","type":"uint256"},
-		{"name":"_feeEndroseStamp","type":"uint128"},
-		{"name":"_feeEndroseRoot","type":"uint128"}
+		{"name":"_endorseStampCost","type":"uint128"},
+		{"name":"_endorseRootFixIncome","type":"uint128"}
 	]
 }

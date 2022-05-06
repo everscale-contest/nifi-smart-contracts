@@ -1,5 +1,5 @@
-const {TonClient} = require("@tonclient/core")
-const {libNode} = require("@tonclient/lib-node")
+const {TonClient} = require("@eversdk/core")
+const {libNode} = require("@eversdk/lib-node")
 
 const {SealRootContract} = require ('../../seal/1/SealRootContract')
 const {SealTokenContract} = require ('../../seal/1/SealTokenContract')
@@ -25,8 +25,8 @@ async function deploySealRoot (client,rootKeys) {
             function_name: 'constructor',
             input: {
                 manager: config.msgiManager,
-                creationMinValue: config.creationMinValue,
-                creationFee : config.creationFee,
+                minCreationFee: config.creationMinValue,
+                creationFixIncome : config.creationFee,
                 name : "SealRoot1",
                 symbol: "SEAL1",
                 tokenCode: SealTokenContract.code,
