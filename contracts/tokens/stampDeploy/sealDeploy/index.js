@@ -1,8 +1,8 @@
-const {TonClient} = require("@tonclient/core")
-const {libNode} = require("@tonclient/lib-node")
+const {TonClient} = require("@eversdk/core")
+const {libNode} = require("@eversdk/lib-node")
 
-const {SealRootContract} = require ('../../seal/SealRootContract')
-const {SealTokenContract} = require ('../../seal/SealTokenContract')
+const {SealRootContract} = require ('../../seal/1/SealRootContract')
+const {SealTokenContract} = require ('../../seal/1/SealTokenContract')
 const {transfer} = require('../utils/transfer')
 const {config} = require('../config')
 const fs = require('fs');
@@ -25,8 +25,8 @@ async function deploySealRoot (client,rootKeys) {
             function_name: 'constructor',
             input: {
                 manager: config.msgiManager,
-                creationMinValue: config.creationMinValue,
-                creationFee : config.creationFee,
+                minCreationFee: config.creationMinValue,
+                creationFixIncome : config.creationFee,
                 name : "SealRoot1",
                 symbol: "SEAL1",
                 tokenCode: SealTokenContract.code,
@@ -53,7 +53,7 @@ async function deploySealRoot (client,rootKeys) {
 
 async function writeSealContractInfo (sealRoot, pubkey, sealTockenCodeHash, sealTokenCodeDepth) {
     let res = sealRoot.substring(2);
-    const path = "../../stamp/SealContractInfoLib.sol";
+    const path = "../../stamp/1/SealContractInfoLib.sol";
     const content= `pragma ton-solidity >=0.47.0; \n\n\
     library SealContractInfo {\n\
         function SEAL_ROOT() internal inline returns(address){\n\
@@ -78,10 +78,10 @@ async function writeSealContractInfo (sealRoot, pubkey, sealTockenCodeHash, seal
         console.log('net: '+config.endpoints.toString());
         let root_json = JSON.parse(fs.readFileSync("../root.json").toString());
 
-        //const rootKeys = await client.crypto.generate_random_sign_keys();
-        const rootKeys = {public:"a32b6119b77e79ee370e173a3383e517d2d235c796bd38198af22b6673300cb8",
-        secret:"5707985ddf6b95a2a11d8503dbc52fee5be330dbc0020023a1180f08aaaef843"}
-        //console.log('root keys:'+JSON.stringify(root_json));
+        const rootKeys = await client.crypto.generate_random_sign_keys();
+        /*const rootKeys = {public:"a32b6119b77e79ee370e173a3383e517d2d235c796bd38198af22b6673300cb8",
+        secret:"5707985ddf6b95a2a11d8503dbc52fee5be330dbc0020023a1180f08aaaef843"}*/
+        console.log('root keys:'+JSON.stringify(root_json));
 
         root_json.keys = rootKeys;
         root_json.seal="";

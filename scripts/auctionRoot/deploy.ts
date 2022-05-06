@@ -60,7 +60,7 @@ async function run(): Promise<void> {
     await auctionRoot.deploy(
         auctionRootConfig.manager,
         auctionRootConfig.creationMinValue,
-        auctionRootConfig.creationFee,
+        auctionRootConfig.creationFixIncome,
         Ton.hex.string(auctionRootConfig.name),
         Ton.hex.string(auctionRootConfig.symbol)
     )

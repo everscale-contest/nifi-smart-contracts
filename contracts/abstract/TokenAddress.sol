@@ -1,4 +1,4 @@
-pragma ton-solidity ^0.47.0;
+pragma ton-solidity >= 0.47.0;
 
 import "Token.sol";
 import "interfaces/ITokenAddress.sol";
@@ -61,7 +61,7 @@ abstract contract TokenAddress is Token, ITokenAddress {
 
 
 
-    
+
 
 
 
