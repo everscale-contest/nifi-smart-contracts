@@ -1,17 +1,19 @@
 {
 	"ABI version": 2,
+	"version": "2.2",
 	"header": ["pubkey", "time", "expire"],
 	"functions": [
 		{
 			"name": "constructor",
 			"inputs": [
 				{"name":"manager","type":"address"},
-				{"name":"name","type":"bytes"},
-				{"name":"symbol","type":"bytes"},
+				{"name":"name","type":"string"},
+				{"name":"symbol","type":"string"},
 				{"name":"limit","type":"uint64"},
 				{"name":"tokenCode","type":"cell"},
 				{"name":"hash","type":"uint256"},
-				{"name":"creatorFees","type":"uint32"}
+				{"name":"creatorPercentReward","type":"uint32"},
+				{"name":"mintTopup","type":"uint128"}
 			],
 			"outputs": [
 			]
@@ -29,7 +31,7 @@
 		{
 			"name": "receiveTokenAddress",
 			"inputs": [
-				{"name":"_answer_id","type":"uint32"},
+				{"name":"answerId","type":"uint32"},
 				{"name":"id","type":"uint64"}
 			],
 			"outputs": [
@@ -67,13 +69,13 @@
 			],
 			"outputs": [
 				{"name":"id","type":"uint64"},
-				{"name":"name","type":"bytes"},
-				{"name":"symbol","type":"bytes"},
+				{"name":"name","type":"string"},
+				{"name":"symbol","type":"string"},
 				{"name":"totalSupply","type":"uint64"},
 				{"name":"limit","type":"uint64"},
 				{"name":"hash","type":"uint256"},
 				{"name":"creator","type":"address"},
-				{"name":"creatorFees","type":"uint32"}
+				{"name":"creatorPercentReward","type":"uint32"}
 			]
 		},
 		{
@@ -101,5 +103,22 @@
 			"outputs": [
 			]
 		}
+	],
+	"fields": [
+		{"name":"_pubkey","type":"uint256"},
+		{"name":"_timestamp","type":"uint64"},
+		{"name":"_constructorFlag","type":"bool"},
+		{"name":"_root","type":"address"},
+		{"name":"_id","type":"uint64"},
+		{"name":"_manager","type":"address"},
+		{"name":"_creator","type":"address"},
+		{"name":"_name","type":"string"},
+		{"name":"_symbol","type":"string"},
+		{"name":"_tokenCode","type":"cell"},
+		{"name":"_totalSupply","type":"uint64"},
+		{"name":"_limit","type":"uint64"},
+		{"name":"_hash","type":"uint256"},
+		{"name":"_creatorPercentReward","type":"uint32"},
+		{"name":"_mintTopup","type":"uint128"}
 	]
 }

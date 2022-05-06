@@ -1,9 +1,9 @@
-pragma ton-solidity >=0.47.0;
+pragma ton-solidity >= 0.47.0;
 pragma AbiHeader time;
 pragma AbiHeader pubkey;
 pragma AbiHeader expire;
 
-import "../../libraries/SwiftAddress.sol";
+import "../../../libraries/SwiftAddress.sol";
 
 contract Art2Token {
 
@@ -18,7 +18,7 @@ contract Art2Token {
     uint64 static _seriesId;
     uint64 static _id;
 
-    
+
 
     address _owner;
     address internal _manager;

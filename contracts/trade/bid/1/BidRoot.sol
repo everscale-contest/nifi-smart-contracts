@@ -1,14 +1,14 @@
-pragma ton-solidity ^0.47.0;
+pragma ton-solidity >= 0.47.0;
 pragma AbiHeader time;
 pragma AbiHeader pubkey;
 pragma AbiHeader expire;
 
-import "../abstract/Root.sol";
-import "../abstract/extensions/rootManaged/root/RootManaged.sol";
-import "../abstract/extensions/rootManaged/root/RootManagedCreationFee.sol";
-import "../abstract/extensions/rootManaged/root/RootManagedWithdraw.sol";
+import "../../../abstract/Root.sol";
+import "../../../abstract/extensions/rootManaged/root/RootManaged.sol";
+import "../../../abstract/extensions/rootManaged/root/RootManagedCreationTradeFee.sol";
+import "../../../abstract/extensions/rootManaged/root/RootManagedWithdraw.sol";
 import "Bid.sol";
-import "../libraries/SwiftAddress.sol";
+import "../../../libraries/SwiftAddress.sol";
 
 contract BidRoot is Root, RootManaged, RootManagedCreationTradeFee, RootManagedWithdraw {
 

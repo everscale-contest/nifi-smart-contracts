@@ -3,10 +3,10 @@ pragma AbiHeader time;
 pragma AbiHeader pubkey;
 pragma AbiHeader expire;
 
-import "../abstract/interfaces/IToken.sol";
-import "../abstract/interfaces/ITokenAddress.sol";
-import "../abstract/modifiers/Accept.sol";
-import "../libraries/SwiftAddress.sol";
+import "../../../abstract/interfaces/IToken.sol";
+import "../../../abstract/interfaces/ITokenAddress.sol";
+import "../../../abstract/modifiers/Accept.sol";
+import "../../../libraries/SwiftAddress.sol";
 
 
 contract Ask is Accept {
@@ -34,7 +34,6 @@ contract Ask is Accept {
     uint32 private _showCaseFee;
     uint32  private _endTime;
     uint128 private _price;
-    uint128 private _percentIncome;
 
     /*************
      * MODIFIERS *
@@ -75,8 +74,7 @@ contract Ask is Accept {
         address token,
         uint128 price,
         uint32  endTime,
-        uint32 showcaseFee,
-        uint128 percentIncome
+        uint32 showcaseFee
     )
         public onlyRoot accept
     {
@@ -85,7 +83,6 @@ contract Ask is Accept {
         _price = price;
         _endTime = endTime;
         _showCaseFee = showcaseFee;
-        _percentIncome = percentIncome;
     }
 
 
@@ -107,11 +104,9 @@ contract Ask is Accept {
 
         ITokenAddress(_token).changeOwner(msg.sender);
         IToken(_token).unlock();
-        
+
         uint128 rootFee;
-        if (_percentIncome>0) {
-            rootFee = math.muldiv(_price,_percentIncome,10000);
-        }
+        rootFee = math.muldiv(_price,500,10000);
 
         _creator.transfer({value: _price-(fee+rootFee), flag: 1, bounce: true});
 
@@ -163,8 +158,7 @@ contract Ask is Accept {
             address token,
             uint128 price,
             uint32  endTime,
-            uint32 showcaseFee,
-            uint128 percentIncome
+            uint32 showcaseFee
         )
     {
         root = _root;
@@ -174,6 +168,5 @@ contract Ask is Accept {
         price = _price;
         endTime = _endTime;
         showcaseFee = _showCaseFee;
-        percentIncome = _percentIncome;
     }
 }

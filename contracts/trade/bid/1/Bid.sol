@@ -3,13 +3,13 @@ pragma AbiHeader time;
 pragma AbiHeader pubkey;
 pragma AbiHeader expire;
 
-import "../abstract/interfaces/IToken.sol";
-import "../abstract/interfaces/ITokenAddress.sol";
-import "../abstract/modifiers/Accept.sol";
-import "../libraries/SwiftAddress.sol";
+import "../../../abstract/interfaces/IToken.sol";
+import "../../../abstract/interfaces/ITokenAddress.sol";
+import "../../../abstract/modifiers/Accept.sol";
+import "../../../libraries/SwiftAddress.sol";
 
 interface ITradeToken {
-    
+
     function receiveTradeInfo() external view responsible returns(
             address owner,
             address creator,
@@ -36,7 +36,7 @@ contract Bid is Accept {
      **********/
     event BID_AC_nifi_bid_1(uint64 id);
     event BID_CL_nifi_bid_1(uint64 id);
-    
+
 
     /**********
      * STATIC *
@@ -125,8 +125,8 @@ contract Bid is Accept {
     /**
      * Everyone can call this method by internal message.
      */
-    function acceptBid() public view onlyInnerMsg validTime checkValue {        
-        ITradeToken(_token).receiveTradeInfo{value: 0, bounce: false, flag: 64, callback: Bid.onReceiveTradeInfo}();        
+    function acceptBid() public view onlyInnerMsg validTime checkValue {
+        ITradeToken(_token).receiveTradeInfo{value: 0, bounce: false, flag: 64, callback: Bid.onReceiveTradeInfo}();
     }
 
     /**
@@ -196,6 +196,6 @@ contract Bid is Accept {
         creator = _creator;
         token = _token;
         price = _price;
-        endTime = _endTime;       
+        endTime = _endTime;
     }
 }

@@ -1,14 +1,14 @@
-pragma ton-solidity ^0.47.0;
+pragma ton-solidity >= 0.47.0;
 pragma AbiHeader time;
 pragma AbiHeader pubkey;
 pragma AbiHeader expire;
 
-import "../abstract/Root.sol";
-import "../abstract/extensions/rootManaged/root/RootManaged.sol";
-import "../abstract/extensions/rootManaged/root/RootManagedCreationTradeFee.sol";
-import "../abstract/extensions/rootManaged/root/RootManagedWithdraw.sol";
+import "../../../abstract/Root.sol";
+import "../../../abstract/extensions/rootManaged/root/RootManaged.sol";
+import "../../../abstract/extensions/rootManaged/root/RootManagedCreationTradeFee.sol";
+import "../../../abstract/extensions/rootManaged/root/RootManagedWithdraw.sol";
 import "Ask.sol";
-import "../libraries/SwiftAddress.sol";
+import "../../../libraries/SwiftAddress.sol";
 
 contract AskRoot is Root, RootManaged, RootManagedCreationTradeFee, RootManagedWithdraw {
 
@@ -35,15 +35,6 @@ contract AskRoot is Root, RootManaged, RootManagedCreationTradeFee, RootManagedW
         RootManaged(manager)
         RootManagedCreationTradeFee(minCreationFee, creationFixIncome)
     {
-        _percentIncome = precentIncome;
-    }
-
-    function setPrecentIncome(uint128 precentIncome) external onlyManager accept {
-        _percentIncome = precentIncome;
-    }
-
-    function getPrecentIncome() public view returns(uint128 precentIncome) {
-        percentIncome = _precentIncome;
     }
 
     /************
@@ -74,7 +65,7 @@ contract AskRoot is Root, RootManaged, RootManagedCreationTradeFee, RootManagedW
                 _root: address(this),
                 _id: _totalSupply
             }
-        }( creator, token, price, endTime, showcaseFee, _percentIncome);
+        }( creator, token, price, endTime, showcaseFee);
         emit ASK_CT_nifi_ask_1{dest: SwiftAddress.value()}(_totalSupply, token, creator, price, endTime, showcaseFee);
     }
 

@@ -1,5 +1,6 @@
 {
 	"ABI version": 2,
+	"version": "2.2",
 	"header": ["pubkey", "time", "expire"],
 	"functions": [
 		{
@@ -9,7 +10,7 @@
 				{"name":"manager","type":"address"},
 				{"name":"managerUnlockTime","type":"uint32"},
 				{"name":"creator","type":"address"},
-				{"name":"creatorFees","type":"uint32"},
+				{"name":"creatorPercentReward","type":"uint32"},
 				{"name":"hash","type":"uint256"}
 			],
 			"outputs": [
@@ -26,7 +27,7 @@
 		{
 			"name": "receiveArtHash",
 			"inputs": [
-				{"name":"_answer_id","type":"uint32"}
+				{"name":"answerId","type":"uint32"}
 			],
 			"outputs": [
 				{"name":"hash","type":"uint256"}
@@ -54,12 +55,12 @@
 		{
 			"name": "receiveTradeInfo",
 			"inputs": [
-				{"name":"_answer_id","type":"uint32"}
+				{"name":"answerId","type":"uint32"}
 			],
 			"outputs": [
 				{"name":"owner","type":"address"},
 				{"name":"creator","type":"address"},
-				{"name":"creatorFees","type":"uint32"},
+				{"name":"creatorPercentReward","type":"uint32"},
 				{"name":"manager","type":"address"},
 				{"name":"managerUnlockTime","type":"uint32"}
 			]
@@ -71,7 +72,7 @@
 			"outputs": [
 				{"name":"owner","type":"address"},
 				{"name":"creator","type":"address"},
-				{"name":"creatorFees","type":"uint32"},
+				{"name":"creatorPercentReward","type":"uint32"},
 				{"name":"manager","type":"address"},
 				{"name":"managerUnlockTime","type":"uint32"}
 			]
@@ -121,5 +122,20 @@
 			"outputs": [
 			]
 		}
+	],
+	"fields": [
+		{"name":"_pubkey","type":"uint256"},
+		{"name":"_timestamp","type":"uint64"},
+		{"name":"_constructorFlag","type":"bool"},
+		{"name":"_root","type":"address"},
+		{"name":"_series","type":"address"},
+		{"name":"_seriesId","type":"uint64"},
+		{"name":"_id","type":"uint64"},
+		{"name":"_owner","type":"address"},
+		{"name":"_manager","type":"address"},
+		{"name":"_managerUnlockTime","type":"uint32"},
+		{"name":"_creator","type":"address"},
+		{"name":"_creatorPercentReward","type":"uint32"},
+		{"name":"_hash","type":"uint256"}
 	]
 }

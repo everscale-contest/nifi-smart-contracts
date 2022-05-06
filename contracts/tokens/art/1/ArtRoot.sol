@@ -1,15 +1,15 @@
-pragma ton-solidity ^0.47.0;
+pragma ton-solidity >= 0.47.0;
 pragma AbiHeader time;
 pragma AbiHeader pubkey;
 pragma AbiHeader expire;
 
-import "../../abstract/Root.sol";
-import "../../abstract/extensions/rootManaged/root/RootManaged.sol";
-import "../../abstract/extensions/rootManaged/root/RootManagedCreationFee.sol";
-import "../../abstract/extensions/rootManaged/root/RootManagedWithdraw.sol";
+import "../../../abstract/Root.sol";
+import "../../../abstract/extensions/rootManaged/root/RootManaged.sol";
+import "../../../abstract/extensions/rootManaged/root/RootManagedCreationFee.sol";
+import "../../../abstract/extensions/rootManaged/root/RootManagedWithdraw.sol";
 import "ArtToken.sol";
 import "interfaces/IArtRoot.sol";
-import "../../libraries/SwiftAddress.sol";
+import "../../../libraries/SwiftAddress.sol";
 
 contract ArtRoot is Root, RootManaged, RootManagedCreationFee, RootManagedWithdraw, IArtRoot {
 
@@ -18,7 +18,7 @@ contract ArtRoot is Root, RootManaged, RootManagedCreationFee, RootManagedWithdr
     modifier validCreatorFees(uint32 fees) {
         require(fees < 2401, 277);
         _;
-    } 
+    }
 
     /***************
      * CONSTRUCTOR *
@@ -74,7 +74,7 @@ contract ArtRoot is Root, RootManaged, RootManagedCreationFee, RootManagedWithdr
             address addr
         )
     {
-        require(msg.value >= _minCreationValue,278);
+        require(msg.value >= _minCreationFee,278);
 
         _totalSupply++;
         addr = new ArtToken{

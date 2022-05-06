@@ -1,9 +1,9 @@
-pragma ton-solidity ^0.47.0;
+pragma ton-solidity >= 0.47.0;
 pragma AbiHeader time;
 pragma AbiHeader pubkey;
 pragma AbiHeader expire;
 
-import "../../libraries/SwiftAddress.sol";
+import "../../../libraries/SwiftAddress.sol";
 import "Art2Token.sol";
 import "Art2Series.sol";
 
@@ -136,7 +136,6 @@ contract Art2Root  {
 
     function setCreationParameters(
         uint128 minCreationFee,
-        uint128 creationFixIncome,
         uint128 creationTopup,
         uint128 mintTopup
     ) public {
@@ -144,19 +143,16 @@ contract Art2Root  {
         require(minCreationFee > creationTopup,103);
         tvm.accept();
         _minCreationFee = minCreationFee;
-        _creationFixIncome = creationFixIncome;
         _creationTopup = creationTopup;
         _mintTopup = mintTopup;
     }
 
-    function getCreationParameters() public returns(
+    function getCreationParameters() public view returns(
         uint128 minCreationFee,
-        uint128 creationFixIncome,
         uint128 creationTopup,
         uint128 mintTopup
     ) {
         minCreationFee = _minCreationFee;
-        creationFixIncome = _creationFixIncome;
         creationTopup = _creationTopup;
         mintTopup = _mintTopup;
     }

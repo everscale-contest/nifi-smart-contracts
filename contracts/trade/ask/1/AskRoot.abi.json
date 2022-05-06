@@ -1,15 +1,16 @@
 {
 	"ABI version": 2,
+	"version": "2.2",
 	"header": ["pubkey", "time", "expire"],
 	"functions": [
 		{
 			"name": "constructor",
 			"inputs": [
 				{"name":"manager","type":"address"},
-				{"name":"creationMinValue","type":"uint128"},
-				{"name":"creationFee","type":"uint128"},
-				{"name":"name","type":"bytes"},
-				{"name":"symbol","type":"bytes"},
+				{"name":"minCreationFee","type":"uint128"},
+				{"name":"creationFixIncome","type":"uint128"},
+				{"name":"name","type":"string"},
+				{"name":"symbol","type":"string"},
 				{"name":"tokenCode","type":"cell"}
 			],
 			"outputs": [
@@ -31,7 +32,7 @@
 		{
 			"name": "receiveTokenAddress",
 			"inputs": [
-				{"name":"_answer_id","type":"uint32"},
+				{"name":"answerId","type":"uint32"},
 				{"name":"id","type":"uint64"}
 			],
 			"outputs": [
@@ -58,31 +59,31 @@
 			]
 		},
 		{
-			"name": "setCreationFee",
+			"name": "setCreationParameters",
 			"inputs": [
-				{"name":"minValue","type":"uint128"},
-				{"name":"fee","type":"uint128"}
+				{"name":"minCreationFee","type":"uint128"},
+				{"name":"creationFixIncome","type":"uint128"}
 			],
 			"outputs": [
 			]
 		},
 		{
-			"name": "receiveCreationFee",
+			"name": "receiveCreationParameters",
 			"inputs": [
-				{"name":"_answer_id","type":"uint32"}
+				{"name":"answerId","type":"uint32"}
 			],
 			"outputs": [
-				{"name":"minValue","type":"uint128"},
-				{"name":"fee","type":"uint128"}
+				{"name":"minCreationFee","type":"uint128"},
+				{"name":"creationFixIncome","type":"uint128"}
 			]
 		},
 		{
-			"name": "getCreationFee",
+			"name": "getCreationParameters",
 			"inputs": [
 			],
 			"outputs": [
-				{"name":"minValue","type":"uint128"},
-				{"name":"fee","type":"uint128"}
+				{"name":"minCreationFee","type":"uint128"},
+				{"name":"creationFixIncome","type":"uint128"}
 			]
 		},
 		{
@@ -96,7 +97,7 @@
 		{
 			"name": "receiveManager",
 			"inputs": [
-				{"name":"_answer_id","type":"uint32"}
+				{"name":"answerId","type":"uint32"}
 			],
 			"outputs": [
 				{"name":"manager","type":"address"}
@@ -113,11 +114,11 @@
 		{
 			"name": "receiveInfo",
 			"inputs": [
-				{"name":"_answer_id","type":"uint32"}
+				{"name":"answerId","type":"uint32"}
 			],
 			"outputs": [
-				{"name":"name","type":"bytes"},
-				{"name":"symbol","type":"bytes"},
+				{"name":"name","type":"string"},
+				{"name":"symbol","type":"string"},
 				{"name":"totalSupply","type":"uint64"},
 				{"name":"publicKey","type":"uint256"}
 			]
@@ -127,8 +128,8 @@
 			"inputs": [
 			],
 			"outputs": [
-				{"name":"name","type":"bytes"},
-				{"name":"symbol","type":"bytes"},
+				{"name":"name","type":"string"},
+				{"name":"symbol","type":"string"},
 				{"name":"totalSupply","type":"uint64"},
 				{"name":"publicKey","type":"uint256"}
 			]
@@ -158,5 +159,17 @@
 			"outputs": [
 			]
 		}
+	],
+	"fields": [
+		{"name":"_pubkey","type":"uint256"},
+		{"name":"_timestamp","type":"uint64"},
+		{"name":"_constructorFlag","type":"bool"},
+		{"name":"_name","type":"string"},
+		{"name":"_symbol","type":"string"},
+		{"name":"_tokenCode","type":"cell"},
+		{"name":"_totalSupply","type":"uint64"},
+		{"name":"_manager","type":"address"},
+		{"name":"_minCreationFee","type":"uint128"},
+		{"name":"_creationFixIncome","type":"uint128"}
 	]
 }

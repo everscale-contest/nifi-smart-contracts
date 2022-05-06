@@ -1,15 +1,17 @@
 {
 	"ABI version": 2,
+	"version": "2.2",
 	"header": ["pubkey", "time", "expire"],
 	"functions": [
 		{
 			"name": "constructor",
 			"inputs": [
 				{"name":"manager","type":"address"},
-				{"name":"creationMinValue","type":"uint128"},
-				{"name":"creationFee","type":"uint128"},
-				{"name":"name","type":"bytes"},
-				{"name":"symbol","type":"bytes"},
+				{"name":"minCreationFee","type":"uint128"},
+				{"name":"creationTopup","type":"uint128"},
+				{"name":"mintTopup","type":"uint128"},
+				{"name":"name","type":"string"},
+				{"name":"symbol","type":"string"},
 				{"name":"seriesCode","type":"cell"},
 				{"name":"tokenCode","type":"cell"}
 			],
@@ -37,8 +39,8 @@
 			"inputs": [
 			],
 			"outputs": [
-				{"name":"name","type":"bytes"},
-				{"name":"symbol","type":"bytes"},
+				{"name":"name","type":"string"},
+				{"name":"symbol","type":"string"},
 				{"name":"totalSupply","type":"uint128"}
 			]
 		},
@@ -58,7 +60,7 @@
 				{"name":"manager","type":"address"},
 				{"name":"limit","type":"uint64"},
 				{"name":"hash","type":"uint256"},
-				{"name":"creatorFees","type":"uint32"}
+				{"name":"creatorPercentReward","type":"uint32"}
 			],
 			"outputs": [
 				{"name":"addr","type":"address"}
@@ -84,21 +86,23 @@
 			]
 		},
 		{
-			"name": "setCreationFee",
+			"name": "setCreationParameters",
 			"inputs": [
-				{"name":"minValue","type":"uint128"},
-				{"name":"fee","type":"uint128"}
+				{"name":"minCreationFee","type":"uint128"},
+				{"name":"creationTopup","type":"uint128"},
+				{"name":"mintTopup","type":"uint128"}
 			],
 			"outputs": [
 			]
 		},
 		{
-			"name": "getCreationFee",
+			"name": "getCreationParameters",
 			"inputs": [
 			],
 			"outputs": [
-				{"name":"minValue","type":"uint128"},
-				{"name":"fee","type":"uint128"}
+				{"name":"minCreationFee","type":"uint128"},
+				{"name":"creationTopup","type":"uint128"},
+				{"name":"mintTopup","type":"uint128"}
 			]
 		}
 	],
@@ -113,5 +117,19 @@
 			"outputs": [
 			]
 		}
+	],
+	"fields": [
+		{"name":"_pubkey","type":"uint256"},
+		{"name":"_timestamp","type":"uint64"},
+		{"name":"_constructorFlag","type":"bool"},
+		{"name":"_manager","type":"address"},
+		{"name":"_minCreationFee","type":"uint128"},
+		{"name":"_creationTopup","type":"uint128"},
+		{"name":"_mintTopup","type":"uint128"},
+		{"name":"_name","type":"string"},
+		{"name":"_symbol","type":"string"},
+		{"name":"_tokenCode","type":"cell"},
+		{"name":"_seriesCode","type":"cell"},
+		{"name":"_totalSupply","type":"uint64"}
 	]
 }

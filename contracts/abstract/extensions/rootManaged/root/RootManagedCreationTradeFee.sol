@@ -1,13 +1,12 @@
-pragma ton-solidity ^0.47.0;
+pragma ton-solidity >= 0.47.0;
 
 import "./RootManaged.sol";
-import "./interfaces/IRootManagedCreationFee.sol";
 
 /**
  * Error codes
  *     1100 - Need more money
  */
-abstract contract RootManagedCreationTradeFee is RootManaged, IRootManagedCreationFee {
+abstract contract RootManagedCreationTradeFee is RootManaged {
     /*************
      * VARIABLES *
      *************/
@@ -54,7 +53,7 @@ abstract contract RootManagedCreationTradeFee is RootManaged, IRootManagedCreati
     function setCreationParameters(
         uint128 minCreationFee,
         uint128 creationFixIncome
-    ) override external onlyManager accept {
+    ) external onlyManager accept {
         _minCreationFee = minCreationFee;
         _creationFixIncome = creationFixIncome;
     }
@@ -69,7 +68,7 @@ abstract contract RootManagedCreationTradeFee is RootManaged, IRootManagedCreati
      * minCreationFee ... The minimum value that needs to be sent to the root to create a token.
      * creationFixIncome ........ Payment for the work of the contract, plus money for the developers.
      */
-    function receiveCreationParameters() override external view responsible returns(
+    function receiveCreationParameters() external view responsible returns(
         uint128 minCreationFee,
         uint128 creationFixIncome
     ) {
@@ -91,5 +90,6 @@ abstract contract RootManagedCreationTradeFee is RootManaged, IRootManagedCreati
         uint128 creationFixIncome
     ) {
         minCreationFee = _minCreationFee;
-        creationFixIncome = _creationFixIncome
+        creationFixIncome = _creationFixIncome;
+    }
 }

@@ -1,4 +1,4 @@
-pragma ton-solidity ^0.47.0;
+pragma ton-solidity >= 0.47.0;
 
 interface IRootManagedCreationFee {
     /***************************
@@ -9,7 +9,7 @@ interface IRootManagedCreationFee {
      * minCreationFee ... The minimum value that needs to be sent to the root to create a token.
      * fee ........ Payment for the work of the contract, plus money for the developers.
      */
-    function setCreationParameters(uint128 minCreationFee, uint128 fee) external;
+    function setCreationParameters(uint128 minCreationFee, uint128 creationTopup) external;
 
 
     /*************
@@ -20,5 +20,5 @@ interface IRootManagedCreationFee {
      * minCreationFee ... The minimum value that needs to be sent to the root to create a token.
      * fee ........ Payment for the work of the contract, plus money for the developers.
      */
-    function receiveCreationFee() external view responsible returns(uint128 minCreationFee, uint128 fee);
+    function receiveCreationParameters() external view responsible returns(uint128 minCreationFee, uint128 creationTopup);
 }

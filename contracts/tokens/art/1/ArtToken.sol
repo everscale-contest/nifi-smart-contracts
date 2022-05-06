@@ -1,10 +1,10 @@
-pragma ton-solidity ^0.47.0;
+pragma ton-solidity >= 0.47.0;
 pragma AbiHeader time;
 pragma AbiHeader pubkey;
 pragma AbiHeader expire;
 
-import "../../abstract/extensions/tokenChangeOwnerEvent/token/TokenChangeOwnerAddressEvent.sol";
-import "../../abstract/TokenAddress.sol";
+import "../../../abstract/extensions/tokenChangeOwnerEvent/token/TokenChangeOwnerAddressEvent.sol";
+import "../../../abstract/TokenAddress.sol";
 import "interfaces/IArtToken.sol";
 
 /**

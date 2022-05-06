@@ -3,10 +3,10 @@ pragma AbiHeader time;
 pragma AbiHeader pubkey;
 pragma AbiHeader expire;
 
-import "../abstract/interfaces/IToken.sol";
-import "../abstract/interfaces/ITokenAddress.sol";
-import "../abstract/modifiers/Accept.sol";
-import "../libraries/SwiftAddress.sol";
+import "../../../abstract/interfaces/IToken.sol";
+import "../../../abstract/interfaces/ITokenAddress.sol";
+import "../../../abstract/modifiers/Accept.sol";
+import "../../../libraries/SwiftAddress.sol";
 
 interface ITradeToken {
     function receiveTradeInfo() external view responsible returns(

@@ -3,7 +3,7 @@ import Art2TokenContract from './tokens/art2/1/Art2Token'
 import Art2SeriesContract from './tokens/art2/1/Art2Series'
 import {DecodedMessageBody, KeyPair} from '@tonclient/core/dist/modules'
 import Contract from '../library/ton/base/Contract'
-import KitInterface from '../library/ton/utils/interfaces/KitInterface'
+import KitInterface from '../../library/ton/utils/interfaces/KitInterface'
 
 export default class Art2Root extends Contract {
     public constructor(kit: KitInterface, keys: KeyPair) {
@@ -22,7 +22,7 @@ export default class Art2Root extends Contract {
      **********/
     public async deploy(
         manager: string,
-        minCreationFee: number,        
+        minCreationFee: number,
         creationTopup: number,
         mintTopup: number,
         name: string,
@@ -58,7 +58,7 @@ export default class Art2Root extends Contract {
         const result: DecodedMessageBody = await this._run('getSeriesAddress',{id:value})
         return result.value['addr']
     }
-    
+
 }
 
 export interface CreationFee {

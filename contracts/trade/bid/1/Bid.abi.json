@@ -1,5 +1,6 @@
 {
 	"ABI version": 2,
+	"version": "2.2",
 	"header": ["pubkey", "time", "expire"],
 	"functions": [
 		{
@@ -25,7 +26,7 @@
 			"inputs": [
 				{"name":"owner","type":"address"},
 				{"name":"creator","type":"address"},
-				{"name":"creatorFees","type":"uint32"},
+				{"name":"creatorPercentReward","type":"uint32"},
 				{"name":"manager","type":"address"},
 				{"name":"managerUnlockTime","type":"uint32"}
 			],
@@ -74,5 +75,17 @@
 			"outputs": [
 			]
 		}
+	],
+	"fields": [
+		{"name":"_pubkey","type":"uint256"},
+		{"name":"_timestamp","type":"uint64"},
+		{"name":"_constructorFlag","type":"bool"},
+		{"name":"_root","type":"address"},
+		{"name":"_id","type":"uint64"},
+		{"name":"_creator","type":"address"},
+		{"name":"_token","type":"address"},
+		{"name":"_endTime","type":"uint32"},
+		{"name":"_price","type":"uint128"},
+		{"name":"_fee","type":"uint128"}
 	]
 }
