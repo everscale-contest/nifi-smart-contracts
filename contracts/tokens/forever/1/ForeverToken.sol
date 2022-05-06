@@ -221,6 +221,8 @@ contract ForeverToken is IForeverToken {
         } else {
             IStampToken(msg.sender).delForever{value:0, flag:64}();
         }
+
+        _root.transfer({value: 0, flag: 64, bounce: true});
     }
 
     function getParameters() public view returns(uint128 delForeverCost) {
