@@ -9,7 +9,7 @@ import "StampToken.sol";
 contract StampRoot  {
 
     address _manager;
-    uint128 _stampCreationTopup;
+    uint128 _creationTopup;
     uint128 _minCreationFee;
     string _name;
     string _symbol;
@@ -54,9 +54,9 @@ contract StampRoot  {
         _minForAddFee = 0.21 ever;
         _forAddFixIncome = 0.1 ever;
         _endorsePercentFee = 500; // 5%
-        //require (_minCreationFee>_stampCreationTopup)
+        //require (_minCreationFee>_creationTopup)
         _minCreationFee = 0.35 ever;
-        _stampCreationTopup = 0.2 ever;
+        _creationTopup = 0.2 ever;
     }
 
     function getManager() public view returns(address){
@@ -101,7 +101,7 @@ contract StampRoot  {
 
         addr = new StampToken{
             code: _tokenCode,
-            value: _stampCreationTopup,
+            value: _creationTopup,
             pubkey: tvm.pubkey(),
             varInit: {
                 _root: address(this),
@@ -129,22 +129,22 @@ contract StampRoot  {
     function setCreationParameters(
         uint128 minCreationFee,
         uint128 creationFixIncome,
-        uint128 stampCreationTopup
+        uint128 creationTopup
     ) public {
         require(msg.sender == _manager,102);
-        require (_minCreationFee>_stampCreationTopup+0.1 ever,103);
+        require (_minCreationFee>_creationTopup+0.1 ever,103);
         tvm.accept();
         _minCreationFee = minCreationFee;
-        _stampCreationTopup = stampCreationTopup;
+        _creationTopup = creationTopup;
     }
 
     function getCreationParameters() public returns(
         uint128 minCreationFee,
         uint128 creationFixIncome,
-        uint128 stampCreationTopup
+        uint128 creationTopup
     ) {
         minCreationFee = _minCreationFee;
-        stampCreationTopup = _stampCreationTopup;
+        creationTopup = _creationTopup;
     }
 
     function setStampParameters(uint128 minSealFee, uint128 minSealRxFee, uint128 requestEndorseFixIncome, uint128 minForAddFee, uint128 forAddFixIncome, uint16 endorsePercentFee) public {

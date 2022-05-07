@@ -160,8 +160,8 @@ export default {
                     giverDeposit: 100_000_000,
 
                     manager: '0:ab5f48c154f672d2f4c30c4473251e14a05199d1df1300263d8f5b0e80e3e387',
-                    minCreationValue: 200_000_000,
-                    creationTopup: 100_000_000,
+                    minCreationValue: 400_000_000,
+                    creationTopup: 300_000_000,
                     name: 'Stamp',
                     symbol: 'STP'
                 },
@@ -170,8 +170,8 @@ export default {
                     giverDeposit: 100_000_000,
 
                     manager: '0:ab5f48c154f672d2f4c30c4473251e14a05199d1df1300263d8f5b0e80e3e387',
-                    minCreationValue: 200_000_000,
-                    creationTopup: 100_000_000,
+                    minCreationValue: 300_000_000,
+                    creationTopup: 200_000_000,
                      name: 'Seal',
                     symbol: 'SEA'
                 },
@@ -180,8 +180,8 @@ export default {
                     giverDeposit: 100_000_000,
 
                     manager: '0:ab5f48c154f672d2f4c30c4473251e14a05199d1df1300263d8f5b0e80e3e387',
-                    minCreationValue: 200_000_000,
-                    creationTopup: 100_000_000,
+                    minCreationValue: 400_000_000,
+                    creationTopup: 300_000_000,
                      name: 'Forever',
                     symbol: 'FOR'
                 },
