@@ -8,7 +8,7 @@
 			"inputs": [
 				{"name":"manager","type":"address"},
 				{"name":"minCreationFee","type":"uint128"},
-				{"name":"creationFixIncome","type":"uint128"},
+				{"name":"creationTopup","type":"uint128"},
 				{"name":"name","type":"string"},
 				{"name":"symbol","type":"string"},
 				{"name":"tokenCode","type":"cell"}
@@ -79,7 +79,7 @@
 			"name": "setCreationParameters",
 			"inputs": [
 				{"name":"minCreationFee","type":"uint128"},
-				{"name":"creationFixIncome","type":"uint128"}
+				{"name":"creationTopup","type":"uint128"}
 			],
 			"outputs": [
 			]
@@ -90,7 +90,7 @@
 			],
 			"outputs": [
 				{"name":"minCreationFee","type":"uint128"},
-				{"name":"creationFixIncome","type":"uint128"}
+				{"name":"creationTopup","type":"uint128"}
 			]
 		},
 		{
@@ -120,7 +120,7 @@
 		{"name":"_timestamp","type":"uint64"},
 		{"name":"_constructorFlag","type":"bool"},
 		{"name":"_manager","type":"address"},
-		{"name":"_creationFixIncome","type":"uint128"},
+		{"name":"_creationTopup","type":"uint128"},
 		{"name":"_minCreationFee","type":"uint128"},
 		{"name":"_name","type":"string"},
 		{"name":"_symbol","type":"string"},

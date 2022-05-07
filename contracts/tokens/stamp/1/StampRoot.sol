@@ -35,6 +35,8 @@ contract StampRoot  {
      ***************/
     constructor(
         address manager,
+        uint128 minCreationFee,
+        uint128 creationTopup
         string  name,
         string  symbol,
         TvmCell tokenCode
@@ -55,8 +57,8 @@ contract StampRoot  {
         _forAddFixIncome = 0.1 ever;
         _endorsePercentFee = 500; // 5%
         //require (_minCreationFee>_creationTopup)
-        _minCreationFee = 0.35 ever;
-        _creationTopup = 0.2 ever;
+        _minCreationFee = minCreationFee;
+        _creationTopup = creationTopup;
     }
 
     function getManager() public view returns(address){

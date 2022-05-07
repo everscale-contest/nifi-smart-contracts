@@ -25,10 +25,10 @@ async function deployForeverRoot (client,rootKeys) {
             function_name: 'constructor',
             input: {
                 manager: config.msgiManager,
-                minCreationFee: config.creationMinValue,
-                creationFixIncome : config.creationFee,
-                name : "ForeverRoot1",
-                symbol: "FOR1",
+                minCreationFee: config.foreverRoot.minCreationValue,
+                creationTopup: config.foreverRoot.creationTopup,
+                name : config.foreverRoot.name,
+                symbol: config.foreverRoot.symbol,
                 tokenCode: ForeverTokenContract.code,
             }
         },
@@ -40,7 +40,7 @@ async function deployForeverRoot (client,rootKeys) {
 
     const { address } = await client.abi.encode_message(deployOptions);
     console.log(`Future address of the contract will be: ${address}`);
-    await transfer(client,address,100_000_000,"");
+    await transfer(client,address,100000000,"");
 
     await client.processing.process_message({
         send_events: false,
