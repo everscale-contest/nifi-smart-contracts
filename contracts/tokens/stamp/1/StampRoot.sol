@@ -147,24 +147,24 @@ contract StampRoot  {
         creationTopup = _creationTopup;
     }
 
-    function setStampParameters(uint128 minSealFee, uint128 minSealRxFee, uint128 requestEndorseFixIncome, uint128 minForAddFee, uint128 forAddFixIncome, uint16 endorsePercentFee) public {
+    function setStampParameters(uint128 minSealFee, uint128 minSealRxFee, uint128 requestEndorseFixIncome, uint128 minForAddFee, uint128 forAddFixIncome, uint16 endorsePercentIncome) public {
         require(msg.sender == _manager,102);
-        require(endorsePercentFee <= 10000,103);
+        require(endorsePercentIncome <= 10000,103);
         tvm.accept();
         _minSealFee = minSealFee;
         _minSealRxFee = minSealRxFee;
         _requestEndorseFixIncome = requestEndorseFixIncome;
         _minForAddFee = minForAddFee;
         _forAddFixIncome = forAddFixIncome;
-        _endorsePercentFee = endorsePercentFee;
+        _endorsePercentFee = endorsePercentIncome;
     }
 
-    function getStampParameters() public returns(uint128 minSealFee, uint128 minSealRxFee, uint128 requestEndorseFixIncome, uint128 minForAddFee, uint128 forAddFixIncome, uint16 endorsePercentFee) {
+    function getStampParameters() public returns(uint128 minSealFee, uint128 minSealRxFee, uint128 requestEndorseFixIncome, uint128 minForAddFee, uint128 forAddFixIncome, uint16 endorsePercentIncome) {
         minSealFee = _minSealFee;
         minSealRxFee = _minSealRxFee;
         requestEndorseFixIncome = _requestEndorseFixIncome;
         minForAddFee = _minForAddFee;
         forAddFixIncome = _forAddFixIncome;
-        endorsePercentFee = _endorsePercentFee;
+        endorsePercentIncome = _endorsePercentFee;
     }
 }

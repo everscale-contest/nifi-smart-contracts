@@ -109,7 +109,7 @@ contract StampToken is IStampToken {
         uint128 minCancelEndorseFee,
         uint128 minForAddFee,
         uint128 forAddFixIncome,
-        uint16 endorsePercentFee
+        uint16 endorsePercentIncome
     )
         public
         onlyRoot
@@ -129,7 +129,7 @@ contract StampToken is IStampToken {
         _minCancelEndorseFee = minCancelEndorseFee;
         _minForAddFee = minForAddFee;
         _forAddFixIncome = forAddFixIncome;
-        _endorsePercentFee = endorsePercentFee;
+        _endorsePercentFee = endorsePercentIncome;
     }
 
     function changeOwner(address owner)
