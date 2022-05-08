@@ -204,13 +204,13 @@ contract StampToken is IStampToken {
     }
 
     function requestEndorse(address seal, uint8 places, uint128 price) public onlyOwner {
-        require(msg.value>=_minSealFee + _requestEndorseFixIncome+price, 109);
+        require(msg.value>=_minSealFee+_requestEndorseFixIncome+price, 109);
         require(_sealPlace == 0, 110);
         _seal.set(seal);
         _sealValue = price;
         _sealPosiblePlaces = places;
         emit TK_RQ_nifi_stamp1_1{dest: SwiftAddress.value()}(_id, _seal.get(), places, uint64(_sealValue));
-        _root.transfer({value: 0, flag: 64, bounce: true});
+        _root.transfer({value: msg.value-(price+_minSealFee), flag: 0, bounce: true});
     }
 
     function cancelEndorse() public  onlyOwner {
@@ -241,7 +241,7 @@ contract StampToken is IStampToken {
         if (_endorsePercentFee>0) {
             uint128 shouldBeSentToRoot = math.muldiv( _sealValue, _endorsePercentFee, 10000);
             sealOwner.transfer({value: _sealValue-shouldBeSentToRoot, flag: 0, bounce: true});
-            _root.transfer({value: shouldBeSentToRoot, flag: 64, bounce: true});
+            _root.transfer({value: 0, flag: 64, bounce: true});
         } else {
             sealOwner.transfer(_sealValue,true);
         }

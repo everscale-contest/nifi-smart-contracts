@@ -17,8 +17,6 @@ const { deployMultisig } = require('../utils/deployMsig.js')
 
 TonClient.useBinaryLibrary(libNode)
 
-const DEPLOY_VALUE = config.creationMinValue;
-
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -37,7 +35,7 @@ async function createToken(client,root,abiContract,amount,hash) {
                 manager:Msig.address,
                 managerUnlockTime:0,
                 creator:Msig.address,
-                creatorFees:1000,
+                creatorPercentReward:1000,
                 hash:hash
             }
         },
@@ -124,7 +122,7 @@ async function callGet(client, contract, addr, function_name, input) {
 }
 
 
-async function requestEndrose(client,stamp,seal,places,price,amount) {
+async function requestEndorse(client,stamp,seal,places,price,amount) {
     const abi = {
         type: 'Contract',
         value: StampTokenContract.abi
@@ -178,7 +176,7 @@ async function requestEndrose(client,stamp,seal,places,price,amount) {
     }
 }
 
-async function cancelEndrose(client,stamp,amount) {
+async function cancelEndorse(client,stamp,amount) {
     const abi = {
         type: 'Contract',
         value: StampTokenContract.abi
@@ -186,7 +184,7 @@ async function cancelEndrose(client,stamp,amount) {
     const body =await client.abi.encode_message_body({
         abi,
         call_set: {
-            function_name: "cancelEndrose",
+            function_name: "cancelEndorse",
             input: { }
         },
         is_internal: true,
@@ -228,7 +226,7 @@ async function cancelEndrose(client,stamp,amount) {
     }
 }
 
-async function endrose(client,seal,stamp,place,amount) {
+async function endorse(client,seal,stamp,place,amount) {
     const abi = {
         type: 'Contract',
         value: SealTokenContract.abi
@@ -236,7 +234,7 @@ async function endrose(client,seal,stamp,place,amount) {
     const body =await client.abi.encode_message_body({
         abi,
         call_set: {
-            function_name: "endrose",
+            function_name: "endorse",
             input: {
                 stamp,
                 place
@@ -346,20 +344,17 @@ async function simpleTest(client, root_json) {
     const stampRoot = root_json.stamp;
     const sealRoot = root_json.seal;
     const foreverRoot = root_json.forever;
-    const stamp1 =await createToken(client,stampRoot,StampRootContract,DEPLOY_VALUE,"0x1111112")
-    //console.log('stamp1',stamp1)
+    const stamp1 =await createToken(client,stampRoot,StampRootContract,config.stampRoot.minCreationValue,"0x1111112")
 
-    const seal1 =await createToken(client,sealRoot,SealRootContract,DEPLOY_VALUE,"0x1111121")
-    //console.log('seal1',seal1)
+    const seal1 =await createToken(client,sealRoot,SealRootContract,config.sealRoot.minCreationValue,"0x1111121")
 
-    const forever1 =await createToken(client,foreverRoot,ForeverRootContract,DEPLOY_VALUE,"0x1111131")
-    await requestEndrose(client,stamp1,seal1,2|1,500_000_000,650_000_000)
+    const forever1 =await createToken(client,foreverRoot,ForeverRootContract,config.foreverRoot.minCreationValue,"0x1111131")
+    await requestEndorse(client,stamp1,seal1,2|1,500_000_000,650_000_000)
     await sleep(1000);
-    await endrose(client,seal1,stamp1,1,2900000000)
+    await endorse(client,seal1,stamp1,1,2_900_000_000)
     await sleep(1000);
     let get_res = await callGet(client,StampTokenContract,stamp1,'getSeal',{})
-    checkExp(get_res,get_res.corner!=1,"simpleTest" , "1 endrose failed");
-
+    checkExp(get_res,get_res.corner!=1,"simpleTest" , "1 endorse failed");
     await setForever(client,stamp1,forever1,210000000)
     await sleep(1000);
     get_res = await callGet(client,ForeverTokenContract,forever1,'getStamps',{})
@@ -371,21 +366,21 @@ async function cancelEndroseTest(client, root_json) {
     const stampRoot = root_json.stamp;
     const sealRoot = root_json.seal;
     const foreverRoot = root_json.forever;
-    const stamp1 =await createToken(client,stampRoot,StampRootContract,DEPLOY_VALUE,"0x1111112")
+    const stamp1 =await createToken(client,stampRoot,StampRootContract,config.stampRoot.minCreationValue,"0x1111112")
 
-    const seal1 =await createToken(client,sealRoot,SealRootContract,DEPLOY_VALUE,"0x1111121")
+    const seal1 =await createToken(client,sealRoot,SealRootContract,config.sealRoot.minCreationValue,"0x1111121")
 
-    await requestEndrose(client,stamp1,seal1,2|1,500_000_000,650_000_000)
+    await requestEndorse(client,stamp1,seal1,2|1,500_000_000,650_000_000)
     await sleep(1000);
     let get_res = await callGet(client,StampTokenContract,stamp1,'getSeal',{})
-    checkExp(get_res,get_res.corner!=0,"cancelEndroseTest" , "1 requestEndrose failed");
-    checkExp(get_res,get_res.seal!=seal1,"cancelEndroseTest" , "1 requestEndrose failed");
+    checkExp(get_res,get_res.corner!=0,"cancelEndroseTest" , "1 requestEndorse failed");
+    checkExp(get_res,get_res.seal!=seal1,"cancelEndroseTest" , "1 requestEndorse failed");
 
-    await cancelEndrose(client,stamp1,110000000)
+    await cancelEndorse(client,stamp1,110000000)
     await sleep(1000);
     get_res = await callGet(client,StampTokenContract,stamp1,'getSeal',{})
-    checkExp(get_res,get_res.corner!=0,"cancelEndroseTest" , "1 requestEndrose failed");
-    checkExp(get_res,get_res.seal!=null,"cancelEndroseTest" , "1 requestEndrose failed");
+    checkExp(get_res,get_res.corner!=0,"cancelEndroseTest" , "1 requestEndorse failed");
+    checkExp(get_res,get_res.seal!=null,"cancelEndroseTest" , "1 requestEndorse failed");
 
     console.log("cancelEndroseTest PASS")
 }
@@ -395,41 +390,41 @@ async function niceForeverTest(client, root_json) {
     const sealRoot = root_json.seal;
     const foreverRoot = root_json.forever;
 
-    const seal1 =await createToken(client,sealRoot,SealRootContract,DEPLOY_VALUE,"0x1111121")
+    const seal1 =await createToken(client,sealRoot,SealRootContract,config.sealRoot.minCreationValue,"0x1111121")
 
-    const forever1 =await createToken(client,foreverRoot,ForeverRootContract,DEPLOY_VALUE,"0x1111131")
+    const forever1 =await createToken(client,foreverRoot,ForeverRootContract,config.foreverRoot.minCreationValue,"0x1111131")
 
-    const stamp1 =await createToken(client,stampRoot,StampRootContract,DEPLOY_VALUE,"0x1111112")
-    await requestEndrose(client,stamp1,seal1,2|1,500_000_000,650_000_000)
+    const stamp1 =await createToken(client,stampRoot,StampRootContract,config.stampRoot.minCreationValue,"0x1111112")
+    await requestEndorse(client,stamp1,seal1,2|1,500_000_000,650_000_000)
     await sleep(1000);
-    await endrose(client,seal1,stamp1,1,290000000)
+    await endorse(client,seal1,stamp1,1,290000000)
     await sleep(1000);
     let get_res = await callGet(client,StampTokenContract,stamp1,'getSeal',{})
-    checkExp(get_res,get_res.corner!=1,"niceForeverTest" , "1 endrose failed");
+    checkExp(get_res,get_res.corner!=1,"niceForeverTest" , "1 endorse failed");
 
-    const stamp2 =await createToken(client,stampRoot,StampRootContract,DEPLOY_VALUE,"0x1111112")
-    await requestEndrose(client,stamp2,seal1,2|1,500_000_000,650_000_000)
+    const stamp2 =await createToken(client,stampRoot,StampRootContract,config.stampRoot.minCreationValue,"0x1111112")
+    await requestEndorse(client,stamp2,seal1,2|1,500_000_000,650_000_000)
     await sleep(1000);
-    await endrose(client,seal1,stamp2,2,290000000)
+    await endorse(client,seal1,stamp2,2,290000000)
     await sleep(1000);
     get_res = await callGet(client,StampTokenContract,stamp2,'getSeal',{})
-    checkExp(get_res,get_res.corner!=2,"niceForeverTest" , "2 endrose failed");
+    checkExp(get_res,get_res.corner!=2,"niceForeverTest" , "2 endorse failed");
 
-    const stamp3 =await createToken(client,stampRoot,StampRootContract,DEPLOY_VALUE,"0x1111112")
-    await requestEndrose(client,stamp3,seal1,4,500_000_000,650_000_000)
+    const stamp3 =await createToken(client,stampRoot,StampRootContract,config.stampRoot.minCreationValue,"0x1111112")
+    await requestEndorse(client,stamp3,seal1,4,500_000_000,650_000_000)
     await sleep(1000);
-    await endrose(client,seal1,stamp3,4,290000000)
+    await endorse(client,seal1,stamp3,4,290000000)
     await sleep(1000);
     get_res = await callGet(client,StampTokenContract,stamp3,'getSeal',{})
-    checkExp(get_res,get_res.corner!=4,"niceForeverTest" , "3 endrose failed");
+    checkExp(get_res,get_res.corner!=4,"niceForeverTest" , "3 endorse failed");
 
-    const stamp4 =await createToken(client,stampRoot,StampRootContract,DEPLOY_VALUE,"0x1111112")
-    await requestEndrose(client,stamp4,seal1,8,500_000_000,650_000_000)
+    const stamp4 =await createToken(client,stampRoot,StampRootContract,config.stampRoot.minCreationValue,"0x1111112")
+    await requestEndorse(client,stamp4,seal1,8,500_000_000,650_000_000)
     await sleep(1000);
-    await endrose(client,seal1,stamp4,8,290000000)
+    await endorse(client,seal1,stamp4,8,290000000)
     await sleep(1000);
     get_res = await callGet(client,StampTokenContract,stamp4,'getSeal',{})
-    checkExp(get_res,get_res.corner!=8,"niceForeverTest" , "4 endrose failed");
+    checkExp(get_res,get_res.corner!=8,"niceForeverTest" , "4 endorse failed");
 
     await setForever(client,stamp1,forever1,210000000)
     await sleep(1000);
@@ -445,13 +440,13 @@ async function niceForeverTest(client, root_json) {
     get_res = await callGet(client,ForeverTokenContract,forever1,'getStamps',{})
     checkExp(get_res,get_res.stamps.length!=4,"niceForeverTest" , "Forever failed");
 
-    const stamp5 =await createToken(client,stampRoot,StampRootContract,DEPLOY_VALUE,"0x1111112")
-    await requestEndrose(client,stamp5,seal1,8,500_000_000,650_000_000)
+    const stamp5 =await createToken(client,stampRoot,StampRootContract,config.stampRoot.minCreationValue,"0x1111112")
+    await requestEndorse(client,stamp5,seal1,8,500_000_000,650_000_000)
     await sleep(1000);
-    await endrose(client,seal1,stamp5,8,290000000)
+    await endorse(client,seal1,stamp5,8,290000000)
     await sleep(1000);
     get_res = await callGet(client,StampTokenContract,stamp5,'getSeal',{})
-    checkExp(get_res,get_res.corner!=8,"niceForeverTest" , "5 endrose failed");
+    checkExp(get_res,get_res.corner!=8,"niceForeverTest" , "5 endorse failed");
     await setForever(client,stamp5,forever1,210000000)
     await sleep(1000);
     get_res = await callGet(client,StampTokenContract,stamp5,'getForever',{})
@@ -465,41 +460,41 @@ async function badForeverCornerTest(client, root_json) {
     const sealRoot = root_json.seal;
     const foreverRoot = root_json.forever;
 
-    const seal1 =await createToken(client,sealRoot,SealRootContract,DEPLOY_VALUE,"0x1111121")
+    const seal1 =await createToken(client,sealRoot,SealRootContract,config.sealRoot.minCreationValue,"0x1111121")
 
-    const forever1 =await createToken(client,foreverRoot,ForeverRootContract,DEPLOY_VALUE,"0x1111131")
+    const forever1 =await createToken(client,foreverRoot,ForeverRootContract,config.foreverRoot.minCreationValue,"0x1111131")
 
-    const stamp1 =await createToken(client,stampRoot,StampRootContract,DEPLOY_VALUE,"0x1111112")
-    await requestEndrose(client,stamp1,seal1,2|1,500_000_000,650_000_000)
+    const stamp1 =await createToken(client,stampRoot,StampRootContract,config.stampRoot.minCreationValue,"0x1111112")
+    await requestEndorse(client,stamp1,seal1,2|1,500_000_000,650_000_000)
     await sleep(1000);
-    await endrose(client,seal1,stamp1,1,290000000)
+    await endorse(client,seal1,stamp1,1,290000000)
     await sleep(1000);
     let get_res = await callGet(client,StampTokenContract,stamp1,'getSeal',{})
-    checkExp(get_res,get_res.corner!=1,"badForeverCornerTest" , "1 endrose failed");
+    checkExp(get_res,get_res.corner!=1,"badForeverCornerTest" , "1 endorse failed");
 
-    const stamp2 =await createToken(client,stampRoot,StampRootContract,DEPLOY_VALUE,"0x1111112")
-    await requestEndrose(client,stamp2,seal1,2|1,500_000_000,650_000_000)
+    const stamp2 =await createToken(client,stampRoot,StampRootContract,config.stampRoot.minCreationValue,"0x1111112")
+    await requestEndorse(client,stamp2,seal1,2|1,500_000_000,650_000_000)
     await sleep(1000);
-    await endrose(client,seal1,stamp2,2,290000000)
+    await endorse(client,seal1,stamp2,2,290000000)
     await sleep(1000);
     get_res = await callGet(client,StampTokenContract,stamp2,'getSeal',{})
-    checkExp(get_res,get_res.corner!=2,"badForeverCornerTest" , "2 endrose failed");
+    checkExp(get_res,get_res.corner!=2,"badForeverCornerTest" , "2 endorse failed");
 
-    const stamp3 =await createToken(client,stampRoot,StampRootContract,DEPLOY_VALUE,"0x1111112")
-    await requestEndrose(client,stamp3,seal1,4,500_000_000,650_000_000)
+    const stamp3 =await createToken(client,stampRoot,StampRootContract,config.stampRoot.minCreationValue,"0x1111112")
+    await requestEndorse(client,stamp3,seal1,4,500_000_000,650_000_000)
     await sleep(1000);
-    await endrose(client,seal1,stamp3,4,290000000)
+    await endorse(client,seal1,stamp3,4,290000000)
     await sleep(1000);
     get_res = await callGet(client,StampTokenContract,stamp3,'getSeal',{})
-    checkExp(get_res,get_res.corner!=4,"badForeverCornerTest" , "3 endrose failed");
+    checkExp(get_res,get_res.corner!=4,"badForeverCornerTest" , "3 endorse failed");
 
-    const stamp4 =await createToken(client,stampRoot,StampRootContract,DEPLOY_VALUE,"0x1111112")
-    await requestEndrose(client,stamp4,seal1,4,500_000_000,650_000_000)
+    const stamp4 =await createToken(client,stampRoot,StampRootContract,config.stampRoot.minCreationValue,"0x1111112")
+    await requestEndorse(client,stamp4,seal1,4,500_000_000,650_000_000)
     await sleep(1000);
-    await endrose(client,seal1,stamp4,4,290000000)
+    await endorse(client,seal1,stamp4,4,290000000)
     await sleep(1000);
     get_res = await callGet(client,StampTokenContract,stamp4,'getSeal',{})
-    checkExp(get_res,get_res.corner!=4,"badForeverCornerTest" , "4 endrose failed");
+    checkExp(get_res,get_res.corner!=4,"badForeverCornerTest" , "4 endorse failed");
 
     await setForever(client,stamp1,forever1,210000000)
     await sleep(1000);
@@ -533,42 +528,42 @@ async function badForeverSealTest(client, root_json) {
     const sealRoot = root_json.seal;
     const foreverRoot = root_json.forever;
 
-    const seal1 =await createToken(client,sealRoot,SealRootContract,DEPLOY_VALUE,"0x1111121")
-    const seal2 =await createToken(client,sealRoot,SealRootContract,DEPLOY_VALUE,"0x1111122")
+    const seal1 =await createToken(client,sealRoot,SealRootContract,config.sealRoot.minCreationValue,"0x1111121")
+    const seal2 =await createToken(client,sealRoot,SealRootContract,config.sealRoot.minCreationValue,"0x1111122")
 
-    const forever1 =await createToken(client,foreverRoot,ForeverRootContract,DEPLOY_VALUE,"0x1111131")
+    const forever1 =await createToken(client,foreverRoot,ForeverRootContract,config.foreverRoot.minCreationValue,"0x1111131")
 
-    const stamp1 =await createToken(client,stampRoot,StampRootContract,DEPLOY_VALUE,"0x1111112")
-    await requestEndrose(client,stamp1,seal1,2|1,500_000_000,650_000_000)
+    const stamp1 =await createToken(client,stampRoot,StampRootContract,config.stampRoot.minCreationValue,"0x1111112")
+    await requestEndorse(client,stamp1,seal1,2|1,500_000_000,650_000_000)
     await sleep(1000);
-    await endrose(client,seal1,stamp1,1,290000000)
+    await endorse(client,seal1,stamp1,1,290000000)
     await sleep(1000);
     let get_res = await callGet(client,StampTokenContract,stamp1,'getSeal',{})
-    checkExp(get_res,get_res.corner!=1,"badForeverSealTest" , "1 endrose failed");
+    checkExp(get_res,get_res.corner!=1,"badForeverSealTest" , "1 endorse failed");
 
-    const stamp2 =await createToken(client,stampRoot,StampRootContract,DEPLOY_VALUE,"0x1111112")
-    await requestEndrose(client,stamp2,seal1,2|1,500_000_000,650_000_000)
+    const stamp2 =await createToken(client,stampRoot,StampRootContract,config.stampRoot.minCreationValue,"0x1111112")
+    await requestEndorse(client,stamp2,seal1,2|1,500_000_000,650_000_000)
     await sleep(1000);
-    await endrose(client,seal1,stamp2,2,290000000)
+    await endorse(client,seal1,stamp2,2,290000000)
     await sleep(1000);
     get_res = await callGet(client,StampTokenContract,stamp2,'getSeal',{})
-    checkExp(get_res,get_res.corner!=2,"badForeverSealTest" , "2 endrose failed");
+    checkExp(get_res,get_res.corner!=2,"badForeverSealTest" , "2 endorse failed");
 
-    const stamp3 =await createToken(client,stampRoot,StampRootContract,DEPLOY_VALUE,"0x1111112")
-    await requestEndrose(client,stamp3,seal1,4,500_000_000,650_000_000)
+    const stamp3 =await createToken(client,stampRoot,StampRootContract,config.stampRoot.minCreationValue,"0x1111112")
+    await requestEndorse(client,stamp3,seal1,4,500_000_000,650_000_000)
     await sleep(1000);
-    await endrose(client,seal1,stamp3,4,290000000)
+    await endorse(client,seal1,stamp3,4,290000000)
     await sleep(1000);
     get_res = await callGet(client,StampTokenContract,stamp3,'getSeal',{})
-    checkExp(get_res,get_res.corner!=4,"badForeverSealTest" , "3 endrose failed");
+    checkExp(get_res,get_res.corner!=4,"badForeverSealTest" , "3 endorse failed");
 
-    const stamp4 =await createToken(client,stampRoot,StampRootContract,DEPLOY_VALUE,"0x1111112")
-    await requestEndrose(client,stamp4,seal2,8,500_000_000,650_000_000)
+    const stamp4 =await createToken(client,stampRoot,StampRootContract,config.stampRoot.minCreationValue,"0x1111112")
+    await requestEndorse(client,stamp4,seal2,8,500_000_000,650_000_000)
     await sleep(1000);
-    await endrose(client,seal2,stamp4,8,290000000)
+    await endorse(client,seal2,stamp4,8,290000000)
     await sleep(1000);
     get_res = await callGet(client,StampTokenContract,stamp4,'getSeal',{})
-    checkExp(get_res,get_res.corner!=8,"badForeverSealTest" , "4 endrose failed");
+    checkExp(get_res,get_res.corner!=8,"badForeverSealTest" , "4 endorse failed");
 
     await setForever(client,stamp1,forever1,210000000)
     await sleep(1000);
@@ -600,8 +595,8 @@ async function badForeverSealTest(client, root_json) {
 async function badEndroseTest(client, root_json) {
     const stampRoot = root_json.stamp;
 
-    const stamp1 =await createToken(client,stampRoot,StampRootContract,DEPLOY_VALUE,"0x1111112")
-    await requestEndrose(client,stamp1,Msig.address,2|1,500_000_000,650_000_000)
+    const stamp1 =await createToken(client,stampRoot,StampRootContract,config.stampRoot.minCreationValue,"0x1111112")
+    await requestEndorse(client,stamp1,Msig.address,2|1,500_000_000,650_000_000)
     await sleep(1000);
 
     const abi = {
@@ -612,11 +607,11 @@ async function badEndroseTest(client, root_json) {
     const body =await client.abi.encode_message_body({
         abi,
         call_set: {
-            function_name: "endrose",
+            function_name: "endorse",
             input: {
                 id: 1,
                 place: 1,
-                receiver: Msig.address
+                sealOwner: Msig.address
             }
         },
         is_internal: true,
@@ -636,7 +631,7 @@ async function badEndroseTest(client, root_json) {
 async function calcStorageFee(client, root_json) {
 
     const stampRoot = root_json.stamp;
-    const stamp1 =await createToken(client,stampRoot,StampRootContract,DEPLOY_VALUE,"0x1111112")
+    const stamp1 =await createToken(client,stampRoot,StampRootContract,config.stampRoot.minCreationValue,"0x1111112")
     sleep(1000)
 
     const res = await client.net.query_collection({
@@ -656,9 +651,9 @@ async function calcStorageFee(client, root_json) {
 async function changeCreationFee(client, root_json){
     const stampRoot = root_json.stamp;
 
-    let get_res = await callGet(client,StampRootContract,stampRoot,'getCreationFee',{})
-    checkExp(get_res,get_res.minValue!=350_000_000,"changeCreationFee" , "1 changeCreationFee failed");
-    checkExp(get_res,get_res.fee!=100_000_000,"changeCreationFee" , "2 changeCreationFee failed");
+    let get_res = await callGet(client,StampRootContract,stampRoot,'getCreationParameters',{})
+    checkExp(get_res,get_res.minCreationFee!=config.stampRoot.minCreationValue,"changeCreationFee" , "1 changeCreationFee failed");
+    checkExp(get_res,get_res.creationTopup!=config.stampRoot.creationTopup,"changeCreationFee" , "2 changeCreationFee failed");
 
     const abi = {
         type: 'Contract',
@@ -668,10 +663,10 @@ async function changeCreationFee(client, root_json){
     const body =await client.abi.encode_message_body({
         abi,
         call_set: {
-            function_name: "setCreationFee",
+            function_name: "setCreationParameters",
             input: {
-                minValue: 500_000_000,
-                fee: 300_000_000,
+                minCreationFee: 500_000_000,
+                creationTopup: 300_000_000,
             }
         },
         is_internal: true,
@@ -680,11 +675,11 @@ async function changeCreationFee(client, root_json){
         }
     })
 
-    transfer(client, stampRoot, 100000000, body.body)
-    await sleep(1000);
-    get_res = await callGet(client,StampRootContract,stampRoot,'getCreationFee',{})
-    checkExp(get_res,get_res.minValue!=500_000_000,"changeCreationFee" , "3 changeCreationFee failed");
-    checkExp(get_res,get_res.fee!=300_000_000,"changeCreationFee" , "4 changeCreationFee failed");
+    transfer(client, stampRoot, 100_000_000, body.body)
+    await sleep(2000);
+    get_res = await callGet(client,StampRootContract,stampRoot,'getCreationParameters',{})
+    checkExp(get_res,get_res.minCreationFee!=500_000_000,"changeCreationFee" , "3 changeCreationFee failed");
+    checkExp(get_res,get_res.creationTopup!=300_000_000,"changeCreationFee" , "4 changeCreationFee failed");
     console.log("changeCreationFee PASS")
 }
 
