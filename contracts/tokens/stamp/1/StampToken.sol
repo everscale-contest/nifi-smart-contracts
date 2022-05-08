@@ -42,9 +42,8 @@ contract StampToken is IStampToken {
 
     optional(address) _forever;
 
-    uint128 _minSealFee;
-    uint128 _minSealRxFee;
-    uint128 _requestEndorseFixIncome;
+    uint128 _minRequestEndorseFee;
+    uint128 _minCancelEndorseFee;
     uint128 _minForAddFee;
     uint128 _forAddFixIncome;
     uint16 _endorsePercentFee;
@@ -106,9 +105,8 @@ contract StampToken is IStampToken {
         address creator,
         uint32  creatorPercentReward,
         uint256 hash,
-        uint128 minSealFee,
-        uint128 minSealRxFee,
-        uint128 requestEndorseFixIncome,
+        uint128 minRequestEndorseFee,
+        uint128 minCancelEndorseFee,
         uint128 minForAddFee,
         uint128 forAddFixIncome,
         uint16 endorsePercentFee
@@ -127,9 +125,8 @@ contract StampToken is IStampToken {
         _manager = manager;
         _managerUnlockTime = managerUnlockTime;
 
-        _minSealFee = minSealFee;
-        _minSealRxFee = minSealRxFee;
-        _requestEndorseFixIncome = requestEndorseFixIncome;
+        _minRequestEndorseFee = minRequestEndorseFee;
+        _minCancelEndorseFee = minCancelEndorseFee;
         _minForAddFee = minForAddFee;
         _forAddFixIncome = forAddFixIncome;
         _endorsePercentFee = endorsePercentFee;
@@ -204,19 +201,21 @@ contract StampToken is IStampToken {
     }
 
     function requestEndorse(address seal, uint8 places, uint128 price) public onlyOwner {
-        require(msg.value>=_minSealFee + _requestEndorseFixIncome+price, 109);
+        require(msg.value>=_minRequestEndorseFee + price, 109);
         require(_sealPlace == 0, 110);
         _seal.set(seal);
         _sealValue = price;
         _sealPosiblePlaces = places;
         emit TK_RQ_nifi_stamp1_1{dest: SwiftAddress.value()}(_id, _seal.get(), places, uint64(_sealValue));
-        _root.transfer({value: 0, flag: 64, bounce: true});
+
+        uint128 shouldBeSentToRoot = msg.value - price - Constants.AVG_GAS_COST;
+        _root.transfer({value: shouldBeSentToRoot, flag: 0, bounce: true});
     }
 
     function cancelEndorse() public  onlyOwner {
         require(_sealPlace == 0, 110);
         require(_seal.hasValue(), 111);
-        require(msg.value>=_minSealRxFee,112);
+        require(msg.value>=_minCancelEndorseFee,112);
         _seal.reset();
         _owner.transfer(_sealValue,true);
         emit TK_RX_nifi_stamp1_1{dest: SwiftAddress.value()}(_id);
@@ -266,15 +265,13 @@ contract StampToken is IStampToken {
     }
 
     function getParameters() public returns(
-        uint128 minSealFee,
-        uint128 minSealRxFee,
-        uint128 requestEndorseFixIncome,
+        uint128 minRequestEndorseFee,
+        uint128 minCancelEndorseFee,
         uint128 minForAddFee,
         uint128 forAddFixIncome
     ) {
-        minSealFee = _minSealFee;
-        minSealRxFee = _minSealRxFee;
-        requestEndorseFixIncome = _requestEndorseFixIncome;
+        minRequestEndorseFee = _minRequestEndorseFee;
+        minCancelEndorseFee = _minCancelEndorseFee;
         minForAddFee = _minForAddFee;
         forAddFixIncome = _forAddFixIncome;
     }
