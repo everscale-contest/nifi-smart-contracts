@@ -177,7 +177,7 @@ contract SealToken {
 
         IStampToken(stamp).endorse{value: _endorseStampCost, flag: 0, bounce: true}(_id,place,_owner);
 
-       _root.transfer({value: 0, flag: 64, bounce: true});
+       _root.transfer({value: _endorseRootFixIncome, flag: 0, bounce: true});
     }
 
     function getParameters() public view returns(uint128 endorseStampCost, uint128 endorseRootFixIncome) {

@@ -36,7 +36,7 @@ contract StampRoot  {
     constructor(
         address manager,
         uint128 minCreationFee,
-        uint128 creationTopup
+        uint128 creationTopup,
         string  name,
         string  symbol,
         TvmCell tokenCode
@@ -130,11 +130,10 @@ contract StampRoot  {
 
     function setCreationParameters(
         uint128 minCreationFee,
-        uint128 creationFixIncome,
         uint128 creationTopup
     ) public {
         require(msg.sender == _manager,102);
-        require (_minCreationFee>_creationTopup+0.1 ever,103);
+        require(minCreationFee > creationTopup,103);
         tvm.accept();
         _minCreationFee = minCreationFee;
         _creationTopup = creationTopup;
@@ -142,7 +141,6 @@ contract StampRoot  {
 
     function getCreationParameters() public returns(
         uint128 minCreationFee,
-        uint128 creationFixIncome,
         uint128 creationTopup
     ) {
         minCreationFee = _minCreationFee;
