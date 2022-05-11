@@ -12,6 +12,8 @@ import "../../../libraries/SwiftAddress.sol";
 
 contract ArtRoot is Root, RootManaged, RootManagedCreationTradeFee, RootManagedWithdraw {
 
+    uint128 _bidCost;
+
     event AUC_CT_nifi_auc_1(uint64 id, address tokenAddress, uint128 startBid, uint128 stepBid, uint32 startTime, uint32 endTime, address auctionCreator, uint32 showcaseFees);
     /***************
      * CONSTRUCTOR *
@@ -25,6 +27,7 @@ contract ArtRoot is Root, RootManaged, RootManagedCreationTradeFee, RootManagedW
         address manager,
         uint128 minCreationFee,
         uint128 creationFixIncome,
+        uint128 bidCost,
         string  name,
         string  symbol,
         TvmCell tokenCode
@@ -33,7 +36,9 @@ contract ArtRoot is Root, RootManaged, RootManagedCreationTradeFee, RootManagedW
         Root(name, symbol, tokenCode)
         RootManaged(manager)
         RootManagedCreationTradeFee(minCreationFee, creationFixIncome)
-    {}
+    {
+        _bidCost = bidCost;
+    }
 
 
 
@@ -48,7 +53,6 @@ contract ArtRoot is Root, RootManaged, RootManagedCreationTradeFee, RootManagedW
         address token,
         uint128 startBid,
         uint128 stepBid,
-        uint128 feeBid,
         uint32 startTime,
         uint32 endTime,
         uint32 showcaseFees
@@ -70,7 +74,7 @@ contract ArtRoot is Root, RootManaged, RootManagedCreationTradeFee, RootManagedW
                 _root: address(this),
                 _id: _totalSupply
             }
-        }( creator, token, startBid, stepBid, feeBid, startTime, endTime, showcaseFees);
+        }( creator, token, startBid, stepBid, _bidCost, startTime, endTime, showcaseFees);
         emit AUC_CT_nifi_auc_1{dest: SwiftAddress.value()}(_totalSupply,token,startBid,stepBid,startTime,endTime,creator,showcaseFees);
     }
 
@@ -109,5 +113,14 @@ contract ArtRoot is Root, RootManaged, RootManagedCreationTradeFee, RootManagedW
             code: _tokenCode
         });
         return address(tvm.hash(stateInit));
+    }
+
+    function getBidCost() public view returns(uint128) {
+        return _bidCost;
+    }
+
+    function setBidCost(uint128 bidCost) public {
+        require(msg.sender == _manager,280);
+        _bidCost = bidCost;
     }
 }

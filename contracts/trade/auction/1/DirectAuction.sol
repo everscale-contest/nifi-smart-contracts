@@ -65,7 +65,7 @@ contract DirectAuction is Accept {
 
     uint128 private _startBid;
     uint128 private _stepBid;
-    uint128 private _feeBid;
+    uint128 private _bidCost;
     Bid     private _curBid;
 
     uint32  _showcaseFees;
@@ -80,10 +80,11 @@ contract DirectAuction is Accept {
         _;
     }
 
-    modifier validBid() {
+    modifier validBid(uint128 price) {
         require(
-            (msg.value - _feeBid >= _startBid) &&
-            (msg.value - _feeBid >= _curBid.value + _stepBid),
+            (price > _startBid) &&
+            (msg.value > price + _bidCost) &&
+            (price >= _curBid.value + _stepBid),
             101,
             "Too low bid");
         _;
@@ -119,7 +120,7 @@ contract DirectAuction is Accept {
      * token ....... Address of token contract.
      * startBid .... The minimum bid at which the auction starts.
      * stepBid ..... Minimum bet step.
-     * feeBid ...... Commission that participants add to each bid to make the contract work.
+     * bidCost ...... Commission that participants add to each bid to make the contract work.
      * startTime ... UNIX time. Auction stat time.
      * endTime ..... UNIX time. Auction end time.
      */
@@ -128,7 +129,7 @@ contract DirectAuction is Accept {
         address token,
         uint128 startBid,
         uint128 stepBid,
-        uint128 feeBid,
+        uint128 bidCost,
         uint32  startTime,
         uint32  endTime,
         uint32 showcaseFees
@@ -139,7 +140,7 @@ contract DirectAuction is Accept {
         _token = token;
         _startBid = startBid;
         _stepBid = stepBid;
-        _feeBid = feeBid;
+        _bidCost = bidCost;
         _startTime = startTime;
         _endTime = endTime;
         _askFinish = endTime;
@@ -154,11 +155,11 @@ contract DirectAuction is Accept {
     /**
      * Everyone can call this method by internal message from own wallet contract.
      */
-    function bid() public validTime validBid {
+    function bid(uint128 price) public validTime validBid(price) {
          if (_curBid.bider != address(0))
             _curBid.bider.transfer({value: _curBid.value, flag: 1, bounce: true});
 
-        _curBid.value = msg.value - _feeBid;
+        _curBid.value = price;
         _curBid.bider = msg.sender;
         emit AUC_BS_nifi_auc_1{dest: SwiftAddress.value()}(_id,_curBid.value,_curBid.bider);
     }
@@ -230,7 +231,7 @@ contract DirectAuction is Accept {
      * token ....... Address of token contract.
      * startBid .... The minimum bid at which the auction starts.
      * stepBid ..... Minimum bet step.
-     * feeBid ...... Commission that participants add to each bid to make the contract work.
+     * bidCost ...... Commission that participants add to each bid to make the contract work.
      * startTime ... UNIX time. Auction stat time.
      * endTime ..... UNIX time. Auction end time.
      * curBid
@@ -244,7 +245,7 @@ contract DirectAuction is Accept {
             address token,
             uint128 startBid,
             uint128 stepBid,
-            uint128 feeBid,
+            uint128 bidCost,
             uint32  startTime,
             uint32  endTime,
             Bid     curBid
@@ -258,7 +259,7 @@ contract DirectAuction is Accept {
         endTime = _endTime;
         startBid = _startBid;
         stepBid = _stepBid;
-        feeBid = _feeBid;
+        bidCost = _bidCost;
         curBid = _curBid;
     }
 }
