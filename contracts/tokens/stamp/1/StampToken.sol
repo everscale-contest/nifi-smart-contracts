@@ -240,7 +240,7 @@ contract StampToken is IStampToken {
         if (_endorsePercentFee>0) {
             uint128 shouldBeSentToRoot = math.muldiv( _sealValue, _endorsePercentFee, 10000);
             sealOwner.transfer({value: _sealValue-shouldBeSentToRoot, flag: 0, bounce: true});
-            _root.transfer({value: shouldBeSentToRoot, flag: 64, bounce: true});
+            _root.transfer({value: 0, flag: 64, bounce: true});
         } else {
             sealOwner.transfer(_sealValue,true);
         }

@@ -25,10 +25,10 @@ async function deploySealRoot (client,rootKeys) {
             function_name: 'constructor',
             input: {
                 manager: config.msgiManager,
-                minCreationFee: config.creationMinValue,
-                creationFixIncome : config.creationFee,
-                name : "SealRoot1",
-                symbol: "SEAL1",
+                minCreationFee: config.sealRoot.minCreationValue,
+                creationTopup: config.sealRoot.creationTopup,
+                name : config.sealRoot.name,
+                symbol: config.sealRoot.symbol,
                 tokenCode: SealTokenContract.code,
             }
         },
@@ -40,7 +40,7 @@ async function deploySealRoot (client,rootKeys) {
 
     const { address } = await client.abi.encode_message(deployOptions);
     console.log(`Future address of the contract will be: ${address}`);
-    await transfer(client,address,100_000_000,"");
+    await transfer(client,address,100000000,"");
 
     await client.processing.process_message({
         send_events: false,
@@ -75,13 +75,12 @@ async function writeSealContractInfo (sealRoot, pubkey, sealTockenCodeHash, seal
         }
     });
     try {
+        console.log('version:', await client.client.version());
         console.log('net: '+config.endpoints.toString());
         let root_json = JSON.parse(fs.readFileSync("../root.json").toString());
 
         const rootKeys = await client.crypto.generate_random_sign_keys();
-        /*const rootKeys = {public:"a32b6119b77e79ee370e173a3383e517d2d235c796bd38198af22b6673300cb8",
-        secret:"5707985ddf6b95a2a11d8503dbc52fee5be330dbc0020023a1180f08aaaef843"}*/
-        console.log('root keys:'+JSON.stringify(root_json));
+        console.log('root keys:'+JSON.stringify(rootKeys));
 
         root_json.keys = rootKeys;
         root_json.seal="";
