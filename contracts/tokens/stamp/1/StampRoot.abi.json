@@ -101,7 +101,7 @@
 				{"name":"requestEndorseFixIncome","type":"uint128"},
 				{"name":"minForAddFee","type":"uint128"},
 				{"name":"forAddFixIncome","type":"uint128"},
-				{"name":"endorsePercentFee","type":"uint16"}
+				{"name":"endorsePercentIncome","type":"uint16"}
 			],
 			"outputs": [
 			]
@@ -116,7 +116,7 @@
 				{"name":"requestEndorseFixIncome","type":"uint128"},
 				{"name":"minForAddFee","type":"uint128"},
 				{"name":"forAddFixIncome","type":"uint128"},
-				{"name":"endorsePercentFee","type":"uint16"}
+				{"name":"endorsePercentIncome","type":"uint16"}
 			]
 		}
 	],

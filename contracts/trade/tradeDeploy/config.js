@@ -25,6 +25,7 @@ module.exports = {
         auction: {
             minCreationFee: 500_000_000,
             creationFixIncome: 100_000_000,
+            bidCost: 50_000_000,
         }
     }
 }

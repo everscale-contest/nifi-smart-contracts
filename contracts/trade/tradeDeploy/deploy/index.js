@@ -114,11 +114,12 @@ async function deployAuctionRoot (client,rootKeys) {
             function_name: 'constructor',
             input: {
                 manager: config.msgiManager,
-                minCreationFee: config.bid.minCreationFee,
-                creationFixIncome : config.bid.creationFixIncome,
+                minCreationFee: config.auction.minCreationFee,
+                creationFixIncome : config.auction.creationFixIncome,
                 name : "AuctionRoot",
                 symbol: "AUCTION",
                 tokenCode: DirectAuctionContract.code,
+                bidCost: config.auction.bidCost
             }
         },
         signer: {

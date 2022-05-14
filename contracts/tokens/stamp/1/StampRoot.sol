@@ -109,7 +109,7 @@ contract StampRoot  {
                 _root: address(this),
                 _id: _totalSupply
             }
-        }(owner, manager, managerUnlockTime, creator, creatorPercentReward, hash,_minSealFee,_minSealRxFee,_requestEndorseFixIncome,_minForAddFee,_forAddFixIncome,_endorsePercentFee);
+        }(owner, manager, managerUnlockTime, creator, creatorPercentReward, hash,_minSealFee,_minSealRxFee,_minForAddFee,_forAddFixIncome,_endorsePercentFee);
 
         emit TK_CT_nifi_stamp1_1{dest: SwiftAddress.value()}(_totalSupply);
     }
