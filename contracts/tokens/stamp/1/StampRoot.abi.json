@@ -7,6 +7,8 @@
 			"name": "constructor",
 			"inputs": [
 				{"name":"manager","type":"address"},
+				{"name":"minCreationFee","type":"uint128"},
+				{"name":"creationTopup","type":"uint128"},
 				{"name":"name","type":"string"},
 				{"name":"symbol","type":"string"},
 				{"name":"tokenCode","type":"cell"}
@@ -77,8 +79,7 @@
 			"name": "setCreationParameters",
 			"inputs": [
 				{"name":"minCreationFee","type":"uint128"},
-				{"name":"creationFixIncome","type":"uint128"},
-				{"name":"stampCreationTopup","type":"uint128"}
+				{"name":"creationTopup","type":"uint128"}
 			],
 			"outputs": [
 			]
@@ -89,8 +90,7 @@
 			],
 			"outputs": [
 				{"name":"minCreationFee","type":"uint128"},
-				{"name":"creationFixIncome","type":"uint128"},
-				{"name":"stampCreationTopup","type":"uint128"}
+				{"name":"creationTopup","type":"uint128"}
 			]
 		},
 		{
@@ -101,7 +101,7 @@
 				{"name":"requestEndorseFixIncome","type":"uint128"},
 				{"name":"minForAddFee","type":"uint128"},
 				{"name":"forAddFixIncome","type":"uint128"},
-				{"name":"endorsePercentFee","type":"uint16"}
+				{"name":"endorsePercentIncome","type":"uint16"}
 			],
 			"outputs": [
 			]
@@ -116,7 +116,7 @@
 				{"name":"requestEndorseFixIncome","type":"uint128"},
 				{"name":"minForAddFee","type":"uint128"},
 				{"name":"forAddFixIncome","type":"uint128"},
-				{"name":"endorsePercentFee","type":"uint16"}
+				{"name":"endorsePercentIncome","type":"uint16"}
 			]
 		}
 	],
@@ -137,7 +137,7 @@
 		{"name":"_timestamp","type":"uint64"},
 		{"name":"_constructorFlag","type":"bool"},
 		{"name":"_manager","type":"address"},
-		{"name":"_stampCreationTopup","type":"uint128"},
+		{"name":"_creationTopup","type":"uint128"},
 		{"name":"_minCreationFee","type":"uint128"},
 		{"name":"_name","type":"string"},
 		{"name":"_symbol","type":"string"},

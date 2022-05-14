@@ -12,12 +12,11 @@
 				{"name":"creator","type":"address"},
 				{"name":"creatorPercentReward","type":"uint32"},
 				{"name":"hash","type":"uint256"},
-				{"name":"minSealFee","type":"uint128"},
-				{"name":"minSealRxFee","type":"uint128"},
-				{"name":"requestEndorseFixIncome","type":"uint128"},
+				{"name":"minRequestEndorseFee","type":"uint128"},
+				{"name":"minCancelEndorseFee","type":"uint128"},
 				{"name":"minForAddFee","type":"uint128"},
 				{"name":"forAddFixIncome","type":"uint128"},
-				{"name":"endorsePercentFee","type":"uint16"}
+				{"name":"endorsePercentIncome","type":"uint16"}
 			],
 			"outputs": [
 			]
@@ -165,9 +164,8 @@
 			"inputs": [
 			],
 			"outputs": [
-				{"name":"minSealFee","type":"uint128"},
-				{"name":"minSealRxFee","type":"uint128"},
-				{"name":"requestEndorseFixIncome","type":"uint128"},
+				{"name":"minRequestEndorseFee","type":"uint128"},
+				{"name":"minCancelEndorseFee","type":"uint128"},
 				{"name":"minForAddFee","type":"uint128"},
 				{"name":"forAddFixIncome","type":"uint128"}
 			]
@@ -262,9 +260,8 @@
 		{"name":"_sealValue","type":"uint128"},
 		{"name":"_sealPosiblePlaces","type":"uint8"},
 		{"name":"_forever","type":"optional(address)"},
-		{"name":"_minSealFee","type":"uint128"},
-		{"name":"_minSealRxFee","type":"uint128"},
-		{"name":"_requestEndorseFixIncome","type":"uint128"},
+		{"name":"_minRequestEndorseFee","type":"uint128"},
+		{"name":"_minCancelEndorseFee","type":"uint128"},
 		{"name":"_minForAddFee","type":"uint128"},
 		{"name":"_forAddFixIncome","type":"uint128"},
 		{"name":"_endorsePercentFee","type":"uint16"}

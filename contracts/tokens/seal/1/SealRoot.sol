@@ -9,7 +9,7 @@ import "SealToken.sol";
 contract SealRoot  {
 
     address _manager;
-    uint128 _creationFixIncome;
+    uint128 _creationTopup;
     uint128 _minCreationFee;
     string _name;
     string _symbol;
@@ -31,7 +31,7 @@ contract SealRoot  {
     constructor(
         address manager,
         uint128 minCreationFee,
-        uint128 creationFixIncome,
+        uint128 creationTopup,
         string  name,
         string  symbol,
         TvmCell tokenCode
@@ -42,7 +42,7 @@ contract SealRoot  {
         tvm.accept();
         _manager = manager;
         _minCreationFee = minCreationFee;
-        _creationFixIncome = creationFixIncome;
+        _creationTopup = creationTopup;
         _name = name;
         _symbol = symbol;
         _tokenCode = tokenCode;
@@ -87,11 +87,10 @@ contract SealRoot  {
         )
     {
         require(msg.value >= _minCreationFee,278);
-        uint128 value = msg.value - _creationFixIncome;
         _totalSupply++;
         addr = new SealToken{
             code: _tokenCode,
-            value: value,
+            value: _creationTopup,
             pubkey: tvm.pubkey(),
             varInit: {
                 _root: address(this),
@@ -116,16 +115,16 @@ contract SealRoot  {
         return address(tvm.hash(stateInit));
     }
 
-    function setCreationParameters(uint128 minCreationFee, uint128 creationFixIncome) public {
+    function setCreationParameters(uint128 minCreationFee, uint128 creationTopup) public {
         require(msg.sender == _manager,102);
         tvm.accept();
         _minCreationFee = minCreationFee;
-        _creationFixIncome = creationFixIncome;
+        _creationTopup = creationTopup;
     }
 
-    function getCreationParameters() public returns(uint128 minCreationFee, uint128 creationFixIncome) {
+    function getCreationParameters() public returns(uint128 minCreationFee, uint128 creationTopup) {
         minCreationFee = _minCreationFee;
-        creationFixIncome = _creationFixIncome;
+        creationTopup = _creationTopup;
     }
 
     function setParameters(uint128 endorseStampCost, uint128 endorseRootFixIncome) public {

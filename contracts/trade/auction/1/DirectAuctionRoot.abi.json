@@ -9,6 +9,7 @@
 				{"name":"manager","type":"address"},
 				{"name":"minCreationFee","type":"uint128"},
 				{"name":"creationFixIncome","type":"uint128"},
+				{"name":"bidCost","type":"uint128"},
 				{"name":"name","type":"string"},
 				{"name":"symbol","type":"string"},
 				{"name":"tokenCode","type":"cell"}
@@ -23,7 +24,6 @@
 				{"name":"token","type":"address"},
 				{"name":"startBid","type":"uint128"},
 				{"name":"stepBid","type":"uint128"},
-				{"name":"feeBid","type":"uint128"},
 				{"name":"startTime","type":"uint32"},
 				{"name":"endTime","type":"uint32"},
 				{"name":"showcaseFees","type":"uint32"}
@@ -49,6 +49,22 @@
 			],
 			"outputs": [
 				{"name":"addr","type":"address"}
+			]
+		},
+		{
+			"name": "getBidCost",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"value0","type":"uint128"}
+			]
+		},
+		{
+			"name": "setBidCost",
+			"inputs": [
+				{"name":"bidCost","type":"uint128"}
+			],
+			"outputs": [
 			]
 		},
 		{
@@ -175,6 +191,7 @@
 		{"name":"_totalSupply","type":"uint64"},
 		{"name":"_manager","type":"address"},
 		{"name":"_minCreationFee","type":"uint128"},
-		{"name":"_creationFixIncome","type":"uint128"}
+		{"name":"_creationFixIncome","type":"uint128"},
+		{"name":"_bidCost","type":"uint128"}
 	]
 }

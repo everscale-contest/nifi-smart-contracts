@@ -10,7 +10,7 @@
 				{"name":"token","type":"address"},
 				{"name":"startBid","type":"uint128"},
 				{"name":"stepBid","type":"uint128"},
-				{"name":"feeBid","type":"uint128"},
+				{"name":"bidCost","type":"uint128"},
 				{"name":"startTime","type":"uint32"},
 				{"name":"endTime","type":"uint32"},
 				{"name":"showcaseFees","type":"uint32"}
@@ -21,6 +21,7 @@
 		{
 			"name": "bid",
 			"inputs": [
+				{"name":"price","type":"uint128"}
 			],
 			"outputs": [
 			]
@@ -55,7 +56,7 @@
 				{"name":"token","type":"address"},
 				{"name":"startBid","type":"uint128"},
 				{"name":"stepBid","type":"uint128"},
-				{"name":"feeBid","type":"uint128"},
+				{"name":"bidCost","type":"uint128"},
 				{"name":"startTime","type":"uint32"},
 				{"name":"endTime","type":"uint32"},
 				{"components":[{"name":"bider","type":"address"},{"name":"value","type":"uint128"}],"name":"curBid","type":"tuple"}
@@ -109,7 +110,7 @@
 		{"name":"_askFinish","type":"uint32"},
 		{"name":"_startBid","type":"uint128"},
 		{"name":"_stepBid","type":"uint128"},
-		{"name":"_feeBid","type":"uint128"},
+		{"name":"_bidCost","type":"uint128"},
 		{"components":[{"name":"bider","type":"address"},{"name":"value","type":"uint128"}],"name":"_curBid","type":"tuple"},
 		{"name":"_showcaseFees","type":"uint32"}
 	]

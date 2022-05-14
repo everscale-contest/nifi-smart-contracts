@@ -9,7 +9,7 @@ import "StampToken.sol";
 contract StampRoot  {
 
     address _manager;
-    uint128 _stampCreationTopup;
+    uint128 _creationTopup;
     uint128 _minCreationFee;
     string _name;
     string _symbol;
@@ -35,6 +35,8 @@ contract StampRoot  {
      ***************/
     constructor(
         address manager,
+        uint128 minCreationFee,
+        uint128 creationTopup,
         string  name,
         string  symbol,
         TvmCell tokenCode
@@ -54,9 +56,9 @@ contract StampRoot  {
         _minForAddFee = 0.21 ever;
         _forAddFixIncome = 0.1 ever;
         _endorsePercentFee = 500; // 5%
-        //require (_minCreationFee>_stampCreationTopup)
-        _minCreationFee = 0.35 ever;
-        _stampCreationTopup = 0.2 ever;
+        //require (_minCreationFee>_creationTopup)
+        _minCreationFee = minCreationFee;
+        _creationTopup = creationTopup;
     }
 
     function getManager() public view returns(address){
@@ -101,13 +103,13 @@ contract StampRoot  {
 
         addr = new StampToken{
             code: _tokenCode,
-            value: _stampCreationTopup,
+            value: _creationTopup,
             pubkey: tvm.pubkey(),
             varInit: {
                 _root: address(this),
                 _id: _totalSupply
             }
-        }(owner, manager, managerUnlockTime, creator, creatorPercentReward, hash,_minSealFee,_minSealRxFee,_requestEndorseFixIncome,_minForAddFee,_forAddFixIncome,_endorsePercentFee);
+        }(owner, manager, managerUnlockTime, creator, creatorPercentReward, hash,_minSealFee,_minSealRxFee,_minForAddFee,_forAddFixIncome,_endorsePercentFee);
 
         emit TK_CT_nifi_stamp1_1{dest: SwiftAddress.value()}(_totalSupply);
     }
@@ -128,43 +130,41 @@ contract StampRoot  {
 
     function setCreationParameters(
         uint128 minCreationFee,
-        uint128 creationFixIncome,
-        uint128 stampCreationTopup
+        uint128 creationTopup
     ) public {
         require(msg.sender == _manager,102);
-        require (_minCreationFee>_stampCreationTopup+0.1 ever,103);
+        require(minCreationFee > creationTopup,103);
         tvm.accept();
         _minCreationFee = minCreationFee;
-        _stampCreationTopup = stampCreationTopup;
+        _creationTopup = creationTopup;
     }
 
     function getCreationParameters() public returns(
         uint128 minCreationFee,
-        uint128 creationFixIncome,
-        uint128 stampCreationTopup
+        uint128 creationTopup
     ) {
         minCreationFee = _minCreationFee;
-        stampCreationTopup = _stampCreationTopup;
+        creationTopup = _creationTopup;
     }
 
-    function setStampParameters(uint128 minSealFee, uint128 minSealRxFee, uint128 requestEndorseFixIncome, uint128 minForAddFee, uint128 forAddFixIncome, uint16 endorsePercentFee) public {
+    function setStampParameters(uint128 minSealFee, uint128 minSealRxFee, uint128 requestEndorseFixIncome, uint128 minForAddFee, uint128 forAddFixIncome, uint16 endorsePercentIncome) public {
         require(msg.sender == _manager,102);
-        require(endorsePercentFee <= 10000,103);
+        require(endorsePercentIncome <= 10000,103);
         tvm.accept();
         _minSealFee = minSealFee;
         _minSealRxFee = minSealRxFee;
         _requestEndorseFixIncome = requestEndorseFixIncome;
         _minForAddFee = minForAddFee;
         _forAddFixIncome = forAddFixIncome;
-        _endorsePercentFee = endorsePercentFee;
+        _endorsePercentFee = endorsePercentIncome;
     }
 
-    function getStampParameters() public returns(uint128 minSealFee, uint128 minSealRxFee, uint128 requestEndorseFixIncome, uint128 minForAddFee, uint128 forAddFixIncome, uint16 endorsePercentFee) {
+    function getStampParameters() public returns(uint128 minSealFee, uint128 minSealRxFee, uint128 requestEndorseFixIncome, uint128 minForAddFee, uint128 forAddFixIncome, uint16 endorsePercentIncome) {
         minSealFee = _minSealFee;
         minSealRxFee = _minSealRxFee;
         requestEndorseFixIncome = _requestEndorseFixIncome;
         minForAddFee = _minForAddFee;
         forAddFixIncome = _forAddFixIncome;
-        endorsePercentFee = _endorsePercentFee;
+        endorsePercentIncome = _endorsePercentFee;
     }
 }
