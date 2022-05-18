@@ -15,7 +15,7 @@ contract BidRoot is Root, RootManaged, RootManagedCreationFee, RootManagedWithdr
     uint128 _minAcceptFee;
     uint32 _bidIncomePercent;
 
-    event BID_CT_nifi_bid_1(uint64 id, address tokenAddress, uint128 bidValue, uint32 endTime, address bidCreator);
+    event BID_CT_nifi_bid_1(uint64 id, address tokenAddress, uint128 bidValue, uint32 endTime, address bidder);
     /***************
      * CONSTRUCTOR *
      ***************/
