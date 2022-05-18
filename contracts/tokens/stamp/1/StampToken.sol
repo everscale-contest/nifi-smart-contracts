@@ -239,10 +239,10 @@ contract StampToken is IStampToken {
         emit TK_EN_nifi_stamp1_1{dest: SwiftAddress.value()}(_id,_seal.get(),_sealPlace);
         if (_endorsePercentFee>0) {
             uint128 shouldBeSentToRoot = math.muldiv( _sealValue, _endorsePercentFee, 10000);
-            sealOwner.transfer({value: _sealValue-shouldBeSentToRoot, flag: 0, bounce: true});
+            sealOwner.transfer({value: _sealValue-shouldBeSentToRoot, flag: 1, bounce: true});
             _root.transfer({value: 0, flag: 64, bounce: true});
         } else {
-            sealOwner.transfer(_sealValue,true);
+            sealOwner.transfer({value: _sealValue, flag: 1, bounce: true});
         }
     }
 
