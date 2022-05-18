@@ -82,7 +82,7 @@ contract DirectAuction is Accept {
 
     modifier validBid(uint128 price) {
         require(
-            (price > _startBid) &&
+            (price >= _startBid) &&
             (msg.value > price + _bidCost) &&
             (price >= _curBid.value + _stepBid),
             101,
