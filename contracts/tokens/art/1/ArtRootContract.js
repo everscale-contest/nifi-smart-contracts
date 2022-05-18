@@ -16,7 +16,7 @@ const ArtRootContract = {
                         "type": "address"
                     },
                     {
-                        "name": "minCreationValue",
+                        "name": "minCreationFee",
                         "type": "uint128"
                     },
                     {

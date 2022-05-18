@@ -5,12 +5,15 @@ pragma AbiHeader expire;
 
 import "../../../abstract/Root.sol";
 import "../../../abstract/extensions/rootManaged/root/RootManaged.sol";
-import "../../../abstract/extensions/rootManaged/root/RootManagedCreationTradeFee.sol";
+import "../../../abstract/extensions/rootManaged/root/RootManagedCreationFee.sol";
 import "../../../abstract/extensions/rootManaged/root/RootManagedWithdraw.sol";
 import "Bid.sol";
 import "../../../libraries/SwiftAddress.sol";
 
-contract BidRoot is Root, RootManaged, RootManagedCreationTradeFee, RootManagedWithdraw {
+contract BidRoot is Root, RootManaged, RootManagedCreationFee, RootManagedWithdraw {
+
+    uint128 _minAcceptFee;
+    uint32 _bidIncomePercent;
 
     event BID_CT_nifi_bid_1(uint64 id, address tokenAddress, uint128 bidValue, uint32 endTime, address bidCreator);
     /***************
@@ -24,7 +27,9 @@ contract BidRoot is Root, RootManaged, RootManagedCreationTradeFee, RootManagedW
     constructor(
         address manager,
         uint128 minCreationFee,
-        uint128 creationFixIncome,
+        uint128 minAcceptFee,
+        uint128 creationTopup,
+        uint32 bidIncomePercent,
         string  name,
         string  symbol,
         TvmCell tokenCode
@@ -32,8 +37,11 @@ contract BidRoot is Root, RootManaged, RootManagedCreationTradeFee, RootManagedW
         public
         Root(name, symbol, tokenCode)
         RootManaged(manager)
-        RootManagedCreationTradeFee(minCreationFee, creationFixIncome)
+        RootManagedCreationTradeFee(minCreationFee, creationTopup)
     {
+        _minAcceptFee = minAcceptFee;
+        _bidIncomePercent = bidIncomePercent;
+        _creationTopup = creationTopup;
     }
 
 
@@ -45,7 +53,6 @@ contract BidRoot is Root, RootManaged, RootManagedCreationTradeFee, RootManagedW
      * Create token contract and returns address. Accept 0.1 ton and more.
      */
     function create(
-        address creator,
         address token,
         uint128 price,
         uint32  endTime
@@ -55,18 +62,20 @@ contract BidRoot is Root, RootManaged, RootManagedCreationTradeFee, RootManagedW
             address addr
         )
     {
-        uint128 value = msg.value - _creationFixIncome;
         _totalSupply++;
+
+        uint128 bidder = msg.sender;
+
         addr = new Bid{
             code: _tokenCode,
-            value: value,
+            value: _creationTopup,
             pubkey: tvm.pubkey(),
             varInit: {
                 _root: address(this),
                 _id: _totalSupply
             }
-        }( creator, token, price, endTime);
-        emit BID_CT_nifi_bid_1{dest: SwiftAddress.value()}(_totalSupply, token, price, endTime, creator);
+        }( bidder, token, price, _minAcceptFee, _bidIncomePercent, endTime);
+        emit BID_CT_nifi_bid_1{dest: SwiftAddress.value()}(_totalSupply, token, price, endTime, bidder);
     }
 
 

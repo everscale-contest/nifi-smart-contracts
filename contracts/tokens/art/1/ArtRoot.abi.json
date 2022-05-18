@@ -7,7 +7,7 @@
 			"name": "constructor",
 			"inputs": [
 				{"name":"manager","type":"address"},
-				{"name":"minCreationValue","type":"uint128"},
+				{"name":"minCreationFee","type":"uint128"},
 				{"name":"creationTopup","type":"uint128"},
 				{"name":"name","type":"string"},
 				{"name":"symbol","type":"string"},

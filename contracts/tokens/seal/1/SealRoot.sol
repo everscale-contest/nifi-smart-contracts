@@ -20,8 +20,8 @@ contract SealRoot  {
 
     event TK_CT_nifi_seal_1(uint64 id);
 
-    modifier validCreatorFees(uint32 fees) {
-        require(fees < 2401, 277);
+    modifier validCreatorPercent(uint32 creatorPercent) {
+        require(creatorpercent< 2401, 277);
         _;
     }
 
@@ -73,20 +73,23 @@ contract SealRoot  {
     }
 
     function create(
-        address owner,
-        address manager,
-        uint32  managerUnlockTime,
-        address creator,
-        uint32  creatorPercentReward,
+        uint32  creatorPercent,
         uint256 hash
     )
         public
-        validCreatorFees(creatorPercentReward)
+        validCreatorPercent(creatorPercent)
         returns(
             address addr
         )
     {
         require(msg.value >= _minCreationFee,278);
+
+        uint32 managerUnlockTime = 0;
+
+        address owner = msg.sender;
+        address manager = msg.sender;
+        address creator = msg.sender;
+
         _totalSupply++;
         addr = new SealToken{
             code: _tokenCode,
@@ -96,7 +99,7 @@ contract SealRoot  {
                 _root: address(this),
                 _id: _totalSupply
             }
-        }(owner, manager, managerUnlockTime, creator, creatorPercentReward, hash, _endorseStampCost, _endorseRootFixIncome);
+        }(owner, manager, managerUnlockTime, creator, creatorPercent, hash, _endorseStampCost, _endorseRootFixIncome);
         emit TK_CT_nifi_seal_1{dest: SwiftAddress.value()}(_totalSupply);
         //_totalSupply++;
     }

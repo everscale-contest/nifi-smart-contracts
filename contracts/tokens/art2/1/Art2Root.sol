@@ -11,6 +11,7 @@ contract Art2Root  {
 
     address _manager;
     uint128 _minCreationFee;
+    uint128 _minMintFee;
     uint128 _creationTopup;
     uint128 _mintTopup;
     string _name;
@@ -21,8 +22,8 @@ contract Art2Root  {
 
     event SR_CT_nifi_art2_1(uint64 id);
 
-    modifier validCreatorFees(uint32 fees) {
-        require(fees < 2401, 277);
+    modifier validCreatorPercent(uint32 creatorPercent) {
+        require(creatorpercent< 2401, 277);
         _;
     }
 
@@ -32,6 +33,7 @@ contract Art2Root  {
     constructor(
         address manager,
         uint128 minCreationFee,
+        uint128 minMintFee,
         uint128 creationTopup,
         uint128 mintTopup,
         string  name,
@@ -46,6 +48,7 @@ contract Art2Root  {
         tvm.accept();
         _manager = manager;
         _minCreationFee = minCreationFee;
+        _minMintFee = minMintFee;
         _creationTopup = creationTopup;
         _mintTopup = mintTopup;
         _name = name;
@@ -76,8 +79,15 @@ contract Art2Root  {
         addr.transfer(value, bounce);
     }
 
-    function createSerie(address manager, uint64 limit, uint256 hash, uint32 creatorPercentReward) public validCreatorFees(creatorPercentReward) internalMsg returns(address addr){
+    function createSerie(
+        uint64 limit,
+        uint256 hash,
+        uint32 creatorPercent
+    ) public validCreatorPercent(creatorPercent) internalMsg returns(address addr){
         require(msg.value >= _minCreationFee,278);
+
+        address manager = msg.sender;
+        address creator = msg.sender;
 
         _totalSupply++;
         addr = new Art2Series{
@@ -88,7 +98,7 @@ contract Art2Root  {
                 _root: address(this),
                 _id: _totalSupply
             }
-        }(manager, _name, _symbol, limit, _tokenCode, hash, creatorPercentReward, _mintTopup);
+        }(manager, creator, _name, _symbol, limit, _tokenCode, hash, creatorPercent, _minMintFee, _mintTopup);
         emit SR_CT_nifi_art2_1{dest: SwiftAddress.value()}(_totalSupply);
 
     }
@@ -136,6 +146,7 @@ contract Art2Root  {
 
     function setCreationParameters(
         uint128 minCreationFee,
+        uint128 minMintFee,
         uint128 creationTopup,
         uint128 mintTopup
     ) public {
@@ -145,15 +156,18 @@ contract Art2Root  {
         _minCreationFee = minCreationFee;
         _creationTopup = creationTopup;
         _mintTopup = mintTopup;
+        _minMintFee = minMintFee;
     }
 
     function getCreationParameters() public view returns(
         uint128 minCreationFee,
+        uint128 minMintFee,
         uint128 creationTopup,
         uint128 mintTopup
     ) {
         minCreationFee = _minCreationFee;
         creationTopup = _creationTopup;
         mintTopup = _mintTopup;
+        minMintFee = _minMintFee;
     }
 }
