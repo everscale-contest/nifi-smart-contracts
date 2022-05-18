@@ -362,6 +362,22 @@ async function simpleTest(client, root_json) {
     console.log("simpleTest PASS")
 }
 
+async function lowValueEndroseTest(client, root_json) {
+    const stampRoot = root_json.stamp;
+    const sealRoot = root_json.seal;
+    const stamp1 =await createToken(client,stampRoot,StampRootContract,config.stampRoot.minCreationValue,"0x1111112")
+
+    const seal1 =await createToken(client,sealRoot,SealRootContract,config.sealRoot.minCreationValue,"0x1111121")
+
+    await requestEndorse(client,stamp1,seal1,2|1,200_000,280_200_000)
+    await sleep(1000);
+    await endorse(client,seal1,stamp1,1,290_000_000)
+    await sleep(1000);
+    let get_res = await callGet(client,StampTokenContract,stamp1,'getSeal',{})
+    checkExp(get_res,get_res.corner!=1,"lowValueEndroseTest" , "1 endorse failed");
+    console.log("lowValueEndroseTest PASS")
+}
+
 async function cancelEndroseTest(client, root_json) {
     const stampRoot = root_json.stamp;
     const sealRoot = root_json.seal;
@@ -697,6 +713,8 @@ async function changeCreationFee(client, root_json){
         //const res = await deployMultisig (client, MsigKeys, 1000_000_000_000);
         //console.log(res.address);
         //console.log('ok');
+
+        await lowValueEndroseTest(client, root_json)
         await simpleTest(client, root_json)
         await niceForeverTest(client, root_json)
         await badForeverCornerTest(client, root_json)
