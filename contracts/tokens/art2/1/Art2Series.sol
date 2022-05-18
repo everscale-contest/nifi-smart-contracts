@@ -76,10 +76,7 @@ contract Art2Series {
      * creatorPercent ......... Creator fee. e.g. 1 = 0.01%. 1 is minimum. 10_000 is maximum.
      * hash ................ Hash of data that associated with token.
      */
-    function create(
-        address manager,
-        uint32  managerUnlockTime
-    )
+    function create()
         public
         internalMsg
         returns(
@@ -89,6 +86,9 @@ contract Art2Series {
         require(_totalSupply<_limit,103);
         require(msg.sender == _manager,102);
         require(msg.value >= _minMintFee, 105);
+
+        address manager = msg.sender;
+        uint32 managerUnlockTime = 0;
 
         _totalSupply++;
 
