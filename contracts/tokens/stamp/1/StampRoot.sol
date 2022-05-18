@@ -26,7 +26,7 @@ contract StampRoot  {
     event TK_CT_nifi_stamp1_1(uint64 id);
 
     modifier validCreatorPercent(uint32 creatorPercent) {
-        require(creatorpercent< 2401, 277);
+        require(creatorPercent< 2401, 277);
         _;
     }
 

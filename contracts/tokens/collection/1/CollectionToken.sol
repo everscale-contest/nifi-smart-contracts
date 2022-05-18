@@ -61,7 +61,7 @@ contract CollectionToken {
     }
 
     modifier validCreatorPercent(uint32 creatorPercent) {
-        require(creatorpercent< 2401, 107, "Unvalid creator fees");
+        require(creatorPercent< 2401, 107, "Unvalid creator fees");
         _;
     }
 

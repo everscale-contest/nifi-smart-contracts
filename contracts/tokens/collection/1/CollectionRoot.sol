@@ -21,7 +21,7 @@ contract CollectionRoot  {
     uint64 _totalSupply;
 
     modifier validCreatorPercent(uint32 creatorPercent) {
-        require(creatorpercent< 2401, 277);
+        require(creatorPercent< 2401, 277);
         _;
     }
 

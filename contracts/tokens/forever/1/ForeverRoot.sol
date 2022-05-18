@@ -21,7 +21,7 @@ contract ForeverRoot  {
     event TK_CT_nifi_for1_1(uint64 id);
 
     modifier validCreatorPercent(uint32 creatorPercent) {
-        require(creatorpercent< 2401, 277);
+        require(creatorPercent< 2401, 277);
         _;
     }
 
