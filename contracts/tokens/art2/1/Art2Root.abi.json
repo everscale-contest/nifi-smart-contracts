@@ -8,6 +8,7 @@
 			"inputs": [
 				{"name":"manager","type":"address"},
 				{"name":"minCreationFee","type":"uint128"},
+				{"name":"minMintFee","type":"uint128"},
 				{"name":"creationTopup","type":"uint128"},
 				{"name":"mintTopup","type":"uint128"},
 				{"name":"name","type":"string"},
@@ -57,10 +58,9 @@
 		{
 			"name": "createSerie",
 			"inputs": [
-				{"name":"manager","type":"address"},
 				{"name":"limit","type":"uint64"},
 				{"name":"hash","type":"uint256"},
-				{"name":"creatorPercentReward","type":"uint32"}
+				{"name":"creatorPercent","type":"uint32"}
 			],
 			"outputs": [
 				{"name":"addr","type":"address"}
@@ -89,6 +89,7 @@
 			"name": "setCreationParameters",
 			"inputs": [
 				{"name":"minCreationFee","type":"uint128"},
+				{"name":"minMintFee","type":"uint128"},
 				{"name":"creationTopup","type":"uint128"},
 				{"name":"mintTopup","type":"uint128"}
 			],
@@ -101,6 +102,7 @@
 			],
 			"outputs": [
 				{"name":"minCreationFee","type":"uint128"},
+				{"name":"minMintFee","type":"uint128"},
 				{"name":"creationTopup","type":"uint128"},
 				{"name":"mintTopup","type":"uint128"}
 			]
@@ -124,6 +126,7 @@
 		{"name":"_constructorFlag","type":"bool"},
 		{"name":"_manager","type":"address"},
 		{"name":"_minCreationFee","type":"uint128"},
+		{"name":"_minMintFee","type":"uint128"},
 		{"name":"_creationTopup","type":"uint128"},
 		{"name":"_mintTopup","type":"uint128"},
 		{"name":"_name","type":"string"},

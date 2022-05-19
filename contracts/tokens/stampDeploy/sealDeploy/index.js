@@ -25,7 +25,7 @@ async function deploySealRoot (client,rootKeys) {
             function_name: 'constructor',
             input: {
                 manager: config.msgiManager,
-                minCreationFee: config.sealRoot.minCreationValue,
+                minCreationFee: config.sealRoot.minCreationFee,
                 creationTopup: config.sealRoot.creationTopup,
                 name : config.sealRoot.name,
                 symbol: config.sealRoot.symbol,

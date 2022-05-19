@@ -10,7 +10,7 @@
 				{"name":"manager","type":"address"},
 				{"name":"managerUnlockTime","type":"uint32"},
 				{"name":"creator","type":"address"},
-				{"name":"creatorPercentReward","type":"uint32"},
+				{"name":"creatorPercent","type":"uint32"},
 				{"name":"hash","type":"uint256"}
 			],
 			"outputs": [
@@ -23,7 +23,7 @@
 			],
 			"outputs": [
 				{"name":"creator","type":"address"},
-				{"name":"creatorPercentReward","type":"uint32"},
+				{"name":"creatorPercent","type":"uint32"},
 				{"name":"hash","type":"uint256"}
 			]
 		},
@@ -33,7 +33,7 @@
 			],
 			"outputs": [
 				{"name":"creator","type":"address"},
-				{"name":"creatorPercentReward","type":"uint32"},
+				{"name":"creatorPercent","type":"uint32"},
 				{"name":"hash","type":"uint256"}
 			]
 		},
@@ -53,7 +53,7 @@
 			"outputs": [
 				{"name":"owner","type":"address"},
 				{"name":"creator","type":"address"},
-				{"name":"creatorPercentReward","type":"uint32"},
+				{"name":"creatorPercent","type":"uint32"},
 				{"name":"manager","type":"address"},
 				{"name":"managerUnlockTime","type":"uint32"}
 			]
@@ -65,7 +65,7 @@
 			"outputs": [
 				{"name":"owner","type":"address"},
 				{"name":"creator","type":"address"},
-				{"name":"creatorPercentReward","type":"uint32"},
+				{"name":"creatorPercent","type":"uint32"},
 				{"name":"manager","type":"address"},
 				{"name":"managerUnlockTime","type":"uint32"}
 			]
@@ -149,7 +149,7 @@
 		{"name":"_managerUnlockTime","type":"uint32"},
 		{"name":"_owner","type":"address"},
 		{"name":"_creator","type":"address"},
-		{"name":"_creatorPercentReward","type":"uint32"},
+		{"name":"_creatorPercent","type":"uint32"},
 		{"name":"_hash","type":"uint256"}
 	]
 }

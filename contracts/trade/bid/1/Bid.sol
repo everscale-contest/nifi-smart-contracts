@@ -13,7 +13,7 @@ interface ITradeToken {
     function receiveTradeInfo() external view responsible returns(
             address owner,
             address creator,
-            uint32  creatorPercentReward,
+            uint32  creatorPercent,
             address manager,
             uint32  managerUnlockTime
         );
@@ -49,13 +49,14 @@ contract Bid is Accept {
     /*************
      * VARIABLES *
      *************/
-    address private _creator;
+    address private _bidder;
     address private _token;
 
     uint32  private _endTime;
 
     uint128 private _price;
-    uint128 private _fee;
+    uint128 private _minAcceptFee;
+    uint128 private _bidIncomePercent;
 
 
 
@@ -87,33 +88,32 @@ contract Bid is Accept {
         _;
     }
 
-    modifier checkValue() {
-        require(msg.value > 0.3 ton, 105, "Need more than 0.3 ton for operation");
-        _;
-    }
-
     /***************
      * CONSTRUCTOR *
      ***************/
     /**
-     * creator ..... Address of a buyer.
+     * bidder ..... Address of a buyer.
      * token ....... Address of token contract.
      * price ....... The value of offer.
-     * stepBid ..... Minimum bet step.
+     * bidStep ..... Minimum bet step.
      * fee ......... Commission for contract creatin and storage.
      * endTime ..... UNIX time. Offer end time.
      */
     constructor(
-        address creator,
+        address bidder,
         address token,
         uint128 price,
+        uint128 minAcceptFee,
+        uint128 bidIncomePercent,
         uint32  endTime
     )
         public onlyRoot accept
     {
-        _creator = creator;
+        _bidder = bidder;
         _token = token;
         _price = price;
+        _minAcceptFee = minAcceptFee;
+        _bidIncomePercent = bidIncomePercent;
         _endTime = endTime;
     }
 
@@ -125,7 +125,8 @@ contract Bid is Accept {
     /**
      * Everyone can call this method by internal message.
      */
-    function acceptBid() public view onlyInnerMsg validTime checkValue {
+    function acceptBid() public view onlyInnerMsg validTime {
+        require(msg.value >= _minAcceptFee,105,"Not enough money");
         ITradeToken(_token).receiveTradeInfo{value: 0, bounce: false, flag: 64, callback: Bid.onReceiveTradeInfo}();
     }
 
@@ -135,36 +136,45 @@ contract Bid is Accept {
     function onReceiveTradeInfo(
             address owner,
             address creator,
-            uint32  creatorPercentReward,
+            uint32  creatorPercent,
             address manager,
             uint32  managerUnlockTime
     ) public onlyToken {
         require(manager == address(this), 106, "Wrong manager");
         require(managerUnlockTime > _endTime+900, 107, "Wrong manager unlock time");
 
-        uint128 balance = address(this).balance;
+        uint128 creatorPercentReward;
 
-        if (creatorPercentReward>0) {
-            uint128 fee = math.muldiv(balance,creatorPercentReward,10000);
-            if (fee>0)
-                creator.transfer({value: fee, flag: 1, bounce: true});
+        if (creatorPercent > 0) {
+            creatorPercentReward = math.muldiv(_price,creatorPercent,10000);
+
+            if (creatorPercentReward > 0)
+                creator.transfer({value: creatorPercentReward, flag: 1, bounce: true});
         }
 
-        ITokenAddress(_token).changeOwner(_creator);
+        ITokenAddress(_token).changeOwner(_bidder);
         IToken(_token).unlock();
 
-        _root.transfer({value: balance/20, flag: 1, bounce: true});
+        uint128 shouldBeSentToRoot = math.muldiv(_price,_bidIncomePercent,10000);
+
+        owner.transfer({
+            value: _price - (creatorPercentReward + shouldBeSentToRoot),
+            flag: 1,
+            bounce: true
+        });
+
         emit BID_AC_nifi_bid_1{dest: SwiftAddress.value()}(_id);
-        selfdestruct(owner);
+        selfdestruct(_root);
     }
 
     /**
      * Everyone can call this method by external message.
      */
     function finish() public bidFinished accept {
-        //emit BidFinished(_id, _creator, _token, _price);
+        //emit BidFinished(_id, _bidder, _token, _price);
         emit BID_CL_nifi_bid_1{dest: SwiftAddress.value()}(_id);
-        selfdestruct(_creator);
+        _bidder.transfer({value: _price, flag: 1, bounce: true});
+        selfdestruct(_root);
     }
 
 
@@ -175,17 +185,17 @@ contract Bid is Accept {
     /**
      * root ........ Address of auction root contract.
      * id .......... Id of auction.
-     * creator ..... Address of a buyer.
+     * bidder ..... Address of a buyer.
      * token ....... Address of token contract.
      * price ....... The value of offer.
-     * stepBid ..... Minimum bet step.
+     * bidStep ..... Minimum bet step.
      * fee ......... Commission for contract creatin and storage.
      * endTime ..... UNIX time. Offer end time.
      */
     function getInfo() public view returns(
             address root,
             uint64 id,
-            address creator,
+            address bidder,
             address token,
             uint128 price,
             uint32  endTime
@@ -193,7 +203,7 @@ contract Bid is Accept {
     {
         root = _root;
         id = _id;
-        creator = _creator;
+        bidder = _bidder;
         token = _token;
         price = _price;
         endTime = _endTime;

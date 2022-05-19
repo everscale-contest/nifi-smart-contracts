@@ -20,8 +20,8 @@ contract CollectionRoot  {
     TvmCell _collectionCode;
     uint64 _totalSupply;
 
-    modifier validCreatorFees(uint32 fees) {
-        require(fees < 2401, 277);
+    modifier validCreatorPercent(uint32 creatorPercent) {
+        require(creatorPercent< 2401, 277);
         _;
     }
 
@@ -74,7 +74,7 @@ contract CollectionRoot  {
         string  name,
         string  symbol,
         uint64 limit,
-        uint32 creatorPercentReward,
+        uint32 creatorPercent,
         uint128 minMintFee,
         string[] level1,
         string[] level2,
@@ -83,7 +83,7 @@ contract CollectionRoot  {
         string[] level5,
         string hash,
         uint32 startTime
-    ) public validCreatorFees(creatorPercentReward) internalMsg returns(address addr){
+    ) public validCreatorPercent(creatorPercent) internalMsg returns(address addr){
         require(msg.value >= _minCreationFee,278);
         require(minMintFee >= 0.5 ton, 279);
         uint128 value = msg.value - _creationFixIncome;
@@ -97,7 +97,7 @@ contract CollectionRoot  {
                 _root: address(this),
                 _id: _totalSupply
             }
-        }(creator, _manager, name, symbol, limit, _colTokenCode, creatorPercentReward, minMintFee, level1, level2, level3, level4, level5, hash, startTime);
+        }(creator, _manager, name, symbol, limit, _colTokenCode, creatorPercent, minMintFee, level1, level2, level3, level4, level5, hash, startTime);
         emit SRC_CT_nifi_col1_1{dest: NotificationAddress.value()}(_totalSupply);
     }
 

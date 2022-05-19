@@ -12,7 +12,7 @@ interface ITradeToken {
     function receiveTradeInfo() external view responsible returns(
             address owner,
             address creator,
-            uint32  creatorPercentReward,
+            uint32  creatorPercent,
             address manager,
             uint32  managerUnlockTime
         );
@@ -56,7 +56,6 @@ contract DirectAuction is Accept {
     /*************
      * VARIABLES *
      *************/
-    address private _creator;
     address private _token;
 
     uint32  private _startTime;
@@ -64,11 +63,11 @@ contract DirectAuction is Accept {
     uint32  private _askFinish;
 
     uint128 private _startBid;
-    uint128 private _stepBid;
+    uint128 private _bidStep;
     uint128 private _bidCost;
     Bid     private _curBid;
 
-    uint32  _showcaseFees;
+    uint32  _showcasePercent;
 
 
 
@@ -84,7 +83,7 @@ contract DirectAuction is Accept {
         require(
             (price >= _startBid) &&
             (msg.value > price + _bidCost) &&
-            (price >= _curBid.value + _stepBid),
+            (price >= _curBid.value + _bidStep),
             101,
             "Too low bid");
         _;
@@ -116,35 +115,32 @@ contract DirectAuction is Accept {
      * CONSTRUCTOR *
      ***************/
     /**
-     * creator ..... Address of auction creator.
      * token ....... Address of token contract.
      * startBid .... The minimum bid at which the auction starts.
-     * stepBid ..... Minimum bet step.
+     * bidStep ..... Minimum bet step.
      * bidCost ...... Commission that participants add to each bid to make the contract work.
      * startTime ... UNIX time. Auction stat time.
      * endTime ..... UNIX time. Auction end time.
      */
     constructor(
-        address creator,
         address token,
         uint128 startBid,
-        uint128 stepBid,
+        uint128 bidStep,
         uint128 bidCost,
         uint32  startTime,
         uint32  endTime,
-        uint32 showcaseFees
+        uint32 showcasePercent
     )
         public onlyRoot accept
     {
-        _creator = creator;
         _token = token;
         _startBid = startBid;
-        _stepBid = stepBid;
+        _bidStep = bidStep;
         _bidCost = bidCost;
         _startTime = startTime;
         _endTime = endTime;
         _askFinish = endTime;
-        _showcaseFees = showcaseFees;
+        _showcasePercent = showcasePercent;
     }
 
 
@@ -178,23 +174,25 @@ contract DirectAuction is Accept {
     function onReceiveTradeInfo(
             address owner,
             address creator,
-            uint32  creatorPercentReward,
+            uint32  creatorPercent,
             address manager,
             uint32  managerUnlockTime
     ) public onlyToken {
         if ((manager == address(this)) && (managerUnlockTime > now+60)){
             uint128 balance = address(this).balance;
 
-            if (creatorPercentReward>0) {
-                uint128 fee = math.muldiv(balance,creatorPercentReward,10000);
-                if (fee>0)
-                    creator.transfer({value: fee, flag: 1, bounce: true});
+            if (creatorPercent>0) {
+                uint128 creatorPercentReward = math.muldiv(balance,creatorPercent,10000);
+
+                if (creatorPercentReward > 0)
+                    creator.transfer({value: creatorPercentReward, flag: 1, bounce: true});
             }
 
-            if (_showcaseFees>0) {
-                uint128 sfee = math.muldiv(balance,_showcaseFees,10000);
-                if (sfee>0)
-                    _root.transfer({value: sfee, flag: 1, bounce: true});
+            if (_showcasePercent>0) {
+                uint128 showcasePercentReward = math.muldiv(balance,_showcasePercent,10000);
+
+                if (showcasePercentReward>0)
+                    _root.transfer({value: showcasePercentReward, flag: 1, bounce: true});
             }
 
             if (_curBid.bider != address(0)) {
@@ -227,10 +225,9 @@ contract DirectAuction is Accept {
     /**
      * root ........ Address of auction root contract.
      * id .......... Id of auction.
-     * creator ..... Address of auction creator.
      * token ....... Address of token contract.
      * startBid .... The minimum bid at which the auction starts.
-     * stepBid ..... Minimum bet step.
+     * bidStep ..... Minimum bet step.
      * bidCost ...... Commission that participants add to each bid to make the contract work.
      * startTime ... UNIX time. Auction stat time.
      * endTime ..... UNIX time. Auction end time.
@@ -241,10 +238,9 @@ contract DirectAuction is Accept {
     function getInfo() public view returns(
             address root,
             uint64 id,
-            address creator,
             address token,
             uint128 startBid,
-            uint128 stepBid,
+            uint128 bidStep,
             uint128 bidCost,
             uint32  startTime,
             uint32  endTime,
@@ -253,12 +249,11 @@ contract DirectAuction is Accept {
     {
         root = _root;
         id = _id;
-        creator = _creator;
         token = _token;
         startTime = _startTime;
         endTime = _endTime;
         startBid = _startBid;
-        stepBid = _stepBid;
+        bidStep = _bidStep;
         bidCost = _bidCost;
         curBid = _curBid;
     }

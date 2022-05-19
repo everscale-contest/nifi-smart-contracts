@@ -21,12 +21,12 @@ contract StampRoot  {
     uint128 _requestEndorseFixIncome;
     uint128 _minForAddFee;
     uint128 _forAddFixIncome;
-    uint16 _endorsePercentFee;
+    uint16 _endorseIncomePercent;
 
     event TK_CT_nifi_stamp1_1(uint64 id);
 
-    modifier validCreatorFees(uint32 fees) {
-        require(fees < 2401, 277);
+    modifier validCreatorPercent(uint32 creatorPercent) {
+        require(creatorPercent< 2401, 277);
         _;
     }
 
@@ -55,7 +55,7 @@ contract StampRoot  {
         _requestEndorseFixIncome = 0.1 ever;
         _minForAddFee = 0.21 ever;
         _forAddFixIncome = 0.1 ever;
-        _endorsePercentFee = 500; // 5%
+        _endorseIncomePercent = 500; // 5%
         //require (_minCreationFee>_creationTopup)
         _minCreationFee = minCreationFee;
         _creationTopup = creationTopup;
@@ -84,20 +84,22 @@ contract StampRoot  {
     }
 
     function create(
-        address owner,
-        address manager,
-        uint32  managerUnlockTime,
-        address creator,
-        uint32  creatorPercentReward,
+        uint32  creatorPercent,
         uint256 hash
     )
         public
-        validCreatorFees(creatorPercentReward)
+        validCreatorPercent(creatorPercent)
         returns(
             address addr
         )
     {
         require(msg.value >= _minCreationFee,278);
+
+        uint32 managerUnlockTime = 0;
+
+        address owner = msg.sender;
+        address manager = msg.sender;
+        address creator = msg.sender;
 
         _totalSupply++;
 
@@ -109,7 +111,7 @@ contract StampRoot  {
                 _root: address(this),
                 _id: _totalSupply
             }
-        }(owner, manager, managerUnlockTime, creator, creatorPercentReward, hash,_minSealFee,_minSealRxFee,_minForAddFee,_forAddFixIncome,_endorsePercentFee);
+        }(owner, manager, managerUnlockTime, creator, creatorPercent, hash,_minSealFee,_minSealRxFee,_minForAddFee,_forAddFixIncome,_endorseIncomePercent);
 
         emit TK_CT_nifi_stamp1_1{dest: SwiftAddress.value()}(_totalSupply);
     }
@@ -147,24 +149,24 @@ contract StampRoot  {
         creationTopup = _creationTopup;
     }
 
-    function setStampParameters(uint128 minSealFee, uint128 minSealRxFee, uint128 requestEndorseFixIncome, uint128 minForAddFee, uint128 forAddFixIncome, uint16 endorsePercentIncome) public {
+    function setStampParameters(uint128 minSealFee, uint128 minSealRxFee, uint128 requestEndorseFixIncome, uint128 minForAddFee, uint128 forAddFixIncome, uint16 endorseIncomePercent) public {
         require(msg.sender == _manager,102);
-        require(endorsePercentIncome <= 10000,103);
+        require(endorseIncomePercent <= 10000,103);
         tvm.accept();
         _minSealFee = minSealFee;
         _minSealRxFee = minSealRxFee;
         _requestEndorseFixIncome = requestEndorseFixIncome;
         _minForAddFee = minForAddFee;
         _forAddFixIncome = forAddFixIncome;
-        _endorsePercentFee = endorsePercentIncome;
+        _endorseIncomePercent = endorseIncomePercent;
     }
 
-    function getStampParameters() public returns(uint128 minSealFee, uint128 minSealRxFee, uint128 requestEndorseFixIncome, uint128 minForAddFee, uint128 forAddFixIncome, uint16 endorsePercentIncome) {
+    function getStampParameters() public returns(uint128 minSealFee, uint128 minSealRxFee, uint128 requestEndorseFixIncome, uint128 minForAddFee, uint128 forAddFixIncome, uint16 endorseIncomePercent) {
         minSealFee = _minSealFee;
         minSealRxFee = _minSealRxFee;
         requestEndorseFixIncome = _requestEndorseFixIncome;
         minForAddFee = _minForAddFee;
         forAddFixIncome = _forAddFixIncome;
-        endorsePercentIncome = _endorsePercentFee;
+        endorseIncomePercent = _endorseIncomePercent;
     }
 }

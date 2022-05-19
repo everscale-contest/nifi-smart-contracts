@@ -18,7 +18,8 @@ contract Art2Series {
     uint64 _totalSupply;
     uint64 _limit;
     uint256 _hash;
-    uint32 _creatorPercentReward;
+    uint32 _creatorPercent;
+    uint128 _minMintFee;
     uint128 _mintTopup;
 
 
@@ -34,24 +35,27 @@ contract Art2Series {
      ***************/
     constructor(
         address manager,
+        address creator,
         string  name,
         string  symbol,
         uint64 limit,
         TvmCell tokenCode,
         uint256 hash,
-        uint32 creatorPercentReward,
+        uint32 creatorPercent,
+        uint128 minMintFee,
         uint128 mintTopup
     )
         public onlyRoot
     {
         _creator = manager;
-        _manager = manager;
+        _manager = creator;
         _name = name;
         _symbol = symbol;
         _tokenCode = tokenCode;
         _limit = limit;
         _hash = hash;
-        _creatorPercentReward = creatorPercentReward;
+        _creatorPercent = creatorPercent;
+        _minMintFee = minMintFee;
         _mintTopup = mintTopup;
     }
 
@@ -69,13 +73,10 @@ contract Art2Series {
      *                       If you don't want to set the manager, use 0.
      * addr ................ Address of the token contract.
      * creator ............. Address of creator.
-     * creatorPercentReward ......... Creator fee. e.g. 1 = 0.01%. 1 is minimum. 10_000 is maximum.
+     * creatorPercent ......... Creator fee. e.g. 1 = 0.01%. 1 is minimum. 10_000 is maximum.
      * hash ................ Hash of data that associated with token.
      */
-    function create(
-        address manager,
-        uint32  managerUnlockTime
-    )
+    function create()
         public
         internalMsg
         returns(
@@ -84,7 +85,11 @@ contract Art2Series {
     {
         require(_totalSupply<_limit,103);
         require(msg.sender == _manager,102);
-        require(msg.value >= _mintTopup+0.02 ton,105);
+        require(msg.value >= _minMintFee, 105);
+
+        address manager = msg.sender;
+        uint32 managerUnlockTime = 0;
+
         _totalSupply++;
 
         addr = new Art2Token{
@@ -97,7 +102,7 @@ contract Art2Series {
                 _seriesId: _id,
                 _id: _totalSupply
             }
-        }(_manager, manager, managerUnlockTime, _creator, _creatorPercentReward, _hash);
+        }(_manager, manager, managerUnlockTime, _creator, _creatorPercent, _hash);
         emit TK_MT_nifi_art2_1{dest: SwiftAddress.value()}(_id,_totalSupply);
         _root.transfer({value: 0, flag: 64, bounce: true});
 
@@ -152,7 +157,7 @@ contract Art2Series {
         _manager = newManager;
     }
 
-    function getInfo() public view returns(uint64 id, string  name, string  symbol, uint64 totalSupply, uint64 limit, uint256 hash, address creator, uint32 creatorPercentReward){
+    function getInfo() public view returns(uint64 id, string  name, string  symbol, uint64 totalSupply, uint64 limit, uint256 hash, address creator, uint32 creatorPercent){
         id = _id;
         name = _name;
         symbol = _symbol;
@@ -160,7 +165,7 @@ contract Art2Series {
         limit = _limit;
         hash = _hash;
         creator = _creator;
-        creatorPercentReward = _creatorPercentReward;
+        creatorPercent = _creatorPercent;
     }
 
     function withdraw(address addr, uint128 value, bool bounce) public view {

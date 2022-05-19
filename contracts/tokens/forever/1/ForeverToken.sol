@@ -34,7 +34,7 @@ contract ForeverToken is IForeverToken {
     uint32  _managerUnlockTime;
 
     address _creator;
-    uint32  _creatorPercentReward;
+    uint32  _creatorPercent;
     uint256 _hash;
 
     StampInfo[] _stamps;
@@ -75,8 +75,8 @@ contract ForeverToken is IForeverToken {
         _;
     }
 
-    modifier validCreatorFees(uint32 fees) {
-        require(fees < 2401, 107, "Unvalid creator fees");
+    modifier validCreatorPercent(uint32 creatorPercent) {
+        require(creatorPercent< 2401, 107, "Unvalid creator fees");
         _;
     }
 
@@ -96,19 +96,19 @@ contract ForeverToken is IForeverToken {
         address manager,
         uint32  managerUnlockTime,
         address creator,
-        uint32  creatorPercentReward,
+        uint32  creatorPercent,
         uint256 hash,
         uint128 delForeverCost
     )
         public
         onlyRoot
-        validCreatorFees(creatorPercentReward)
+        validCreatorPercent(creatorPercent)
         addressIsNotNull(creator)
         addressIsNotNull(owner)
         accept
     {
         _creator = creator;
-        _creatorPercentReward = creatorPercentReward;
+        _creatorPercent = creatorPercent;
         _hash = hash;
         _owner = owner;
         _manager = manager;
@@ -126,13 +126,13 @@ contract ForeverToken is IForeverToken {
         emit TK_CO_nifi_for1_1{dest: SwiftAddress.value()}(_id, _owner);
     }
 
-    function receiveArtInfo() public view responsible returns(address creator, uint32  creatorPercentReward, uint256 hash) {
+    function receiveArtInfo() public view responsible returns(address creator, uint32  creatorPercent, uint256 hash) {
         return{value: 0, bounce: false, flag: 64} getArtInfo();
     }
 
-    function getArtInfo() public view returns(address creator, uint32  creatorPercentReward, uint256 hash) {
+    function getArtInfo() public view returns(address creator, uint32  creatorPercent, uint256 hash) {
         creator = _creator;
-        creatorPercentReward = _creatorPercentReward;
+        creatorPercent = _creatorPercent;
         hash = _hash;
     }
 
@@ -144,17 +144,17 @@ contract ForeverToken is IForeverToken {
     function receiveTradeInfo() public view responsible returns(
             address owner,
             address creator,
-            uint32  creatorPercentReward,
+            uint32  creatorPercent,
             address manager,
             uint32  managerUnlockTime
         ) {
         return{value: 0, bounce: false, flag: 64} getTradeInfo();
     }
 
-    function getTradeInfo() public view returns(address owner, address creator, uint32 creatorPercentReward, address manager, uint32 managerUnlockTime) {
+    function getTradeInfo() public view returns(address owner, address creator, uint32 creatorPercent, address manager, uint32 managerUnlockTime) {
         owner = _owner;
         creator = _creator;
-        creatorPercentReward = _creatorPercentReward;
+        creatorPercent = _creatorPercent;
         manager = _manager;
         managerUnlockTime = _managerUnlockTime;
     }

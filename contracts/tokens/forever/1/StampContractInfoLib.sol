@@ -2,9 +2,9 @@ pragma ton-solidity >=0.47.0;
 
     library StampContractInfo {
         function STAMP_ROOT() internal inline returns(address){
-            return address(0xae342223a991ab6299531fa75e433cd068b6e20171b33c98f82c5997da5537c9);
+            return address(0xc98e477a059af5aeaa544850df555a150ea3b47e51cf800d48ad9604babd7546);
         }
-        uint256 constant STAMP_ROOT_PUBKEY = 0x55962e2e4919c254145e11f1ca2cdfc1302f74c0c719bb6355de26f4a5dd5276;
-        uint256 constant STAMP_CODEHASH = 0xfb4db31e28cf308b1052d958eebd4ce0fa82796d566d6e969a5e660a810321a9;
+        uint256 constant STAMP_ROOT_PUBKEY = 0x2d3b461017ff29ed30af561444660cbc37f5cb19df25a9910a63d8325200e717;
+        uint256 constant STAMP_CODEHASH = 0x71160ca59ae11697b65b309424346a3c080f36bcfa1370c9a8586966a1905541;
         uint16 constant  STAMP_CODEDEPTH = 9;
     }

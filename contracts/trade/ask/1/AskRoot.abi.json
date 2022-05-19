@@ -8,7 +8,9 @@
 			"inputs": [
 				{"name":"manager","type":"address"},
 				{"name":"minCreationFee","type":"uint128"},
-				{"name":"creationFixIncome","type":"uint128"},
+				{"name":"minAcceptFee","type":"uint128"},
+				{"name":"creationTopup","type":"uint128"},
+				{"name":"askIncomePercent","type":"uint128"},
 				{"name":"name","type":"string"},
 				{"name":"symbol","type":"string"},
 				{"name":"tokenCode","type":"cell"}
@@ -19,11 +21,10 @@
 		{
 			"name": "create",
 			"inputs": [
-				{"name":"creator","type":"address"},
 				{"name":"token","type":"address"},
 				{"name":"price","type":"uint128"},
 				{"name":"endTime","type":"uint32"},
-				{"name":"showcaseFee","type":"uint32"}
+				{"name":"showcasePercent","type":"uint32"}
 			],
 			"outputs": [
 				{"name":"addr","type":"address"}
@@ -49,6 +50,24 @@
 			]
 		},
 		{
+			"name": "getAskParameters",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"minAcceptFee","type":"uint128"},
+				{"name":"askIncomePercent","type":"uint128"}
+			]
+		},
+		{
+			"name": "setAskParameters",
+			"inputs": [
+				{"name":"minAcceptFee","type":"uint128"},
+				{"name":"askIncomePercent","type":"uint128"}
+			],
+			"outputs": [
+			]
+		},
+		{
 			"name": "withdraw",
 			"inputs": [
 				{"name":"addr","type":"address"},
@@ -62,7 +81,7 @@
 			"name": "setCreationParameters",
 			"inputs": [
 				{"name":"minCreationFee","type":"uint128"},
-				{"name":"creationFixIncome","type":"uint128"}
+				{"name":"creationTopup","type":"uint128"}
 			],
 			"outputs": [
 			]
@@ -74,7 +93,7 @@
 			],
 			"outputs": [
 				{"name":"minCreationFee","type":"uint128"},
-				{"name":"creationFixIncome","type":"uint128"}
+				{"name":"creationTopup","type":"uint128"}
 			]
 		},
 		{
@@ -83,7 +102,7 @@
 			],
 			"outputs": [
 				{"name":"minCreationFee","type":"uint128"},
-				{"name":"creationFixIncome","type":"uint128"}
+				{"name":"creationTopup","type":"uint128"}
 			]
 		},
 		{
@@ -141,6 +160,18 @@
 			"outputs": [
 				{"name":"code","type":"cell"}
 			]
+		},
+		{
+			"name": "_await_ITradeToken_receiveTradeInfo",
+			"inputs": [
+				{"name":"owner","type":"address"},
+				{"name":"creator","type":"address"},
+				{"name":"creatorPercent","type":"uint32"},
+				{"name":"manager","type":"address"},
+				{"name":"managerUnlockTime","type":"uint32"}
+			],
+			"outputs": [
+			]
 		}
 	],
 	"data": [
@@ -154,7 +185,7 @@
 				{"name":"creator","type":"address"},
 				{"name":"price","type":"uint128"},
 				{"name":"endTime","type":"uint32"},
-				{"name":"showcaseFee","type":"uint32"}
+				{"name":"showcasePercent","type":"uint32"}
 			],
 			"outputs": [
 			]
@@ -164,12 +195,15 @@
 		{"name":"_pubkey","type":"uint256"},
 		{"name":"_timestamp","type":"uint64"},
 		{"name":"_constructorFlag","type":"bool"},
+		{"name":"_await","type":"optional(cell)"},
 		{"name":"_name","type":"string"},
 		{"name":"_symbol","type":"string"},
 		{"name":"_tokenCode","type":"cell"},
 		{"name":"_totalSupply","type":"uint64"},
 		{"name":"_manager","type":"address"},
 		{"name":"_minCreationFee","type":"uint128"},
-		{"name":"_creationFixIncome","type":"uint128"}
+		{"name":"_creationTopup","type":"uint128"},
+		{"name":"_minAcceptFee","type":"uint128"},
+		{"name":"_askIncomePercent","type":"uint128"}
 	]
 }
