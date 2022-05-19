@@ -21,14 +21,14 @@ export default class ArtRoot extends Contract {
      **********/
     public async deploy(
         manager: string,
-        minCreationValue: number,
+        minCreationFee: number,
         creationTopup: number,
         name: string,
         symbol: string
     ): Promise<boolean> {
         return await this._deploy({
             manager: manager,
-            minCreationValue: minCreationValue,
+            minCreationFee: minCreationFee,
             creationTopup: creationTopup,
             name: name,
             symbol: symbol,

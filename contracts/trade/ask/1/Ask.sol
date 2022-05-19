@@ -7,6 +7,7 @@ import "../../../abstract/interfaces/IToken.sol";
 import "../../../abstract/interfaces/ITokenAddress.sol";
 import "../../../abstract/modifiers/Accept.sol";
 import "../../../libraries/SwiftAddress.sol";
+import "../../../Constants.sol";
 
 
 contract Ask is Accept {
@@ -24,14 +25,17 @@ contract Ask is Accept {
     address static _root;
     uint64 static _id;
 
-
+    uint128 _askIncomePercent;
 
     /*************
      * VARIABLES *
      *************/
+    address private _owner;
     address private _creator;
     address private _token;
-    uint32 private _showCaseFee;
+    uint128 private _minAcceptFee;
+    uint32 private _creatorPercent;
+    uint32 private _showcasePercent;
     uint32  private _endTime;
     uint128 private _price;
 
@@ -44,7 +48,7 @@ contract Ask is Accept {
     }
 
     modifier onlyCreator() {
-        require(msg.sender == _creator, 101, "Method for the creator only");
+        require(msg.sender == _owner, 101, "Method for the owner only");
         _;
     }
 
@@ -62,27 +66,38 @@ contract Ask is Accept {
      * CONSTRUCTOR *
      ***************/
     /**
-     * creator ..... Address of a buyer.
+     * owner ..... Address of a seller.
+     * creator ..... Address of a token creator.
      * token ....... Address of token contract.
      * price ....... The value of offer.
-     * stepBid ..... Minimum bet step.
-     * fee ......... Commission for contract creatin and storage.
      * endTime ..... UNIX time. Offer end time.
+     * minAcceptFee ..... Minimal fee for accept.
+     * creatorPercent ..... Creator percent.
+     * showcasePercent ..... Percent of token sale intermediary.
+     * askIncomePercent ..... Percent of marketplace.
      */
     constructor(
+        address owner,
         address creator,
         address token,
         uint128 price,
-        uint32  endTime,
-        uint32 showcaseFee
+        uint32 endTime,
+        uint128 minAcceptFee,
+        uint32 creatorPercent,
+        uint32 showcasePercent,
+        uint128 askIncomePercent
     )
         public onlyRoot accept
     {
+        _owner = owner;
         _creator = creator;
         _token = token;
         _price = price;
         _endTime = endTime;
-        _showCaseFee = showcaseFee;
+        _minAcceptFee = minAcceptFee;
+        _creatorPercent = creatorPercent;
+        _showcasePercent = showcasePercent;
+        _askIncomePercent = askIncomePercent;
     }
 
 
@@ -94,21 +109,37 @@ contract Ask is Accept {
      * Everyone can call this method by internal message.
      */
     function acceptAsk() public onlyInnerMsg validTime {
-        require(msg.value > _price, 105, "Not enougth money");
-        uint128 fee;
-        if (_showCaseFee>0) {
-            fee = math.muldiv(_price,_showCaseFee,10000);
-            if (fee>0)
-                _root.transfer({value: fee, flag: 1, bounce: true});
+        require(msg.value > _price + _minAcceptFee, 105, "Not enough money");
+
+        uint128 creatorPercentReward;
+
+        if (_creatorPercent > 0) {
+            creatorPercentReward = math.muldiv(_price, _creatorPercent, 10000);
+
+            if (creatorPercentReward > 0) {
+                _creator.transfer({value: creatorPercentReward, flag: 1, bounce: true});
+            }
+        }
+
+        uint128 showcasePercentReward;
+
+        if (_showcasePercent > 0) {
+            showcasePercentReward = math.muldiv(_price, _showcasePercent, 10000);
+
+            if (showcasePercentReward > 0)
+                _root.transfer({value: showcasePercentReward, flag: 1, bounce: true});
         }
 
         ITokenAddress(_token).changeOwner(msg.sender);
         IToken(_token).unlock();
 
-        uint128 rootFee;
-        rootFee = math.muldiv(_price,500,10000);
+        uint128 shouldBeSentToRoot = math.muldiv(_price, _askIncomePercent, 10000);
 
-        _creator.transfer({value: _price-(fee+rootFee), flag: 1, bounce: true});
+        _owner.transfer({
+            value: _price - (creatorPercentReward + showcasePercentReward + shouldBeSentToRoot),
+            flag: 1,
+            bounce: true
+        });
 
         emit ASK_AC_nifi_ask_1{dest: SwiftAddress.value()}(_id, msg.sender);
         selfdestruct(_root);
@@ -132,7 +163,7 @@ contract Ask is Accept {
     }
 
     function changePrice(uint128 newPrice) public onlyCreator accept {
-        require(address(this).balance>0.1 ton,103);
+        require(address(this).balance > Constants.MAX_GAS_COST, 103);
         _price = newPrice;
         emit ASK_PC_nifi_ask_1{dest: SwiftAddress.value()}(_id, newPrice);
     }
@@ -144,29 +175,29 @@ contract Ask is Accept {
     /**
      * root ........ Address of auction root contract.
      * id .......... Id of auction.
-     * creator ..... Address of a buyer.
+     * owner ..... Address of a buyer.
      * token ....... Address of token contract.
      * price ....... The value of offer.
-     * stepBid ..... Minimum bet step.
+     * bidStep ..... Minimum bet step.
      * fee ......... Commission for contract creatin and storage.
      * endTime ..... UNIX time. Offer end time.
      */
     function getInfo() public view returns(
             address root,
             uint64 id,
-            address creator,
+            address owner,
             address token,
             uint128 price,
             uint32  endTime,
-            uint32 showcaseFee
+            uint32 showcasePercent
         )
     {
         root = _root;
         id = _id;
-        creator = _creator;
+        owner = _owner;
         token = _token;
         price = _price;
         endTime = _endTime;
-        showcaseFee = _showCaseFee;
+        showcasePercent = _showcasePercent;
     }
 }

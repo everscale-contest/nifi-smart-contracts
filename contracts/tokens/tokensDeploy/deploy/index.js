@@ -28,7 +28,7 @@ async function deployArtRoot (client,rootKeys) {
             function_name: 'constructor',
             input: {
                 manager: config.msgiManager,
-                minCreationValue: config.art.minCreationValue,
+                minCreationFee: config.art.minCreationFee,
                 creationTopup : config.art.creationTopup,
                 name : "ArtRoot",
                 symbol: "ART",
@@ -70,7 +70,8 @@ async function deployArt2Root (client,rootKeys) {
             function_name: 'constructor',
             input: {
                 manager: config.msgiManager,
-                minCreationFee: config.art2.minCreationValue,
+                minCreationFee: config.art2.minCreationFee,
+                minMintFee: config.art2.minMintFee,
                 creationTopup : config.art2.creationTopup,
                 mintTopup : config.art2.mintTopup,
                 name : "Art2Root",

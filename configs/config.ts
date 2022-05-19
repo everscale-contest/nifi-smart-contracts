@@ -107,7 +107,7 @@ export default {
                     giverDeposit: 100_000_000,
 
                     manager: '0:ab5f48c154f672d2f4c30c4473251e14a05199d1df1300263d8f5b0e80e3e387',
-                    minCreationValue: 350_000_000,
+                    minCreationFee: 350_000_000,
                     creationTopup: 200_000_000,
                     name: 'Art',
                     symbol: 'ART'
@@ -117,7 +117,7 @@ export default {
                     giverDeposit: 100_000_000,
 
                     manager: '0:ab5f48c154f672d2f4c30c4473251e14a05199d1df1300263d8f5b0e80e3e387',
-                    minCreationValue: 350_000_000,
+                    minCreationFee: 350_000_000,
                     creationTopup: 200_000_000,
                     mintTopup: 200_000_000,
                     name: 'Art2',
@@ -128,7 +128,7 @@ export default {
                     giverDeposit: 100_000_000,
 
                     manager: '0:ab5f48c154f672d2f4c30c4473251e14a05199d1df1300263d8f5b0e80e3e387',
-                    minCreationValue: 500_000_000,
+                    minCreationFee: 500_000_000,
                     creationFixIncome: 100_000_000,
                     name: 'Auction',
                     symbol: 'AUCTION'
@@ -138,7 +138,7 @@ export default {
                     giverDeposit: 100_000_000,
 
                     manager: '0:ab5f48c154f672d2f4c30c4473251e14a05199d1df1300263d8f5b0e80e3e387',
-                    minCreationValue: 200_000_000,
+                    minCreationFee: 200_000_000,
                     creationFixIncome: 100_000_000,
                     creationAndStorageFee : 0,
                     name: 'Bid',
@@ -149,7 +149,7 @@ export default {
                     giverDeposit: 100_000_000,
 
                     manager: '0:ab5f48c154f672d2f4c30c4473251e14a05199d1df1300263d8f5b0e80e3e387',
-                    minCreationValue: 200_000_000,
+                    minCreationFee: 200_000_000,
                     creationFixIncome: 100_000_000,
                     creationAndStorageFee : 0,
                     name: 'Ask',
@@ -160,7 +160,7 @@ export default {
                     giverDeposit: 100_000_000,
 
                     manager: '0:ab5f48c154f672d2f4c30c4473251e14a05199d1df1300263d8f5b0e80e3e387',
-                    minCreationValue: 400_000_000,
+                    minCreationFee: 400_000_000,
                     creationTopup: 300_000_000,
                     name: 'Stamp',
                     symbol: 'STP'
@@ -170,7 +170,7 @@ export default {
                     giverDeposit: 100_000_000,
 
                     manager: '0:ab5f48c154f672d2f4c30c4473251e14a05199d1df1300263d8f5b0e80e3e387',
-                    minCreationValue: 300_000_000,
+                    minCreationFee: 300_000_000,
                     creationTopup: 200_000_000,
                      name: 'Seal',
                     symbol: 'SEA'
@@ -180,7 +180,7 @@ export default {
                     giverDeposit: 100_000_000,
 
                     manager: '0:ab5f48c154f672d2f4c30c4473251e14a05199d1df1300263d8f5b0e80e3e387',
-                    minCreationValue: 400_000_000,
+                    minCreationFee: 400_000_000,
                     creationTopup: 300_000_000,
                      name: 'Forever',
                     symbol: 'FOR'
@@ -190,7 +190,7 @@ export default {
                     giverDeposit: 100_000_000,
 
                     manager: '0:ab5f48c154f672d2f4c30c4473251e14a05199d1df1300263d8f5b0e80e3e387',
-                    minCreationValue: 100_000_000,
+                    minCreationFee: 100_000_000,
                     creationTopup: 10_000_000,
                     limit: 100_000,
                     freezingTimeStart: 0,

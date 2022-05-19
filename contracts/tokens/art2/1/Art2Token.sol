@@ -25,7 +25,7 @@ contract Art2Token {
     uint32  internal _managerUnlockTime;
 
     address   private _creator;
-    uint32    private _creatorPercentReward;
+    uint32    private _creatorPercent;
     uint256   private _hash;
 
 
@@ -64,8 +64,8 @@ contract Art2Token {
         _;
     }
 
-    modifier validCreatorFees(uint32 fees) {
-        require(fees < 2401, 107, "Unvalid creator fees");
+    modifier validCreatorPercent(uint32 creatorPercent) {
+        require(creatorPercent< 2401, 107, "Unvalid creator fees");
         _;
     }
 
@@ -85,7 +85,7 @@ contract Art2Token {
      * manager ............. Contract that governs this contract.
      * managerUnlockTime ... UNIX time. Time when the manager can be unlocked.
      * creator ............. Address of creator.
-     * creatorPercentReward ......... Creator fee. e.g. 1 = 0.01%. 1 is minimum. 10_000 is maximum.
+     * creatorPercent ......... Creator fee. e.g. 1 = 0.01%. 1 is minimum. 10_000 is maximum.
      * hash ................ Hash of data that associated with token.
      */
     constructor(
@@ -93,19 +93,18 @@ contract Art2Token {
         address manager,
         uint32  managerUnlockTime,
         address creator,
-        uint32  creatorPercentReward,
+        uint32  creatorPercent,
         uint256 hash
     )
         public
         onlySeries
-        validCreatorFees(creatorPercentReward)
+        validCreatorPercent(creatorPercent)
         addressIsNotNull(creator)
         addressIsNotNull(owner)
         accept
     {
-        _root.transfer({value: 0.1 ton, flag: 1, bounce: true});
         _creator = creator;
-        _creatorPercentReward = creatorPercentReward;
+        _creatorPercent = creatorPercent;
         _hash = hash;
         _owner = owner;
         _manager = manager;
@@ -141,17 +140,17 @@ contract Art2Token {
     function receiveTradeInfo() public view responsible returns(
             address owner,
             address creator,
-            uint32  creatorPercentReward,
+            uint32  creatorPercent,
             address manager,
             uint32  managerUnlockTime
         ) {
         return{value: 0, bounce: false, flag: 64} getTradeInfo();
     }
 
-    function getTradeInfo() public view returns(address owner, address creator, uint32 creatorPercentReward, address manager, uint32 managerUnlockTime) {
+    function getTradeInfo() public view returns(address owner, address creator, uint32 creatorPercent, address manager, uint32 managerUnlockTime) {
         owner = _owner;
         creator = _creator;
-        creatorPercentReward = _creatorPercentReward;
+        creatorPercent = _creatorPercent;
         manager = _manager;
         managerUnlockTime = _managerUnlockTime;
     }

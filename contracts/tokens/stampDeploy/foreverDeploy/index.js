@@ -25,7 +25,7 @@ async function deployForeverRoot (client,rootKeys) {
             function_name: 'constructor',
             input: {
                 manager: config.msgiManager,
-                minCreationFee: config.foreverRoot.minCreationValue,
+                minCreationFee: config.foreverRoot.minCreationFee,
                 creationTopup: config.foreverRoot.creationTopup,
                 name : config.foreverRoot.name,
                 symbol: config.foreverRoot.symbol,

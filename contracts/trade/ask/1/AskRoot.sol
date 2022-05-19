@@ -5,14 +5,28 @@ pragma AbiHeader expire;
 
 import "../../../abstract/Root.sol";
 import "../../../abstract/extensions/rootManaged/root/RootManaged.sol";
-import "../../../abstract/extensions/rootManaged/root/RootManagedCreationTradeFee.sol";
+import "../../../abstract/extensions/rootManaged/root/RootManagedCreationFee.sol";
 import "../../../abstract/extensions/rootManaged/root/RootManagedWithdraw.sol";
 import "Ask.sol";
 import "../../../libraries/SwiftAddress.sol";
 
-contract AskRoot is Root, RootManaged, RootManagedCreationTradeFee, RootManagedWithdraw {
+interface ITradeToken {
 
-    event ASK_CT_nifi_ask_1(uint64 id, address token, address creator, uint128 price, uint32 endTime, uint32 showcaseFee);
+    function receiveTradeInfo() external view responsible returns(
+            address owner,
+            address creator,
+            uint32  creatorPercent,
+            address manager,
+            uint32  managerUnlockTime
+        );
+}
+
+contract AskRoot is Root, RootManaged, RootManagedCreationFee, RootManagedWithdraw {
+
+    uint128 _minAcceptFee;
+    uint128 _askIncomePercent;
+
+    event ASK_CT_nifi_ask_1(uint64 id, address token, address creator, uint128 price, uint32 endTime, uint32 showcasePercent);
 
     /***************
      * CONSTRUCTOR *
@@ -25,7 +39,9 @@ contract AskRoot is Root, RootManaged, RootManagedCreationTradeFee, RootManagedW
     constructor(
         address manager,
         uint128 minCreationFee,
-        uint128 creationFixIncome,
+        uint128 minAcceptFee,
+        uint128 creationTopup,
+        uint128 askIncomePercent,
         string  name,
         string  symbol,
         TvmCell tokenCode
@@ -33,8 +49,11 @@ contract AskRoot is Root, RootManaged, RootManagedCreationTradeFee, RootManagedW
         public
         Root(name, symbol, tokenCode)
         RootManaged(manager)
-        RootManagedCreationTradeFee(minCreationFee, creationFixIncome)
+        RootManagedCreationFee(minCreationFee, creationTopup)
     {
+        _minAcceptFee = minAcceptFee;
+        _creationTopup = creationTopup;
+        _askIncomePercent = askIncomePercent;
     }
 
     /************
@@ -44,29 +63,37 @@ contract AskRoot is Root, RootManaged, RootManagedCreationTradeFee, RootManagedW
      * Create token contract and returns address. Accept 0.1 ton and more.
      */
     function create(
-        address creator,
         address token,
         uint128 price,
         uint32  endTime,
-        uint32 showcaseFee
+        uint32 showcasePercent
     )
         external creationPaymentIsEnough
         returns(
             address addr
         )
     {
+        (
+            address owner,
+            address creator,
+            uint32  creatorPercent
+            ,,
+        ) = ITradeToken(token).receiveTradeInfo().await;
+
+        require(msg.sender == owner,280,"Owner of token is not sender");
+
         _totalSupply++;
-        uint128 value = msg.value - _creationFixIncome;
+
         addr = new Ask{
             code: _tokenCode,
-            value: value,
+            value: _creationTopup,
             pubkey: tvm.pubkey(),
             varInit: {
                 _root: address(this),
                 _id: _totalSupply
             }
-        }( creator, token, price, endTime, showcaseFee);
-        emit ASK_CT_nifi_ask_1{dest: SwiftAddress.value()}(_totalSupply, token, creator, price, endTime, showcaseFee);
+        }( owner, creator, token, price, endTime, _minAcceptFee, creatorPercent, showcasePercent, _askIncomePercent);
+        emit ASK_CT_nifi_ask_1{dest: SwiftAddress.value()}(_totalSupply, token, creator, price, endTime, showcasePercent);
     }
 
 
@@ -104,5 +131,19 @@ contract AskRoot is Root, RootManaged, RootManagedCreationTradeFee, RootManagedW
             code: _tokenCode
         });
         return address(tvm.hash(stateInit));
+    }
+
+    function getAskParameters() public view returns(
+        uint128 minAcceptFee,
+        uint128 askIncomePercent
+    ) {
+        minAcceptFee = _minAcceptFee;
+        askIncomePercent = _askIncomePercent;
+    }
+
+    function setAskParameters(uint128 minAcceptFee, uint128 askIncomePercent) public {
+        require(msg.sender == _manager,280);
+        _minAcceptFee = minAcceptFee;
+        _askIncomePercent = askIncomePercent;
     }
 }

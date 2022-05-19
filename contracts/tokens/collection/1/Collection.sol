@@ -22,7 +22,7 @@ contract Collection {
     uint32 _totalSupply;
     uint32 _ready2Mint;
     uint64 _limit;
-    uint32 _creatorPercentReward;
+    uint32 _creatorPercent;
     uint128 _minMintFee;
 
     string[] _level1;
@@ -57,7 +57,7 @@ contract Collection {
         string  symbol,
         uint64 limit,
         TvmCell tokenCode,
-        uint32 creatorPercentReward,
+        uint32 creatorPercent,
         uint128 minMintFee,
         string[] level1,
         string[] level2,
@@ -75,7 +75,7 @@ contract Collection {
         _symbol = symbol;
         _tokenCode = tokenCode;
         _limit = limit;
-        _creatorPercentReward = creatorPercentReward;
+        _creatorPercent = creatorPercent;
         _minMintFee = minMintFee;
         _level1 = level1;
         _level2 = level2;
@@ -117,7 +117,7 @@ contract Collection {
                 _id4: id4,
                 _id5: id5
             }
-        }(owner,_creator,_creatorPercentReward, mintId);
+        }(owner,_creator,_creatorPercent, mintId);
         if (owner == _creator) {
             if (msg.value-GAS-TOKEN_MINT_GAS>0.01 ton) {
                 _root.transfer({value: msg.value-GAS-TOKEN_MINT_GAS, bounce: true, flag: 0});
@@ -173,14 +173,14 @@ contract Collection {
         _manager = newManager;
     }
 
-    function getInfo() public view functionID(0xa) returns(uint64 id, string  name, string  symbol, uint64 totalSupply, uint64 limit, address creator, uint32 creatorPercentReward, string hash, uint128 minMintFee , uint32 startTime){
+    function getInfo() public view functionID(0xa) returns(uint64 id, string  name, string  symbol, uint64 totalSupply, uint64 limit, address creator, uint32 creatorPercent, string hash, uint128 minMintFee , uint32 startTime){
         id = _id;
         name = _name;
         symbol = _symbol;
         totalSupply = _totalSupply;
         limit = _limit;
         creator = _creator;
-        creatorPercentReward = _creatorPercentReward;
+        creatorPercent = _creatorPercent;
         hash = _hash;
         minMintFee = _minMintFee;
         startTime = _startTime;

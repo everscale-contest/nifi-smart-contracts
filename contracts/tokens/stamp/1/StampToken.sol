@@ -8,7 +8,7 @@ import "IStampToken.sol";
 import "../../forever/1/IForeverToken.sol";
 import "../../seal/1/SealToken.sol";
 import "SealContractInfoLib.sol";
-import "../../Constants.sol";
+import "../../../Constants.sol";
 
 contract StampToken is IStampToken {
 
@@ -31,7 +31,7 @@ contract StampToken is IStampToken {
     uint32  _managerUnlockTime;
 
     address _creator;
-    uint32  _creatorPercentReward;
+    uint32  _creatorPercent;
     uint256 _hash;
 
     uint8 _sealPlace;
@@ -46,7 +46,7 @@ contract StampToken is IStampToken {
     uint128 _minCancelEndorseFee;
     uint128 _minForAddFee;
     uint128 _forAddFixIncome;
-    uint16 _endorsePercentFee;
+    uint16 _endorseIncomePercent;
 
     modifier onlyRoot() {
         require(msg.sender == _root, 101, "Method for the root only");
@@ -82,8 +82,8 @@ contract StampToken is IStampToken {
         _;
     }
 
-    modifier validCreatorFees(uint32 fees) {
-        require(fees < 2401, 107, "Unvalid creator fees");
+    modifier validCreatorPercent(uint32 creatorPercent) {
+        require(creatorPercent< 2401, 107, "Unvalid creator fees");
         _;
     }
 
@@ -103,23 +103,23 @@ contract StampToken is IStampToken {
         address manager,
         uint32  managerUnlockTime,
         address creator,
-        uint32  creatorPercentReward,
+        uint32  creatorPercent,
         uint256 hash,
         uint128 minRequestEndorseFee,
         uint128 minCancelEndorseFee,
         uint128 minForAddFee,
         uint128 forAddFixIncome,
-        uint16 endorsePercentIncome
+        uint16 endorseIncomePercent
     )
         public
         onlyRoot
-        validCreatorFees(creatorPercentReward)
+        validCreatorPercent(creatorPercent)
         addressIsNotNull(creator)
         addressIsNotNull(owner)
         accept
     {
         _creator = creator;
-        _creatorPercentReward = creatorPercentReward;
+        _creatorPercent = creatorPercent;
         _hash = hash;
         _owner = owner;
         _manager = manager;
@@ -129,7 +129,7 @@ contract StampToken is IStampToken {
         _minCancelEndorseFee = minCancelEndorseFee;
         _minForAddFee = minForAddFee;
         _forAddFixIncome = forAddFixIncome;
-        _endorsePercentFee = endorsePercentIncome;
+        _endorseIncomePercent = endorseIncomePercent;
     }
 
     function changeOwner(address owner)
@@ -142,13 +142,13 @@ contract StampToken is IStampToken {
         emit TK_CO_nifi_stamp1_1{dest: SwiftAddress.value()}(_id, _owner);
     }
 
-    function receiveArtInfo() public view responsible returns(address creator, uint32  creatorPercentReward, uint256 hash) {
+    function receiveArtInfo() public view responsible returns(address creator, uint32  creatorPercent, uint256 hash) {
         return{value: 0, bounce: false, flag: 64} getArtInfo();
     }
 
-    function getArtInfo() public view returns(address creator, uint32  creatorPercentReward, uint256 hash) {
+    function getArtInfo() public view returns(address creator, uint32  creatorPercent, uint256 hash) {
         creator = _creator;
-        creatorPercentReward = _creatorPercentReward;
+        creatorPercent = _creatorPercent;
         hash = _hash;
     }
 
@@ -169,17 +169,17 @@ contract StampToken is IStampToken {
     function receiveTradeInfo() public view responsible returns(
             address owner,
             address creator,
-            uint32  creatorPercentReward,
+            uint32  creatorPercent,
             address manager,
             uint32  managerUnlockTime
         ) {
         return{value: 0, bounce: false, flag: 64} getTradeInfo();
     }
 
-    function getTradeInfo() public view returns(address owner, address creator, uint32 creatorPercentReward, address manager, uint32 managerUnlockTime) {
+    function getTradeInfo() public view returns(address owner, address creator, uint32 creatorPercent, address manager, uint32 managerUnlockTime) {
         owner = _owner;
         creator = _creator;
-        creatorPercentReward = _creatorPercentReward;
+        creatorPercent = _creatorPercent;
         manager = _manager;
         managerUnlockTime = _managerUnlockTime;
     }
@@ -237,8 +237,8 @@ contract StampToken is IStampToken {
         tvm.accept();
         _sealPlace = place;
         emit TK_EN_nifi_stamp1_1{dest: SwiftAddress.value()}(_id,_seal.get(),_sealPlace);
-        if (_endorsePercentFee>0) {
-            uint128 shouldBeSentToRoot = math.muldiv( _sealValue, _endorsePercentFee, 10000);
+        if (_endorseIncomePercent>0) {
+            uint128 shouldBeSentToRoot = math.muldiv( _sealValue, _endorseIncomePercent, 10000);
             sealOwner.transfer({value: _sealValue-shouldBeSentToRoot, flag: 1, bounce: true});
             _root.transfer({value: 0, flag: 64, bounce: true});
         } else {

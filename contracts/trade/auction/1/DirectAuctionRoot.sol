@@ -5,16 +5,17 @@ pragma AbiHeader expire;
 
 import "../../../abstract/Root.sol";
 import "../../../abstract/extensions/rootManaged/root/RootManaged.sol";
-import "../../../abstract/extensions/rootManaged/root/RootManagedCreationTradeFee.sol";
+import "../../../abstract/extensions/rootManaged/root/RootManagedCreationFee.sol";
 import "../../../abstract/extensions/rootManaged/root/RootManagedWithdraw.sol";
 import "DirectAuction.sol";
 import "../../../libraries/SwiftAddress.sol";
 
-contract ArtRoot is Root, RootManaged, RootManagedCreationTradeFee, RootManagedWithdraw {
+contract ArtRoot is Root, RootManaged, RootManagedCreationFee, RootManagedWithdraw {
 
+    uint32 _auctionIncomePercent;
     uint128 _bidCost;
 
-    event AUC_CT_nifi_auc_1(uint64 id, address tokenAddress, uint128 startBid, uint128 stepBid, uint32 startTime, uint32 endTime, address auctionCreator, uint32 showcaseFees);
+    event AUC_CT_nifi_auc_1(uint64 id, address tokenAddress, uint128 startBid, uint128 bidStep, uint32 startTime, uint32 endTime, address owner, uint32 showcasePercent);
     /***************
      * CONSTRUCTOR *
      ***************/
@@ -26,7 +27,8 @@ contract ArtRoot is Root, RootManaged, RootManagedCreationTradeFee, RootManagedW
     constructor(
         address manager,
         uint128 minCreationFee,
-        uint128 creationFixIncome,
+        uint32 auctionIncomePercent,
+        uint128 creationTopup,
         uint128 bidCost,
         string  name,
         string  symbol,
@@ -35,8 +37,10 @@ contract ArtRoot is Root, RootManaged, RootManagedCreationTradeFee, RootManagedW
         public
         Root(name, symbol, tokenCode)
         RootManaged(manager)
-        RootManagedCreationTradeFee(minCreationFee, creationFixIncome)
+        RootManagedCreationFee(minCreationFee, creationTopup)
     {
+        _auctionIncomePercent = auctionIncomePercent;
+        _creationTopup = creationTopup;
         _bidCost = bidCost;
     }
 
@@ -49,13 +53,12 @@ contract ArtRoot is Root, RootManaged, RootManagedCreationTradeFee, RootManagedW
      * Create token contract and returns address. Accept 0.1 ton and more.
      */
     function create(
-        address creator,
         address token,
         uint128 startBid,
-        uint128 stepBid,
+        uint128 bidStep,
         uint32 startTime,
         uint32 endTime,
-        uint32 showcaseFees
+        uint32 showcasePercent
     )
         external
         returns(
@@ -63,19 +66,23 @@ contract ArtRoot is Root, RootManaged, RootManagedCreationTradeFee, RootManagedW
         )
     {
         require(msg.value >= _minCreationFee,278);
-	    require(showcaseFees<1001,279);//<=10%
+        require(showcasePercent<1001,279);//<=10%
+
+        (address owner,,,,) = ITradeToken(token).receiveTradeInfo().await;
+        require(msg.sender == owner,280,"Owner of token is not sender");
+
         _totalSupply++;
-        uint128 value = msg.value - _creationFixIncome;
+
         addr = new DirectAuction{
             code: _tokenCode,
-            value: value,
+            value: _creationTopup,
             pubkey: tvm.pubkey(),
             varInit: {
                 _root: address(this),
                 _id: _totalSupply
             }
-        }( creator, token, startBid, stepBid, _bidCost, startTime, endTime, showcaseFees);
-        emit AUC_CT_nifi_auc_1{dest: SwiftAddress.value()}(_totalSupply,token,startBid,stepBid,startTime,endTime,creator,showcaseFees);
+        }( token, startBid, bidStep, _bidCost, startTime, endTime, showcasePercent);
+        emit AUC_CT_nifi_auc_1{dest: SwiftAddress.value()}(_totalSupply,token,startBid,bidStep,startTime,endTime,owner,showcasePercent);
     }
 
 

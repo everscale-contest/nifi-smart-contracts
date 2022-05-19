@@ -31,7 +31,9 @@ async function deployAskRoot (client,rootKeys) {
             input: {
                 manager: config.msgiManager,
                 minCreationFee: config.ask.minCreationFee,
-                creationFixIncome : config.ask.creationFixIncome,
+                minAcceptFee: config.ask.minAcceptFee,
+                creationTopup: config.ask.creationTopup,
+                askIncomePercent: config.ask.askIncomePercent,
                 name : "AskRoot",
                 symbol: "ASK",
                 tokenCode: AskContract.code,
@@ -73,7 +75,9 @@ async function deployBidRoot (client,rootKeys) {
             input: {
                 manager: config.msgiManager,
                 minCreationFee: config.bid.minCreationFee,
-                creationFixIncome : config.bid.creationFixIncome,
+                minAcceptFee: config.bid.minAcceptFee,
+                creationTopup: config.bid.creationTopup,
+                bidIncomePercent: config.bid.bidIncomePercent,
                 name : "BidRoot",
                 symbol: "BID",
                 tokenCode: BidContract.code,
@@ -115,7 +119,8 @@ async function deployAuctionRoot (client,rootKeys) {
             input: {
                 manager: config.msgiManager,
                 minCreationFee: config.auction.minCreationFee,
-                creationFixIncome : config.auction.creationFixIncome,
+                auctionIncomePercent: config.auction.auctionIncomePercent,
+                creationTopup: config.auction.creationTopup,
                 name : "AuctionRoot",
                 symbol: "AUCTION",
                 tokenCode: DirectAuctionContract.code,

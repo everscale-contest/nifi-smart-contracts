@@ -8,6 +8,8 @@ async function transfer (client, dst, amount, payload) {
         type: 'Contract',
         value: Msig.abi
     }
+	
+	console.log(MsigKeys);
 
     const params = {
         send_events: false,

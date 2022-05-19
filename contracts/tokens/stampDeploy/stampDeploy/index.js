@@ -24,7 +24,7 @@ async function deployStampRoot (client,rootKeys) {
             function_name: 'constructor',
             input: {
                 manager: config.msgiManager,
-                minCreationFee: config.stampRoot.minCreationValue,
+                minCreationFee: config.stampRoot.minCreationFee,
                 creationTopup: config.stampRoot.creationTopup,
                 name : config.stampRoot.name,
                 symbol: config.stampRoot.symbol,

@@ -12,10 +12,6 @@ const DirectAuctionContract = {
                 "name": "constructor",
                 "inputs": [
                     {
-                        "name": "creator",
-                        "type": "address"
-                    },
-                    {
                         "name": "token",
                         "type": "address"
                     },
@@ -24,7 +20,7 @@ const DirectAuctionContract = {
                         "type": "uint128"
                     },
                     {
-                        "name": "stepBid",
+                        "name": "bidStep",
                         "type": "uint128"
                     },
                     {
@@ -40,7 +36,7 @@ const DirectAuctionContract = {
                         "type": "uint32"
                     },
                     {
-                        "name": "showcaseFees",
+                        "name": "showcasePercent",
                         "type": "uint32"
                     }
                 ],
@@ -73,7 +69,7 @@ const DirectAuctionContract = {
                         "type": "address"
                     },
                     {
-                        "name": "creatorPercentReward",
+                        "name": "creatorPercent",
                         "type": "uint32"
                     },
                     {
@@ -100,10 +96,6 @@ const DirectAuctionContract = {
                         "type": "uint64"
                     },
                     {
-                        "name": "creator",
-                        "type": "address"
-                    },
-                    {
                         "name": "token",
                         "type": "address"
                     },
@@ -112,7 +104,7 @@ const DirectAuctionContract = {
                         "type": "uint128"
                     },
                     {
-                        "name": "stepBid",
+                        "name": "bidStep",
                         "type": "uint128"
                     },
                     {
@@ -226,10 +218,6 @@ const DirectAuctionContract = {
                 "type": "uint64"
             },
             {
-                "name": "_creator",
-                "type": "address"
-            },
-            {
                 "name": "_token",
                 "type": "address"
             },
@@ -250,7 +238,7 @@ const DirectAuctionContract = {
                 "type": "uint128"
             },
             {
-                "name": "_stepBid",
+                "name": "_bidStep",
                 "type": "uint128"
             },
             {
@@ -272,13 +260,13 @@ const DirectAuctionContract = {
                 "type": "tuple"
             },
             {
-                "name": "_showcaseFees",
+                "name": "_showcasePercent",
                 "type": "uint32"
             }
         ]
     },
-    tvc: "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",
-    code: "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",
-    codeHash: "9211a1fdfbba97bb79d9f57d8c6a4a3f0e3c75270cf815c7386af94fd088bfff",
+    tvc: "te6ccgECKQEABwQAAgE0AwEBAcACAEPQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgBCSK7VMg4wMgwP/jAiDA/uMC8gsmBQQoA7ztRNDXScMB+GaJ+Gkh2zzTAAGOGYMI1xgg+QEB0wABlNP/AwGTAvhC4vkQ8qiV0wAB8nri0z8B+EMhufK0IPgjgQPoqIIIG3dAoLnytPhj0x8B+CO88rnTHwHbPPI8IQ4GA1LtRNDXScMB+GYi0NMD+kAw+GmpOADcIccA4wIh1w0f8rwh4wMB2zzyPCUlBgIoIIIQJJcGYLvjAiCCEFAdUYq64wILBwMmMPhG8uBM+EJu4wDR2zww2zzyACQIHQKYiPgj+E6+8uhniPgj+E++8uhp+AD4I6Z4tR/4b/hMcMjPhYDKAM+EQM6CwCAcnDgAAAAAAAAAAAAAAAAAAG/ac/4Z6ilEzwvOyXD7AAoJACpUcnkgaXQgaW4gdHdvIG1pbnV0ZXMAKEF1Y3Rpb24gbm90IGZpbmlzaGVkBFAgghAPDlEiuuMCIIIQF1yHdbrjAiCCEBnqKUS64wIgghAklwZguuMCHBkRDAO4MPhCbuMA+EbycyGOENTR0PpA03/Tf9N/0x/U0dCd+kDTf9N/03/U0dDTH+LTH9Mf0Yj4SfhKxwXy6GT4AFUF+GxVBPhwVQP4cVUC+HJY+G0h+G4B+G/4dNs88gAODR0AME1ldGhvZCBmb3IgdGhlIHJvb3Qgb25seQIW7UTQ10nCAY6A4w0PJAOScO1E0PQFcSGAQPQOjoDfciKAQPQOk9cLP5Fw4olwX1CJcG8CcPh0+HP4cvhx+HD4b/hu+G34bPhr+GqAQPQO8r3XC//4YnD4YxAhIQECiSEDUjD4RvLgTPhCbuMAIZPU0dDe+kDU0dD6QNMf1NHQ+kDTH9HbPDDbPPIAJBIdA2SI+En4TMcF8uhoAfgoxwUgmTAg+COmPLUfvN6OgI6A4iPIz4UIzoBvz0DJgQCg+wBfBBgUEwK++FNvEInHBY4Y+FNvEfhTbxDIz4WIzgH6AoBrz0DJcfsA3/hMyM+FiM6CmBzEtAAAAAAAAAAAAAAAAAAAXMTmts8Lpslw+wD4S9s8yM+HIM6CEEFE7qjPC4HLP8lw+wAhIATc+CdvECLCAI4iUwKBJxCphLV/IMIAjhJTBMjPhYjOAfoCgGvPQMlx+wDeMN74VMIAjiQg+FSBJxCphLV/IMIAjhMg+ErIz4WIzgH6AoBrz0DJcfsA3jDe+FNvEInHBY6AjoDiyXD7APhMyM+FiM4hFxYVAGiCmBzEtAAAAAAAAAAAAAAAAAAAXMTmts8Lpslw+wCAFKkE+ErIz4WIzgH6AoBrz0DJcfsAAab4U28Q+FNvEfhL2zzIz4cgznHPC2FVIMjPkWrTpfLLP8t/zs3JcPsA+FNvEPhMyM+FiM6CeBzEtAAAAAAAAAAAAAAAAAABzwuGAcjPkIXszCLOzSABKPhL2zzIz4cgzoIQQUTuqM8Lgcs/IAAyTWV0aG9kIGZvciB0aGUgdG9rZW4gb25seQOoMPhG8uBM+EJu4wDR2zwpjjsr0NMB+kAwMcjPhyDOcc8LYV6AyM+SXXId1s7LP1VgyM7Lf8t/y3/LH1nIyx8BbyICzst/zc3NyXD7AJJfCeLjAPIAJBsaACjtRNDT/9M/MfhDWMjL/8s/zsntVAI8iXCJcF8g+Eo2+Es1+Ew0+E34TvhQNfhRNPhSM/hTISEDNjD4RvLgTPhCbuMAIZPU0dDe03/R2zww2zzyACQeHQCK+FT4U/hS+FH4UPhP+E74TfhM+Ev4SvhD+ELIy//LP8+Dzss/VYDIzssfyx/LH8t/y39VIMjLfwFvIgLOy3/LH83Nye1UBOKI+CP4Tb74I/hOubDy6GYgiCH4UL4gjhswaKb+YCL4UqC1f7wgnDAh+FNvEfhRoLV/vt7e8uhlMPhTbxCJxwWOGPhTbxH4U28QyM+FiM4B+gKAa89AyXH7AN/4UwFvUSD4c/hJb1Ag+HNvEPhTbxH4SyMiIR8BPNs8yM+HIM5xzwthVSDIz5AhFXDSyz/Lf87NyXD7ACAASI0IWAAg2roYubBxOdG40QEjGeBKebK4CIki4Hm5abjiGQqI/ABDgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAWVG9vIGxvdyBiaWQAWkF1Y3Rpb24gbm90IHN0aWxsIHN0YXJ0ZWQgb3IgYWxyZWFkeSBmaW5pc2hlZACO7UTQ0//TP9MAMfpA0z/U0dD6QNMf0x/TH9N/03/U0dDTf/pA039ZbwIB0x/R+HT4c/hy+HH4cPhv+G74bfhs+Gv4avhj+GIACvhG8uBMAgr0pCD0oSgnABRzb2wgMC42MS4wAAA=",
+    code: "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",
+    codeHash: "4986b645895217f13c1d78c22c9e8652cd339ca2dd350b15838cc58c282cac5b",
 };
 module.exports = { DirectAuctionContract };

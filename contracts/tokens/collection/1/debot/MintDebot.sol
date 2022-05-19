@@ -35,7 +35,7 @@ abstract contract ACollectionRoot {
 
 abstract contract ACollection {
     function mintToken() public {}
-    function getInfo() public functionID(0xa) returns(uint64 id, string  name, string  symbol, uint64 totalSupply, uint64 limit, address creator, uint32 creatorPercentReward, string hash, uint128 minMintFee , uint32 startTime) {}
+    function getInfo() public functionID(0xa) returns(uint64 id, string  name, string  symbol, uint64 totalSupply, uint64 limit, address creator, uint32 creatorPercent, string hash, uint128 minMintFee , uint32 startTime) {}
 }
 
 contract MintDebot is Debot, Upgradable {
@@ -134,7 +134,7 @@ contract MintDebot is Debot, Upgradable {
             }();
     }
 
-    function getCollectionMenuInfo(uint64 id, string  name, string  symbol, uint64 totalSupply, uint64 limit, address creator, uint32 creatorPercentReward, string hash, uint128 minMintFee , uint32 startTime) public{
+    function getCollectionMenuInfo(uint64 id, string  name, string  symbol, uint64 totalSupply, uint64 limit, address creator, uint32 creatorPercent, string hash, uint128 minMintFee , uint32 startTime) public{
         MenuItem i = MenuItem(name,"",tvm.functionId(onCollectionMenu));
         _items.push(i);
         _curItem++;
@@ -164,7 +164,7 @@ contract MintDebot is Debot, Upgradable {
         }();
     }
 
-    function getCollectionMintInfo(uint64 id, string  name, string  symbol, uint64 totalSupply, uint64 limit, address creator, uint32 creatorPercentReward, string hash, uint128 minMintFee , uint32 startTime) public{
+    function getCollectionMintInfo(uint64 id, string  name, string  symbol, uint64 totalSupply, uint64 limit, address creator, uint32 creatorPercent, string hash, uint128 minMintFee , uint32 startTime) public{
         Terminal.print(0,format("Collection: {}\nSupply: {}/{}\nMint start time: {}",name,totalSupply,limit,startTime));
         MenuItem[] items;
         _minMintFee = minMintFee;
