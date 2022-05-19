@@ -143,8 +143,6 @@ contract Bid is Accept {
         require(manager == address(this), 106, "Wrong manager");
         require(managerUnlockTime > _endTime+900, 107, "Wrong manager unlock time");
 
-        uint128 balance = address(this).balance;
-
         uint128 creatorPercentReward;
 
         if (creatorPercent > 0) {

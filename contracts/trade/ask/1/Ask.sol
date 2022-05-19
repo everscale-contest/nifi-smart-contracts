@@ -82,7 +82,7 @@ contract Ask is Accept {
         address token,
         uint128 price,
         uint32 endTime,
-        uint128 minAcceptFee;
+        uint128 minAcceptFee,
         uint32 creatorPercent,
         uint32 showcasePercent,
         uint128 askIncomePercent

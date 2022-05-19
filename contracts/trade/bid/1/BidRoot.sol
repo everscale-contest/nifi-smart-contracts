@@ -64,7 +64,7 @@ contract BidRoot is Root, RootManaged, RootManagedCreationFee, RootManagedWithdr
     {
         _totalSupply++;
 
-        uint128 bidder = msg.sender;
+        address bidder = msg.sender;
 
         addr = new Bid{
             code: _tokenCode,

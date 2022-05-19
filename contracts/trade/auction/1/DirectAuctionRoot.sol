@@ -10,17 +10,6 @@ import "../../../abstract/extensions/rootManaged/root/RootManagedWithdraw.sol";
 import "DirectAuction.sol";
 import "../../../libraries/SwiftAddress.sol";
 
-interface ITradeToken {
-
-    function receiveTradeInfo() external view responsible returns(
-            address owner,
-            address creator,
-            uint32  creatorPercent,
-            address manager,
-            uint32  managerUnlockTime
-        );
-}
-
 contract ArtRoot is Root, RootManaged, RootManagedCreationFee, RootManagedWithdraw {
 
     uint32 _auctionIncomePercent;
@@ -79,7 +68,7 @@ contract ArtRoot is Root, RootManaged, RootManagedCreationFee, RootManagedWithdr
         require(msg.value >= _minCreationFee,278);
         require(showcasePercent<1001,279);//<=10%
 
-        (address owner) = await ITradeToken(token).receiveTradeInfo();
+        (address owner,,,,) = ITradeToken(token).receiveTradeInfo().await;
         require(msg.sender == owner,280,"Owner of token is not sender");
 
         _totalSupply++;
