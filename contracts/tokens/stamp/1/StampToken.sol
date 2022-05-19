@@ -217,7 +217,7 @@ contract StampToken is IStampToken {
         require(_seal.hasValue(), 111);
         require(msg.value>=_minCancelEndorseFee,112);
         _seal.reset();
-        _owner.transfer(_sealValue,true);
+        _owner.transfer({value: _sealValue, flag: 1, bounce: true});
         emit TK_RX_nifi_stamp1_1{dest: SwiftAddress.value()}(_id);
         _root.transfer({value: 0, flag: 64, bounce: true});
     }
