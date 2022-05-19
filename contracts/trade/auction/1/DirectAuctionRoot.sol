@@ -48,7 +48,7 @@ contract ArtRoot is Root, RootManaged, RootManagedCreationFee, RootManagedWithdr
         public
         Root(name, symbol, tokenCode)
         RootManaged(manager)
-        RootManagedCreationTradeFee(minCreationFee, creationTopup)
+        RootManagedCreationFee(minCreationFee, creationTopup)
     {
         _auctionIncomePercent = auctionIncomePercent;
         _creationTopup = creationTopup;

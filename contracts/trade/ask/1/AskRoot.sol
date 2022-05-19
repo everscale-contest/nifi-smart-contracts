@@ -49,7 +49,7 @@ contract AskRoot is Root, RootManaged, RootManagedCreationFee, RootManagedWithdr
         public
         Root(name, symbol, tokenCode)
         RootManaged(manager)
-        RootManagedCreationTradeFee(minCreationFee, creationTopup)
+        RootManagedCreationFee(minCreationFee, creationTopup)
     {
         _minAcceptFee = minAcceptFee;
         _creationTopup = creationTopup;

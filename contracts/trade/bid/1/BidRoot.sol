@@ -37,7 +37,7 @@ contract BidRoot is Root, RootManaged, RootManagedCreationFee, RootManagedWithdr
         public
         Root(name, symbol, tokenCode)
         RootManaged(manager)
-        RootManagedCreationTradeFee(minCreationFee, creationTopup)
+        RootManagedCreationFee(minCreationFee, creationTopup)
     {
         _minAcceptFee = minAcceptFee;
         _bidIncomePercent = bidIncomePercent;
