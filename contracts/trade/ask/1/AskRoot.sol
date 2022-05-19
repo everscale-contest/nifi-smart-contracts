@@ -77,7 +77,7 @@ contract AskRoot is Root, RootManaged, RootManagedCreationFee, RootManagedWithdr
             address owner,
             address creator,
             uint32 creatorPercent
-        ) = await ITradeToken(token).receiveArtInfo();
+        ) = await ITradeToken(token).receiveTradeInfo();
 
         require(msg.sender == owner,280,"Owner of token is not sender");
 

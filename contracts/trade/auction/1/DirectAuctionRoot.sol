@@ -79,7 +79,7 @@ contract ArtRoot is Root, RootManaged, RootManagedCreationFee, RootManagedWithdr
         require(msg.value >= _minCreationFee,278);
         require(showcasePercent<1001,279);//<=10%
 
-        (address owner) = await ITradeToken(token).receiveArtInfo();
+        (address owner) = await ITradeToken(token).receiveTradeInfo();
         require(msg.sender == owner,280,"Owner of token is not sender");
 
         _totalSupply++;
