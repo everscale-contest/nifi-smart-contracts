@@ -6,14 +6,13 @@
 		{
 			"name": "constructor",
 			"inputs": [
-				{"name":"creator","type":"address"},
 				{"name":"token","type":"address"},
 				{"name":"startBid","type":"uint128"},
-				{"name":"stepBid","type":"uint128"},
+				{"name":"bidStep","type":"uint128"},
 				{"name":"bidCost","type":"uint128"},
 				{"name":"startTime","type":"uint32"},
 				{"name":"endTime","type":"uint32"},
-				{"name":"showcaseFees","type":"uint32"}
+				{"name":"showcasePercent","type":"uint32"}
 			],
 			"outputs": [
 			]
@@ -38,7 +37,7 @@
 			"inputs": [
 				{"name":"owner","type":"address"},
 				{"name":"creator","type":"address"},
-				{"name":"creatorPercentReward","type":"uint32"},
+				{"name":"creatorPercent","type":"uint32"},
 				{"name":"manager","type":"address"},
 				{"name":"managerUnlockTime","type":"uint32"}
 			],
@@ -52,10 +51,9 @@
 			"outputs": [
 				{"name":"root","type":"address"},
 				{"name":"id","type":"uint64"},
-				{"name":"creator","type":"address"},
 				{"name":"token","type":"address"},
 				{"name":"startBid","type":"uint128"},
-				{"name":"stepBid","type":"uint128"},
+				{"name":"bidStep","type":"uint128"},
 				{"name":"bidCost","type":"uint128"},
 				{"name":"startTime","type":"uint32"},
 				{"name":"endTime","type":"uint32"},
@@ -103,15 +101,14 @@
 		{"name":"_constructorFlag","type":"bool"},
 		{"name":"_root","type":"address"},
 		{"name":"_id","type":"uint64"},
-		{"name":"_creator","type":"address"},
 		{"name":"_token","type":"address"},
 		{"name":"_startTime","type":"uint32"},
 		{"name":"_endTime","type":"uint32"},
 		{"name":"_askFinish","type":"uint32"},
 		{"name":"_startBid","type":"uint128"},
-		{"name":"_stepBid","type":"uint128"},
+		{"name":"_bidStep","type":"uint128"},
 		{"name":"_bidCost","type":"uint128"},
 		{"components":[{"name":"bider","type":"address"},{"name":"value","type":"uint128"}],"name":"_curBid","type":"tuple"},
-		{"name":"_showcaseFees","type":"uint32"}
+		{"name":"_showcasePercent","type":"uint32"}
 	]
 }

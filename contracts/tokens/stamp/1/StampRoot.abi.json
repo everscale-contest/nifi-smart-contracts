@@ -55,11 +55,7 @@
 		{
 			"name": "create",
 			"inputs": [
-				{"name":"owner","type":"address"},
-				{"name":"manager","type":"address"},
-				{"name":"managerUnlockTime","type":"uint32"},
-				{"name":"creator","type":"address"},
-				{"name":"creatorPercentReward","type":"uint32"},
+				{"name":"creatorPercent","type":"uint32"},
 				{"name":"hash","type":"uint256"}
 			],
 			"outputs": [
@@ -101,7 +97,7 @@
 				{"name":"requestEndorseFixIncome","type":"uint128"},
 				{"name":"minForAddFee","type":"uint128"},
 				{"name":"forAddFixIncome","type":"uint128"},
-				{"name":"endorsePercentIncome","type":"uint16"}
+				{"name":"endorseIncomePercent","type":"uint16"}
 			],
 			"outputs": [
 			]
@@ -116,7 +112,7 @@
 				{"name":"requestEndorseFixIncome","type":"uint128"},
 				{"name":"minForAddFee","type":"uint128"},
 				{"name":"forAddFixIncome","type":"uint128"},
-				{"name":"endorsePercentIncome","type":"uint16"}
+				{"name":"endorseIncomePercent","type":"uint16"}
 			]
 		}
 	],
@@ -148,6 +144,6 @@
 		{"name":"_requestEndorseFixIncome","type":"uint128"},
 		{"name":"_minForAddFee","type":"uint128"},
 		{"name":"_forAddFixIncome","type":"uint128"},
-		{"name":"_endorsePercentFee","type":"uint16"}
+		{"name":"_endorseIncomePercent","type":"uint16"}
 	]
 }

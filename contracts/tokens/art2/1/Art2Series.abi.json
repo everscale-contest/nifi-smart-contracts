@@ -7,12 +7,14 @@
 			"name": "constructor",
 			"inputs": [
 				{"name":"manager","type":"address"},
+				{"name":"creator","type":"address"},
 				{"name":"name","type":"string"},
 				{"name":"symbol","type":"string"},
 				{"name":"limit","type":"uint64"},
 				{"name":"tokenCode","type":"cell"},
 				{"name":"hash","type":"uint256"},
-				{"name":"creatorPercentReward","type":"uint32"},
+				{"name":"creatorPercent","type":"uint32"},
+				{"name":"minMintFee","type":"uint128"},
 				{"name":"mintTopup","type":"uint128"}
 			],
 			"outputs": [
@@ -21,8 +23,6 @@
 		{
 			"name": "create",
 			"inputs": [
-				{"name":"manager","type":"address"},
-				{"name":"managerUnlockTime","type":"uint32"}
 			],
 			"outputs": [
 				{"name":"addr","type":"address"}
@@ -75,7 +75,7 @@
 				{"name":"limit","type":"uint64"},
 				{"name":"hash","type":"uint256"},
 				{"name":"creator","type":"address"},
-				{"name":"creatorPercentReward","type":"uint32"}
+				{"name":"creatorPercent","type":"uint32"}
 			]
 		},
 		{
@@ -118,7 +118,8 @@
 		{"name":"_totalSupply","type":"uint64"},
 		{"name":"_limit","type":"uint64"},
 		{"name":"_hash","type":"uint256"},
-		{"name":"_creatorPercentReward","type":"uint32"},
+		{"name":"_creatorPercent","type":"uint32"},
+		{"name":"_minMintFee","type":"uint128"},
 		{"name":"_mintTopup","type":"uint128"}
 	]
 }

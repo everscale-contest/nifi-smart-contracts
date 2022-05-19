@@ -8,7 +8,8 @@
 			"inputs": [
 				{"name":"manager","type":"address"},
 				{"name":"minCreationFee","type":"uint128"},
-				{"name":"creationFixIncome","type":"uint128"},
+				{"name":"auctionIncomePercent","type":"uint32"},
+				{"name":"creationTopup","type":"uint128"},
 				{"name":"bidCost","type":"uint128"},
 				{"name":"name","type":"string"},
 				{"name":"symbol","type":"string"},
@@ -20,13 +21,12 @@
 		{
 			"name": "create",
 			"inputs": [
-				{"name":"creator","type":"address"},
 				{"name":"token","type":"address"},
 				{"name":"startBid","type":"uint128"},
-				{"name":"stepBid","type":"uint128"},
+				{"name":"bidStep","type":"uint128"},
 				{"name":"startTime","type":"uint32"},
 				{"name":"endTime","type":"uint32"},
-				{"name":"showcaseFees","type":"uint32"}
+				{"name":"showcasePercent","type":"uint32"}
 			],
 			"outputs": [
 				{"name":"addr","type":"address"}
@@ -81,7 +81,7 @@
 			"name": "setCreationParameters",
 			"inputs": [
 				{"name":"minCreationFee","type":"uint128"},
-				{"name":"creationFixIncome","type":"uint128"}
+				{"name":"creationTopup","type":"uint128"}
 			],
 			"outputs": [
 			]
@@ -93,7 +93,7 @@
 			],
 			"outputs": [
 				{"name":"minCreationFee","type":"uint128"},
-				{"name":"creationFixIncome","type":"uint128"}
+				{"name":"creationTopup","type":"uint128"}
 			]
 		},
 		{
@@ -102,7 +102,7 @@
 			],
 			"outputs": [
 				{"name":"minCreationFee","type":"uint128"},
-				{"name":"creationFixIncome","type":"uint128"}
+				{"name":"creationTopup","type":"uint128"}
 			]
 		},
 		{
@@ -160,6 +160,18 @@
 			"outputs": [
 				{"name":"code","type":"cell"}
 			]
+		},
+		{
+			"name": "_await_ITradeToken_receiveTradeInfo",
+			"inputs": [
+				{"name":"owner","type":"address"},
+				{"name":"creator","type":"address"},
+				{"name":"creatorPercent","type":"uint32"},
+				{"name":"manager","type":"address"},
+				{"name":"managerUnlockTime","type":"uint32"}
+			],
+			"outputs": [
+			]
 		}
 	],
 	"data": [
@@ -171,11 +183,11 @@
 				{"name":"id","type":"uint64"},
 				{"name":"tokenAddress","type":"address"},
 				{"name":"startBid","type":"uint128"},
-				{"name":"stepBid","type":"uint128"},
+				{"name":"bidStep","type":"uint128"},
 				{"name":"startTime","type":"uint32"},
 				{"name":"endTime","type":"uint32"},
-				{"name":"auctionCreator","type":"address"},
-				{"name":"showcaseFees","type":"uint32"}
+				{"name":"owner","type":"address"},
+				{"name":"showcasePercent","type":"uint32"}
 			],
 			"outputs": [
 			]
@@ -185,13 +197,15 @@
 		{"name":"_pubkey","type":"uint256"},
 		{"name":"_timestamp","type":"uint64"},
 		{"name":"_constructorFlag","type":"bool"},
+		{"name":"_await","type":"optional(cell)"},
 		{"name":"_name","type":"string"},
 		{"name":"_symbol","type":"string"},
 		{"name":"_tokenCode","type":"cell"},
 		{"name":"_totalSupply","type":"uint64"},
 		{"name":"_manager","type":"address"},
 		{"name":"_minCreationFee","type":"uint128"},
-		{"name":"_creationFixIncome","type":"uint128"},
+		{"name":"_creationTopup","type":"uint128"},
+		{"name":"_auctionIncomePercent","type":"uint32"},
 		{"name":"_bidCost","type":"uint128"}
 	]
 }

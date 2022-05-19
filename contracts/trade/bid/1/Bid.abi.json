@@ -6,9 +6,11 @@
 		{
 			"name": "constructor",
 			"inputs": [
-				{"name":"creator","type":"address"},
+				{"name":"bidder","type":"address"},
 				{"name":"token","type":"address"},
 				{"name":"price","type":"uint128"},
+				{"name":"minAcceptFee","type":"uint128"},
+				{"name":"bidIncomePercent","type":"uint128"},
 				{"name":"endTime","type":"uint32"}
 			],
 			"outputs": [
@@ -26,7 +28,7 @@
 			"inputs": [
 				{"name":"owner","type":"address"},
 				{"name":"creator","type":"address"},
-				{"name":"creatorPercentReward","type":"uint32"},
+				{"name":"creatorPercent","type":"uint32"},
 				{"name":"manager","type":"address"},
 				{"name":"managerUnlockTime","type":"uint32"}
 			],
@@ -47,7 +49,7 @@
 			"outputs": [
 				{"name":"root","type":"address"},
 				{"name":"id","type":"uint64"},
-				{"name":"creator","type":"address"},
+				{"name":"bidder","type":"address"},
 				{"name":"token","type":"address"},
 				{"name":"price","type":"uint128"},
 				{"name":"endTime","type":"uint32"}
@@ -82,10 +84,11 @@
 		{"name":"_constructorFlag","type":"bool"},
 		{"name":"_root","type":"address"},
 		{"name":"_id","type":"uint64"},
-		{"name":"_creator","type":"address"},
+		{"name":"_bidder","type":"address"},
 		{"name":"_token","type":"address"},
 		{"name":"_endTime","type":"uint32"},
 		{"name":"_price","type":"uint128"},
-		{"name":"_fee","type":"uint128"}
+		{"name":"_minAcceptFee","type":"uint128"},
+		{"name":"_bidIncomePercent","type":"uint128"}
 	]
 }

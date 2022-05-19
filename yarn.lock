@@ -303,10 +303,15 @@
     "exec-sh" "^0.3.2"
     "minimist" "^1.2.0"
 
-"@eversdk/core@^1.33.0":
-  "integrity" "sha512-VuNvjM3WOjfcwOSvNLaMzGiDShlyK78Yv7NTi3eM7y96QC0KQGVpxp3HazfajhZffar7UXxP7/boGsWohQDYiw=="
-  "resolved" "https://registry.npmjs.org/@eversdk/core/-/core-1.33.0.tgz"
-  "version" "1.33.0"
+"@eversdk/core@^1.34.0":
+  "integrity" "sha512-9AFcvBD6OWFyIbHqeJbRhNfgjyJdzlFfU8oyY+pv/JVctVBrDXcI95ZxZPXfdNiq2Dz2yBU9MmGrZJ4pCYUSHQ=="
+  "resolved" "https://registry.npmjs.org/@eversdk/core/-/core-1.34.0.tgz"
+  "version" "1.34.0"
+
+"@eversdk/lib-node@^1.34.0":
+  "integrity" "sha512-XO8dUa7KLfIyANnDZFjd9upmVmgAKYaskJnBz8i2W6DkIwIPo7ABtMH1DPeBvRT4nvqb7I0Jh+J/VfXlCT6Xyw=="
+  "resolved" "https://registry.npmjs.org/@eversdk/lib-node/-/lib-node-1.34.0.tgz"
+  "version" "1.34.0"
 
 "@istanbuljs/load-nyc-config@^1.0.0":
   "integrity" "sha512-VjeHSlIzpv/NyD3N0YuHfXOPDIixcA1q2ZV98wsMqcYlPmv2n3Yb2lYP9XMElnaFVXg5A7YLTeLu6V84uQDjmQ=="

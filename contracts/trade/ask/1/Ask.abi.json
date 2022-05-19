@@ -6,11 +6,15 @@
 		{
 			"name": "constructor",
 			"inputs": [
+				{"name":"owner","type":"address"},
 				{"name":"creator","type":"address"},
 				{"name":"token","type":"address"},
 				{"name":"price","type":"uint128"},
 				{"name":"endTime","type":"uint32"},
-				{"name":"showcaseFee","type":"uint32"}
+				{"name":"minAcceptFee","type":"uint128"},
+				{"name":"creatorPercent","type":"uint32"},
+				{"name":"showcasePercent","type":"uint32"},
+				{"name":"askIncomePercent","type":"uint128"}
 			],
 			"outputs": [
 			]
@@ -51,11 +55,11 @@
 			"outputs": [
 				{"name":"root","type":"address"},
 				{"name":"id","type":"uint64"},
-				{"name":"creator","type":"address"},
+				{"name":"owner","type":"address"},
 				{"name":"token","type":"address"},
 				{"name":"price","type":"uint128"},
 				{"name":"endTime","type":"uint32"},
-				{"name":"showcaseFee","type":"uint32"}
+				{"name":"showcasePercent","type":"uint32"}
 			]
 		}
 	],
@@ -105,9 +109,13 @@
 		{"name":"_constructorFlag","type":"bool"},
 		{"name":"_root","type":"address"},
 		{"name":"_id","type":"uint64"},
+		{"name":"_askIncomePercent","type":"uint128"},
+		{"name":"_owner","type":"address"},
 		{"name":"_creator","type":"address"},
 		{"name":"_token","type":"address"},
-		{"name":"_showCaseFee","type":"uint32"},
+		{"name":"_minAcceptFee","type":"uint128"},
+		{"name":"_creatorPercent","type":"uint32"},
+		{"name":"_showcasePercent","type":"uint32"},
 		{"name":"_endTime","type":"uint32"},
 		{"name":"_price","type":"uint128"}
 	]
