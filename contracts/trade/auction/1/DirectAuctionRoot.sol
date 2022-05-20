@@ -83,7 +83,7 @@ contract ArtRoot is Root, RootManaged, RootManagedCreationFee, RootManagedWithdr
                 _root: address(this),
                 _id: _totalSupply
             }
-        }( issuer, token, startBid, bidStep, _bidCost, startTime, endTime, showcasePercent);
+        }( issuer, token, startBid, bidStep, _minBidSubmissionFee, _auctionIncomePercent, _bidCost, startTime, endTime, showcasePercent);
         emit AUC_CT_nifi_auc_1{dest: SwiftAddress.value()}(_totalSupply,token,startBid,bidStep,startTime,endTime,issuer,showcasePercent);
     }
 
