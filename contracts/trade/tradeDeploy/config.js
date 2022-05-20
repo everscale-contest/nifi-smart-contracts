@@ -15,7 +15,7 @@ module.exports = {
             mintTopup: 200_000_000
         },
         ask: {
-            minCreationFee: 200_000_000,
+            minCreationFee: 300_000_000,
             askIncomePercent: 500,
             minAcceptFee: 300_000_000,
             creationTopup: 150_000_000,
@@ -27,7 +27,7 @@ module.exports = {
             creationTopup: 150_000_000,
         },
         auction: {
-            minCreationFee: 500_000_000,
+            minCreationFee: 400_000_000,
             bidCost: 50_000_000,
             minAcceptFee: 300_000_000,
             creationTopup: 150_000_000,

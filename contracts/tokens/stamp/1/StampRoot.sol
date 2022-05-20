@@ -50,10 +50,10 @@ contract StampRoot  {
         _symbol = symbol;
         _tokenCode = tokenCode;
 
-        _minSealFee = 0.05 ever;
-        _minSealRxFee = 0.11 ever;
+        _minSealFee = 0.2 ever;
+        _minSealRxFee = 0.2 ever;
         _requestEndorseFixIncome = 0.1 ever;
-        _minForAddFee = 0.21 ever;
+        _minForAddFee = 0.2 ever;
         _forAddFixIncome = 0.1 ever;
         _endorseIncomePercent = 500; // 5%
         //require (_minCreationFee>_creationTopup)
