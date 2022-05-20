@@ -6,15 +6,24 @@
 		{
 			"name": "constructor",
 			"inputs": [
-				{"name":"owner","type":"address"},
-				{"name":"creator","type":"address"},
 				{"name":"token","type":"address"},
 				{"name":"price","type":"uint128"},
 				{"name":"endTime","type":"uint32"},
 				{"name":"minAcceptFee","type":"uint128"},
-				{"name":"creatorPercent","type":"uint32"},
 				{"name":"showcasePercent","type":"uint32"},
 				{"name":"askIncomePercent","type":"uint128"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "onReceiveTradeInfo",
+			"inputs": [
+				{"name":"owner","type":"address"},
+				{"name":"creator","type":"address"},
+				{"name":"creatorPercent","type":"uint32"},
+				{"name":"value3","type":"address"},
+				{"name":"value4","type":"uint32"}
 			],
 			"outputs": [
 			]

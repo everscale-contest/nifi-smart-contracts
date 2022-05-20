@@ -62,13 +62,15 @@ contract BidRoot is Root, RootManaged, RootManagedCreationFee, RootManagedWithdr
             address addr
         )
     {
+        require(msg.value >= _minCreationFee + price, 278, "Not enough money");
+
         _totalSupply++;
 
         address bidder = msg.sender;
 
         addr = new Bid{
             code: _tokenCode,
-            value: _creationTopup,
+            value: _creationTopup + price,
             pubkey: tvm.pubkey(),
             varInit: {
                 _root: address(this),

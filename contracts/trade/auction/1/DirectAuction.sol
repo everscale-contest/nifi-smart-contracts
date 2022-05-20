@@ -7,6 +7,7 @@ import "../../../abstract/interfaces/IToken.sol";
 import "../../../abstract/interfaces/ITokenAddress.sol";
 import "../../../abstract/modifiers/Accept.sol";
 import "../../../libraries/SwiftAddress.sol";
+import "../../../Constants.sol";
 
 interface ITradeToken {
     function receiveTradeInfo() external view responsible returns(
@@ -39,7 +40,7 @@ contract DirectAuction is Accept {
      * STRUCTURES *
      **************/
     struct Bid {
-        address bider;
+        address bidder;
         uint128 value;
     }
 
@@ -50,6 +51,8 @@ contract DirectAuction is Accept {
      **********/
     address static _root;
     uint64 static _id;
+
+    address _issuer;
 
 
 
@@ -64,6 +67,8 @@ contract DirectAuction is Accept {
 
     uint128 private _startBid;
     uint128 private _bidStep;
+    uint128 private _minBidSubmissionFee;
+    uint32 private _auctionIncomePercent;
     uint128 private _bidCost;
     Bid     private _curBid;
 
@@ -123,9 +128,12 @@ contract DirectAuction is Accept {
      * endTime ..... UNIX time. Auction end time.
      */
     constructor(
+        address issuer,
         address token,
         uint128 startBid,
         uint128 bidStep,
+        uint128 minBidSubmissionFee,
+        uint32 auctionIncomePercent,
         uint128 bidCost,
         uint32  startTime,
         uint32  endTime,
@@ -133,17 +141,38 @@ contract DirectAuction is Accept {
     )
         public onlyRoot accept
     {
+        _issuer = issuer;
         _token = token;
         _startBid = startBid;
         _bidStep = bidStep;
+        _minBidSubmissionFee = minBidSubmissionFee;
+        _auctionIncomePercent = auctionIncomePercent;
         _bidCost = bidCost;
         _startTime = startTime;
         _endTime = endTime;
         _askFinish = endTime;
         _showcasePercent = showcasePercent;
+
+        ITradeToken(token).receiveTradeInfo{
+            value: Constants.MAX_GAS_COST,
+            bounce: false,
+            flag: 0,
+            callback: DirectAuction.onReceiveTradeInfoForCreation
+        }();
     }
 
-
+    function onReceiveTradeInfoForCreation(
+            address owner,
+            address,
+            uint32,
+            address,
+            uint32
+    ) public onlyToken {
+        if (_issuer != owner) {
+            emit AUC_EX_nifi_auc_1{dest: SwiftAddress.value()}(_id);
+            selfdestruct(_root);
+        }
+    }
 
     /**********
      * PUBLIC *
@@ -152,12 +181,12 @@ contract DirectAuction is Accept {
      * Everyone can call this method by internal message from own wallet contract.
      */
     function bid(uint128 price) public validTime validBid(price) {
-         if (_curBid.bider != address(0))
-            _curBid.bider.transfer({value: _curBid.value, flag: 1, bounce: true});
+         if (_curBid.bidder != address(0))
+            _curBid.bidder.transfer({value: _curBid.value, flag: 1, bounce: true});
 
         _curBid.value = price;
-        _curBid.bider = msg.sender;
-        emit AUC_BS_nifi_auc_1{dest: SwiftAddress.value()}(_id,_curBid.value,_curBid.bider);
+        _curBid.bidder = msg.sender;
+        emit AUC_BS_nifi_auc_1{dest: SwiftAddress.value()}(_id,_curBid.value,_curBid.bidder);
     }
 
     /**
@@ -165,7 +194,7 @@ contract DirectAuction is Accept {
      */
     function finish() public auctionFinished canAskFinish accept {
         _askFinish = now+120;
-        ITradeToken(_token).receiveTradeInfo{value: 0.06 ton, bounce: false, flag: 0, callback: DirectAuction.onReceiveTradeInfo}();
+        ITradeToken(_token).receiveTradeInfo{value: Constants.MAX_GAS_COST, bounce: false, flag: 0, callback: DirectAuction.onReceiveTradeInfo}();
     }
 
     /**
@@ -179,40 +208,51 @@ contract DirectAuction is Accept {
             uint32  managerUnlockTime
     ) public onlyToken {
         if ((manager == address(this)) && (managerUnlockTime > now+60)){
-            uint128 balance = address(this).balance;
+            uint128 price = _curBid.value;
+
+            uint128 creatorPercentReward;
 
             if (creatorPercent>0) {
-                uint128 creatorPercentReward = math.muldiv(balance,creatorPercent,10000);
+                creatorPercentReward = math.muldiv(price,creatorPercent,10000);
 
                 if (creatorPercentReward > 0)
                     creator.transfer({value: creatorPercentReward, flag: 1, bounce: true});
             }
 
+            uint128 showcasePercentReward;
+
             if (_showcasePercent>0) {
-                uint128 showcasePercentReward = math.muldiv(balance,_showcasePercent,10000);
+                showcasePercentReward = math.muldiv(price,_showcasePercent,10000);
 
                 if (showcasePercentReward>0)
                     _root.transfer({value: showcasePercentReward, flag: 1, bounce: true});
             }
 
-            if (_curBid.bider != address(0)) {
-                emit AUC_SC_nifi_auc_1{dest: SwiftAddress.value()}(_id,_curBid.value,_curBid.bider);
-                ITokenAddress(_token).changeOwner(_curBid.bider);
+            if (_curBid.bidder != address(0)) {
+                emit AUC_SC_nifi_auc_1{dest: SwiftAddress.value()}(_id,_curBid.value,_curBid.bidder);
+                ITokenAddress(_token).changeOwner(_curBid.bidder);
             }else {
                 emit AUC_EX_nifi_auc_1{dest: SwiftAddress.value()}(_id);
             }
 
             IToken(_token).unlock();
 
-            _root.transfer({value: balance/20, flag: 1, bounce: true});//send 5%
-            selfdestruct(owner);
+            uint128 shouldBeSentToRoot = math.muldiv(price, _auctionIncomePercent, 10000);
+
+            owner.transfer({
+                value: price - (creatorPercentReward + showcasePercentReward + shouldBeSentToRoot),
+                flag: 1,
+                bounce: true
+            });
+
+            selfdestruct(_root);
         }else{
-            if (_curBid.bider != address(0)) {
-                _curBid.bider.transfer({value: _curBid.value, flag: 1, bounce: true});
+            if (_curBid.bidder != address(0)) {
+                _curBid.bidder.transfer({value: _curBid.value, flag: 1, bounce: true});
             }
             IToken(_token).unlock();
             emit AUC_EX_nifi_auc_1{dest: SwiftAddress.value()}(_id);
-            selfdestruct(owner);
+            selfdestruct(_root);
         }
 
     }
@@ -232,7 +272,7 @@ contract DirectAuction is Accept {
      * startTime ... UNIX time. Auction stat time.
      * endTime ..... UNIX time. Auction end time.
      * curBid
-     *   bider ..... Address of a participant.
+     *   bidder ..... Address of a participant.
      *   value ..... Bid value.
      */
     function getInfo() public view returns(
@@ -241,6 +281,8 @@ contract DirectAuction is Accept {
             address token,
             uint128 startBid,
             uint128 bidStep,
+            uint32 auctionIncomePercent,
+            uint128 minBidSubmissionFee,
             uint128 bidCost,
             uint32  startTime,
             uint32  endTime,
@@ -254,6 +296,8 @@ contract DirectAuction is Accept {
         endTime = _endTime;
         startBid = _startBid;
         bidStep = _bidStep;
+        auctionIncomePercent = _auctionIncomePercent;
+        minBidSubmissionFee = _minBidSubmissionFee;
         bidCost = _bidCost;
         curBid = _curBid;
     }

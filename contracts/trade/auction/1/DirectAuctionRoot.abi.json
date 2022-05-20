@@ -10,6 +10,7 @@
 				{"name":"minCreationFee","type":"uint128"},
 				{"name":"auctionIncomePercent","type":"uint32"},
 				{"name":"creationTopup","type":"uint128"},
+				{"name":"minBidSubmissionFee","type":"uint128"},
 				{"name":"bidCost","type":"uint128"},
 				{"name":"name","type":"string"},
 				{"name":"symbol","type":"string"},
@@ -52,16 +53,20 @@
 			]
 		},
 		{
-			"name": "getBidCost",
+			"name": "getAuctionParameters",
 			"inputs": [
 			],
 			"outputs": [
-				{"name":"value0","type":"uint128"}
+				{"name":"minBidSubmissionFee","type":"uint128"},
+				{"name":"auctionIncomePercent","type":"uint32"},
+				{"name":"bidCost","type":"uint128"}
 			]
 		},
 		{
-			"name": "setBidCost",
+			"name": "setAuctionParameters",
 			"inputs": [
+				{"name":"minBidSubmissionFee","type":"uint128"},
+				{"name":"auctionIncomePercent","type":"uint32"},
 				{"name":"bidCost","type":"uint128"}
 			],
 			"outputs": [
@@ -160,18 +165,6 @@
 			"outputs": [
 				{"name":"code","type":"cell"}
 			]
-		},
-		{
-			"name": "_await_ITradeToken_receiveTradeInfo",
-			"inputs": [
-				{"name":"owner","type":"address"},
-				{"name":"creator","type":"address"},
-				{"name":"creatorPercent","type":"uint32"},
-				{"name":"manager","type":"address"},
-				{"name":"managerUnlockTime","type":"uint32"}
-			],
-			"outputs": [
-			]
 		}
 	],
 	"data": [
@@ -186,7 +179,7 @@
 				{"name":"bidStep","type":"uint128"},
 				{"name":"startTime","type":"uint32"},
 				{"name":"endTime","type":"uint32"},
-				{"name":"owner","type":"address"},
+				{"name":"issuer","type":"address"},
 				{"name":"showcasePercent","type":"uint32"}
 			],
 			"outputs": [
@@ -197,7 +190,6 @@
 		{"name":"_pubkey","type":"uint256"},
 		{"name":"_timestamp","type":"uint64"},
 		{"name":"_constructorFlag","type":"bool"},
-		{"name":"_await","type":"optional(cell)"},
 		{"name":"_name","type":"string"},
 		{"name":"_symbol","type":"string"},
 		{"name":"_tokenCode","type":"cell"},
@@ -206,6 +198,7 @@
 		{"name":"_minCreationFee","type":"uint128"},
 		{"name":"_creationTopup","type":"uint128"},
 		{"name":"_auctionIncomePercent","type":"uint32"},
+		{"name":"_minBidSubmissionFee","type":"uint128"},
 		{"name":"_bidCost","type":"uint128"}
 	]
 }
