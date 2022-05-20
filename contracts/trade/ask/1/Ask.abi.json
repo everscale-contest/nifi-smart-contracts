@@ -6,6 +6,7 @@
 		{
 			"name": "constructor",
 			"inputs": [
+				{"name":"issuer","type":"address"},
 				{"name":"token","type":"address"},
 				{"name":"price","type":"uint128"},
 				{"name":"endTime","type":"uint32"},
@@ -64,7 +65,7 @@
 			"outputs": [
 				{"name":"root","type":"address"},
 				{"name":"id","type":"uint64"},
-				{"name":"owner","type":"address"},
+				{"name":"issuer","type":"address"},
 				{"name":"token","type":"address"},
 				{"name":"price","type":"uint128"},
 				{"name":"endTime","type":"uint32"},
@@ -119,7 +120,7 @@
 		{"name":"_root","type":"address"},
 		{"name":"_id","type":"uint64"},
 		{"name":"_askIncomePercent","type":"uint128"},
-		{"name":"_owner","type":"address"},
+		{"name":"_issuer","type":"address"},
 		{"name":"_creator","type":"address"},
 		{"name":"_token","type":"address"},
 		{"name":"_minAcceptFee","type":"uint128"},
