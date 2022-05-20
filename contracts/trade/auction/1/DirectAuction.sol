@@ -68,7 +68,7 @@ contract DirectAuction is Accept {
     uint128 private _startBid;
     uint128 private _bidStep;
     uint128 private _minBidSubmissionFee;
-    uint128 private _auctionIncomePercent;
+    uint32 private _auctionIncomePercent;
     uint128 private _bidCost;
     Bid     private _curBid;
 
