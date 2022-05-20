@@ -2,9 +2,9 @@ pragma ton-solidity >=0.47.0;
 
     library SealContractInfo {
         function SEAL_ROOT() internal inline returns(address){
-            return address(0x4371da89ed0ff65c43b273445c09eb83588b2a50f58e45ebf1dc2453ca1a2f9b);
+            return address(0xd4e173dc8eb2e1a869eb7e458fb9dda9396b2e5236a3d697a2743c74486a3604);
         }
-        uint256 constant SEAL_ROOT_PUBKEY = 0x61a407233cbeb96ff96e96401cf148faf69045248c69817b304a57c500f01588;
-        uint256 constant SEAL_CODEHASH = 0x7385ca9748cf07d6a15ff390399ec00a1850edcf781aedfe49d23b7145ba0b9e;
+        uint256 constant SEAL_ROOT_PUBKEY = 0x5c84101e5cc8650e884c24ed422105bb115e64d2affbed6236a4f8a6a9c71535;
+        uint256 constant SEAL_CODEHASH = 0xed9e6fb01389302e021849e6f71b0b08a249aed9932c47827bea7049b932ab37;
         uint16 constant  SEAL_CODEDEPTH = 8;
     }
