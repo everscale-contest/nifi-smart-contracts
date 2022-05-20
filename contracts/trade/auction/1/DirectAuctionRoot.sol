@@ -13,6 +13,8 @@ import "../../../libraries/SwiftAddress.sol";
 contract ArtRoot is Root, RootManaged, RootManagedCreationFee, RootManagedWithdraw {
 
     uint32 _auctionIncomePercent;
+    uint128 _minBidSubmissionFee;
+    uint128 auctionIncomePercent;
     uint128 _bidCost;
 
     event AUC_CT_nifi_auc_1(uint64 id, address tokenAddress, uint128 startBid, uint128 bidStep, uint32 startTime, uint32 endTime, address owner, uint32 showcasePercent);
@@ -29,6 +31,8 @@ contract ArtRoot is Root, RootManaged, RootManagedCreationFee, RootManagedWithdr
         uint128 minCreationFee,
         uint32 auctionIncomePercent,
         uint128 creationTopup,
+        uint128 minBidSubmissionFee,
+        uint128 auctionIncomePercent,
         uint128 bidCost,
         string  name,
         string  symbol,
@@ -41,6 +45,8 @@ contract ArtRoot is Root, RootManaged, RootManagedCreationFee, RootManagedWithdr
     {
         _auctionIncomePercent = auctionIncomePercent;
         _creationTopup = creationTopup;
+        _minBidSubmissionFee = minBidSubmissionFee;
+        _auctionIncomePercent = auctionIncomePercent;
         _bidCost = bidCost;
     }
 
@@ -67,9 +73,6 @@ contract ArtRoot is Root, RootManaged, RootManagedCreationFee, RootManagedWithdr
     {
         require(msg.value >= _minCreationFee,278);
         require(showcasePercent<1001,279);//<=10%
-
-        (address owner,,,,) = ITradeToken(token).receiveTradeInfo().await;
-        require(msg.sender == owner,280,"Owner of token is not sender");
 
         _totalSupply++;
 
@@ -122,12 +125,24 @@ contract ArtRoot is Root, RootManaged, RootManagedCreationFee, RootManagedWithdr
         return address(tvm.hash(stateInit));
     }
 
-    function getBidCost() public view returns(uint128) {
-        return _bidCost;
+    function getAuctionParameters() public view returns(
+        uint128 minBidSubmissionFee,
+        uint128 auctionIncomePercent,
+        uint128 bidCost
+    ) {
+        minBidSubmissionFee = _minBidSubmissionFee;
+        auctionIncomePercent = _auctionIncomePercent;
+        bidCost = _bidCost;
     }
 
-    function setBidCost(uint128 bidCost) public {
+    function setAuctionParameters(
+        uint128 minBidSubmissionFee,
+        uint128 auctionIncomePercent,
+        uint128 bidCost
+    ) public {
         require(msg.sender == _manager,280);
+        _minBidSubmissionFee = minBidSubmissionFee;
+        _auctionIncomePercent = auctionIncomePercent;
         _bidCost = bidCost;
     }
 }

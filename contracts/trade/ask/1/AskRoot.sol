@@ -73,14 +73,6 @@ contract AskRoot is Root, RootManaged, RootManagedCreationFee, RootManagedWithdr
             address addr
         )
     {
-        (
-            address owner,
-            address creator,
-            uint32  creatorPercent
-            ,,
-        ) = ITradeToken(token).receiveTradeInfo().await;
-
-        require(msg.sender == owner,280,"Owner of token is not sender");
 
         _totalSupply++;
 
@@ -92,7 +84,7 @@ contract AskRoot is Root, RootManaged, RootManagedCreationFee, RootManagedWithdr
                 _root: address(this),
                 _id: _totalSupply
             }
-        }( owner, creator, token, price, endTime, _minAcceptFee, creatorPercent, showcasePercent, _askIncomePercent);
+        }( token, price, endTime, _minAcceptFee, showcasePercent, _askIncomePercent);
         emit ASK_CT_nifi_ask_1{dest: SwiftAddress.value()}(_totalSupply, token, creator, price, endTime, showcasePercent);
     }
 

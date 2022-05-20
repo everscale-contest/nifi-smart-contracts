@@ -53,7 +53,7 @@ contract Ask is Accept {
     }
 
     modifier onlyInnerMsg() {
-        require(msg.value != 0, 102, "Recive only inner message");
+        require(msg.value != 0, 102, "Receive only inner message");
         _;
     }
 
@@ -77,20 +77,17 @@ contract Ask is Accept {
      * askIncomePercent ..... Percent of marketplace.
      */
     constructor(
-        address owner,
-        address creator,
         address token,
         uint128 price,
         uint32 endTime,
         uint128 minAcceptFee,
-        uint32 creatorPercent,
         uint32 showcasePercent,
         uint128 askIncomePercent
     )
         public onlyRoot accept
     {
         _owner = owner;
-        _creator = creator;
+        
         _token = token;
         _price = price;
         _endTime = endTime;
@@ -98,9 +95,31 @@ contract Ask is Accept {
         _creatorPercent = creatorPercent;
         _showcasePercent = showcasePercent;
         _askIncomePercent = askIncomePercent;
+
+        ITradeToken(token).receiveTradeInfo{
+            value: Constants.MAX_GAS_COST,
+            bounce: false,
+            flag: 0,
+            callback: Ask.onReceiveTradeInfo
+        }();
     }
 
+    function onReceiveTradeInfo(
+            address owner,
+            address creator,
+            uint32  creatorPercent,
+            address manager,
+            uint32  managerUnlockTime
+    ) public onlyToken {
+        if (_owner != owner) {
+            emit ASK_EX_nifi_ask_1{dest: SwiftAddress.value()}(_id);
+            selfdestruct(_root);
+        }
 
+        _owner = owner;
+        _creator = creator;
+        _creatorPercent = creatorPercent;
+    }
 
     /**********
      * PUBLIC *

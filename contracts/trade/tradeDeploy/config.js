@@ -32,6 +32,8 @@ module.exports = {
             minAcceptFee: 300_000_000,
             creationTopup: 150_000_000,
             auctionIncomePercent: 500,
+            minBidSubmissionFee: 200_000_000,
+            auctionIncomePercent: 500,
         }
     }
 }
