@@ -9,6 +9,15 @@ import "../../../abstract/modifiers/Accept.sol";
 import "../../../libraries/SwiftAddress.sol";
 import "../../../Constants.sol";
 
+interface ITradeToken {
+    function receiveTradeInfo() external view responsible returns(
+            address owner,
+            address creator,
+            uint32  creatorPercent,
+            address manager,
+            uint32  managerUnlockTime
+        );
+}
 
 contract Ask is Accept {
     /**********
@@ -91,13 +100,10 @@ contract Ask is Accept {
     )
         public onlyRoot accept
     {
-        _owner = owner;
-        
         _token = token;
         _price = price;
         _endTime = endTime;
         _minAcceptFee = minAcceptFee;
-        _creatorPercent = creatorPercent;
         _showcasePercent = showcasePercent;
         _askIncomePercent = askIncomePercent;
 
