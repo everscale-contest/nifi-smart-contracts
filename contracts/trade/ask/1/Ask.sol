@@ -39,7 +39,7 @@ contract Ask is Accept {
     /*************
      * VARIABLES *
      *************/
-    address private _owner;
+    address private _issuer;
     address private _creator;
     address private _token;
     uint128 private _minAcceptFee;
@@ -56,8 +56,8 @@ contract Ask is Accept {
         _;
     }
 
-    modifier onlyCreator() {
-        require(msg.sender == _owner, 101, "Method for the owner only");
+    modifier onlyIssuer() {
+        require(msg.sender == _issuer, 101, "Method for the issuer only");
         _;
     }
 
@@ -80,7 +80,7 @@ contract Ask is Accept {
      * CONSTRUCTOR *
      ***************/
     /**
-     * owner ..... Address of a seller.
+     * issuer ..... Address of an issuer.
      * creator ..... Address of a token creator.
      * token ....... Address of token contract.
      * price ....... The value of offer.
@@ -91,6 +91,7 @@ contract Ask is Accept {
      * askIncomePercent ..... Percent of marketplace.
      */
     constructor(
+        address issuer,
         address token,
         uint128 price,
         uint32 endTime,
@@ -100,6 +101,7 @@ contract Ask is Accept {
     )
         public onlyRoot accept
     {
+        _issuer = issuer;
         _token = token;
         _price = price;
         _endTime = endTime;
@@ -122,12 +124,11 @@ contract Ask is Accept {
             address,
             uint32
     ) public onlyToken {
-        if (_owner != owner) {
+        if (_issuer != owner) {
             emit ASK_EX_nifi_ask_1{dest: SwiftAddress.value()}(_id);
             selfdestruct(_root);
         }
 
-        _owner = owner;
         _creator = creator;
         _creatorPercent = creatorPercent;
     }
@@ -165,7 +166,7 @@ contract Ask is Accept {
 
         uint128 shouldBeSentToRoot = math.muldiv(_price, _askIncomePercent, 10000);
 
-        _owner.transfer({
+        _issuer.transfer({
             value: _price - (creatorPercentReward + showcasePercentReward + shouldBeSentToRoot),
             flag: 1,
             bounce: true
@@ -178,7 +179,7 @@ contract Ask is Accept {
     /**
      * Everyone can call this method by external message.
      */
-    function cancel() public onlyCreator accept {
+    function cancel() public onlyIssuer accept {
         IToken(_token).unlock();
         emit ASK_CN_nifi_ask_1{dest: SwiftAddress.value()}(_id);
         selfdestruct(_root);
@@ -192,7 +193,7 @@ contract Ask is Accept {
         selfdestruct(_root);
     }
 
-    function changePrice(uint128 newPrice) public onlyCreator accept {
+    function changePrice(uint128 newPrice) public onlyIssuer accept {
         require(address(this).balance > Constants.MAX_GAS_COST, 103);
         _price = newPrice;
         emit ASK_PC_nifi_ask_1{dest: SwiftAddress.value()}(_id, newPrice);
@@ -215,7 +216,7 @@ contract Ask is Accept {
     function getInfo() public view returns(
             address root,
             uint64 id,
-            address owner,
+            address issuer,
             address token,
             uint128 price,
             uint32  endTime,
@@ -224,7 +225,7 @@ contract Ask is Accept {
     {
         root = _root;
         id = _id;
-        owner = _owner;
+        issuer = _issuer;
         token = _token;
         price = _price;
         endTime = _endTime;
