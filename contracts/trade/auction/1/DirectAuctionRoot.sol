@@ -126,7 +126,7 @@ contract ArtRoot is Root, RootManaged, RootManagedCreationFee, RootManagedWithdr
 
     function getAuctionParameters() public view returns(
         uint128 minBidSubmissionFee,
-        uint128 auctionIncomePercent,
+        uint32 auctionIncomePercent,
         uint128 bidCost
     ) {
         minBidSubmissionFee = _minBidSubmissionFee;
@@ -136,7 +136,7 @@ contract ArtRoot is Root, RootManaged, RootManagedCreationFee, RootManagedWithdr
 
     function setAuctionParameters(
         uint128 minBidSubmissionFee,
-        uint128 auctionIncomePercent,
+        uint32 auctionIncomePercent,
         uint128 bidCost
     ) public {
         require(msg.sender == _manager,280);
