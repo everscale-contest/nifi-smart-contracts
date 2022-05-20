@@ -52,6 +52,8 @@ contract DirectAuction is Accept {
     address static _root;
     uint64 static _id;
 
+    address _issuer;
+
 
 
     /*************
@@ -126,6 +128,7 @@ contract DirectAuction is Accept {
      * endTime ..... UNIX time. Auction end time.
      */
     constructor(
+        address issuer,
         address token,
         uint128 startBid,
         uint128 bidStep,
@@ -138,6 +141,7 @@ contract DirectAuction is Accept {
     )
         public onlyRoot accept
     {
+        _issuer = issuer;
         _token = token;
         _startBid = startBid;
         _bidStep = bidStep;
@@ -161,10 +165,10 @@ contract DirectAuction is Accept {
             address owner,
             address creator,
             uint32  creatorPercent,
-            address manager,
-            uint32  managerUnlockTime
+            address,
+            uint32
     ) public onlyToken {
-        if (_owner != owner) {
+        if (_issuer != owner) {
             emit AUC_EX_nifi_auc_1{dest: SwiftAddress.value()}(_id);
             selfdestruct(_root);
         }
@@ -206,15 +210,19 @@ contract DirectAuction is Accept {
         if ((manager == address(this)) && (managerUnlockTime > now+60)){
             uint128 price = _curBid.value;
 
+            uint128 creatorPercentReward;
+
             if (creatorPercent>0) {
-                uint128 creatorPercentReward = math.muldiv(price,creatorPercent,10000);
+                creatorPercentReward = math.muldiv(price,creatorPercent,10000);
 
                 if (creatorPercentReward > 0)
                     creator.transfer({value: creatorPercentReward, flag: 1, bounce: true});
             }
 
+            uint128 showcasePercentReward;
+
             if (_showcasePercent>0) {
-                uint128 showcasePercentReward = math.muldiv(price,_showcasePercent,10000);
+                showcasePercentReward = math.muldiv(price,_showcasePercent,10000);
 
                 if (showcasePercentReward>0)
                     _root.transfer({value: showcasePercentReward, flag: 1, bounce: true});

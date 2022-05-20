@@ -17,7 +17,7 @@ contract ArtRoot is Root, RootManaged, RootManagedCreationFee, RootManagedWithdr
     uint128 auctionIncomePercent;
     uint128 _bidCost;
 
-    event AUC_CT_nifi_auc_1(uint64 id, address tokenAddress, uint128 startBid, uint128 bidStep, uint32 startTime, uint32 endTime, address owner, uint32 showcasePercent);
+    event AUC_CT_nifi_auc_1(uint64 id, address tokenAddress, uint128 startBid, uint128 bidStep, uint32 startTime, uint32 endTime, address issuer, uint32 showcasePercent);
     /***************
      * CONSTRUCTOR *
      ***************/
@@ -76,6 +76,8 @@ contract ArtRoot is Root, RootManaged, RootManagedCreationFee, RootManagedWithdr
 
         _totalSupply++;
 
+        address issuer = msg.sender;
+
         addr = new DirectAuction{
             code: _tokenCode,
             value: _creationTopup,
@@ -84,8 +86,8 @@ contract ArtRoot is Root, RootManaged, RootManagedCreationFee, RootManagedWithdr
                 _root: address(this),
                 _id: _totalSupply
             }
-        }( token, startBid, bidStep, _bidCost, startTime, endTime, showcasePercent);
-        emit AUC_CT_nifi_auc_1{dest: SwiftAddress.value()}(_totalSupply,token,startBid,bidStep,startTime,endTime,owner,showcasePercent);
+        }( issuer, token, startBid, bidStep, _bidCost, startTime, endTime, showcasePercent);
+        emit AUC_CT_nifi_auc_1{dest: SwiftAddress.value()}(_totalSupply,token,startBid,bidStep,startTime,endTime,issuer,showcasePercent);
     }
 
 
