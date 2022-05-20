@@ -62,6 +62,11 @@ contract Ask is Accept {
         _;
     }
 
+    modifier onlyToken() {
+        require(msg.sender == _token, 104, "Method for the token only");
+        _;
+    }
+
     /***************
      * CONSTRUCTOR *
      ***************/
