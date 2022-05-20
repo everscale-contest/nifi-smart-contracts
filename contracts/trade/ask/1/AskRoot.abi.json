@@ -160,18 +160,6 @@
 			"outputs": [
 				{"name":"code","type":"cell"}
 			]
-		},
-		{
-			"name": "_await_ITradeToken_receiveTradeInfo",
-			"inputs": [
-				{"name":"owner","type":"address"},
-				{"name":"creator","type":"address"},
-				{"name":"creatorPercent","type":"uint32"},
-				{"name":"manager","type":"address"},
-				{"name":"managerUnlockTime","type":"uint32"}
-			],
-			"outputs": [
-			]
 		}
 	],
 	"data": [
@@ -182,7 +170,7 @@
 			"inputs": [
 				{"name":"id","type":"uint64"},
 				{"name":"token","type":"address"},
-				{"name":"creator","type":"address"},
+				{"name":"issuer","type":"address"},
 				{"name":"price","type":"uint128"},
 				{"name":"endTime","type":"uint32"},
 				{"name":"showcasePercent","type":"uint32"}
@@ -195,7 +183,6 @@
 		{"name":"_pubkey","type":"uint256"},
 		{"name":"_timestamp","type":"uint64"},
 		{"name":"_constructorFlag","type":"bool"},
-		{"name":"_await","type":"optional(cell)"},
 		{"name":"_name","type":"string"},
 		{"name":"_symbol","type":"string"},
 		{"name":"_tokenCode","type":"cell"},
