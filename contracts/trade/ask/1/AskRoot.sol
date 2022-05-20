@@ -10,23 +10,12 @@ import "../../../abstract/extensions/rootManaged/root/RootManagedWithdraw.sol";
 import "Ask.sol";
 import "../../../libraries/SwiftAddress.sol";
 
-interface ITradeToken {
-
-    function receiveTradeInfo() external view responsible returns(
-            address owner,
-            address creator,
-            uint32  creatorPercent,
-            address manager,
-            uint32  managerUnlockTime
-        );
-}
-
 contract AskRoot is Root, RootManaged, RootManagedCreationFee, RootManagedWithdraw {
 
     uint128 _minAcceptFee;
     uint128 _askIncomePercent;
 
-    event ASK_CT_nifi_ask_1(uint64 id, address token, address creator, uint128 price, uint32 endTime, uint32 showcasePercent);
+    event ASK_CT_nifi_ask_1(uint64 id, address token, address issuer, uint128 price, uint32 endTime, uint32 showcasePercent);
 
     /***************
      * CONSTRUCTOR *
@@ -73,16 +62,10 @@ contract AskRoot is Root, RootManaged, RootManagedCreationFee, RootManagedWithdr
             address addr
         )
     {
-        (
-            address owner,
-            address creator,
-            uint32  creatorPercent
-            ,,
-        ) = ITradeToken(token).receiveTradeInfo().await;
-
-        require(msg.sender == owner,280,"Owner of token is not sender");
 
         _totalSupply++;
+
+        address issuer = msg.sender;
 
         addr = new Ask{
             code: _tokenCode,
@@ -92,8 +75,8 @@ contract AskRoot is Root, RootManaged, RootManagedCreationFee, RootManagedWithdr
                 _root: address(this),
                 _id: _totalSupply
             }
-        }( owner, creator, token, price, endTime, _minAcceptFee, creatorPercent, showcasePercent, _askIncomePercent);
-        emit ASK_CT_nifi_ask_1{dest: SwiftAddress.value()}(_totalSupply, token, creator, price, endTime, showcasePercent);
+        }( token, price, endTime, _minAcceptFee, showcasePercent, _askIncomePercent);
+        emit ASK_CT_nifi_ask_1{dest: SwiftAddress.value()}(_totalSupply, token, issuer, price, endTime, showcasePercent);
     }
 
 

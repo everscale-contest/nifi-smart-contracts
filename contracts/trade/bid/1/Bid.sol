@@ -74,17 +74,17 @@ contract Bid is Accept {
     }
 
     modifier onlyInnerMsg() {
-        require(msg.value != 0, 102, "Recive only inner message");
+        require(msg.value != 0, 102, "Receive only inner message");
         _;
     }
 
     modifier validTime() {
-        require(now < _endTime, 103, "Offer already finished");
+        require(now < _endTime, 103, "Bid already finished");
         _;
     }
 
     modifier bidFinished() {
-        require(now >= _endTime+900, 104, "Offer not finished");
+        require(now >= _endTime+900, 104, "Bid not finished");
         _;
     }
 

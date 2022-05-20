@@ -124,6 +124,7 @@ async function deployAuctionRoot (client,rootKeys) {
                 name : "AuctionRoot",
                 symbol: "AUCTION",
                 tokenCode: DirectAuctionContract.code,
+                minBidSubmissionFee: config.auction.minBidSubmissionFee,
                 bidCost: config.auction.bidCost
             }
         },
