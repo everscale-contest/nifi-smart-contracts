@@ -39,7 +39,7 @@ contract Ask is Accept {
     /*************
      * VARIABLES *
      *************/
-    address private _owner;
+    address private _issuer;
     address private _creator;
     address private _token;
     uint128 private _minAcceptFee;
@@ -91,6 +91,7 @@ contract Ask is Accept {
      * askIncomePercent ..... Percent of marketplace.
      */
     constructor(
+        address issuer,
         address token,
         uint128 price,
         uint32 endTime,
@@ -100,6 +101,7 @@ contract Ask is Accept {
     )
         public onlyRoot accept
     {
+        _issuer = issuer;
         _token = token;
         _price = price;
         _endTime = endTime;
@@ -122,7 +124,7 @@ contract Ask is Accept {
             address,
             uint32
     ) public onlyToken {
-        if (_owner != owner) {
+        if (_issuer != owner) {
             emit ASK_EX_nifi_ask_1{dest: SwiftAddress.value()}(_id);
             selfdestruct(_root);
         }

@@ -75,7 +75,7 @@ contract AskRoot is Root, RootManaged, RootManagedCreationFee, RootManagedWithdr
                 _root: address(this),
                 _id: _totalSupply
             }
-        }( token, price, endTime, _minAcceptFee, showcasePercent, _askIncomePercent);
+        }( issuer, token, price, endTime, _minAcceptFee, showcasePercent, _askIncomePercent);
         emit ASK_CT_nifi_ask_1{dest: SwiftAddress.value()}(_totalSupply, token, issuer, price, endTime, showcasePercent);
     }
 
