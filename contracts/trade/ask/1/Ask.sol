@@ -119,8 +119,8 @@ contract Ask is Accept {
             address owner,
             address creator,
             uint32  creatorPercent,
-            address manager,
-            uint32  managerUnlockTime
+            address,
+            uint32
     ) public onlyToken {
         if (_owner != owner) {
             emit ASK_EX_nifi_ask_1{dest: SwiftAddress.value()}(_id);

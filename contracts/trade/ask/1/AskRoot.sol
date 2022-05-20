@@ -10,17 +10,6 @@ import "../../../abstract/extensions/rootManaged/root/RootManagedWithdraw.sol";
 import "Ask.sol";
 import "../../../libraries/SwiftAddress.sol";
 
-interface ITradeToken {
-
-    function receiveTradeInfo() external view responsible returns(
-            address owner,
-            address creator,
-            uint32  creatorPercent,
-            address manager,
-            uint32  managerUnlockTime
-        );
-}
-
 contract AskRoot is Root, RootManaged, RootManagedCreationFee, RootManagedWithdraw {
 
     uint128 _minAcceptFee;
