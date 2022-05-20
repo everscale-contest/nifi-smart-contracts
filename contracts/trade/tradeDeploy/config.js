@@ -33,7 +33,6 @@ module.exports = {
             creationTopup: 150_000_000,
             auctionIncomePercent: 500,
             minBidSubmissionFee: 200_000_000,
-            auctionIncomePercent: 500,
         }
     }
 }

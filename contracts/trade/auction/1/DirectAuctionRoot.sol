@@ -14,7 +14,6 @@ contract ArtRoot is Root, RootManaged, RootManagedCreationFee, RootManagedWithdr
 
     uint32 _auctionIncomePercent;
     uint128 _minBidSubmissionFee;
-    uint128 auctionIncomePercent;
     uint128 _bidCost;
 
     event AUC_CT_nifi_auc_1(uint64 id, address tokenAddress, uint128 startBid, uint128 bidStep, uint32 startTime, uint32 endTime, address issuer, uint32 showcasePercent);
@@ -32,7 +31,6 @@ contract ArtRoot is Root, RootManaged, RootManagedCreationFee, RootManagedWithdr
         uint32 auctionIncomePercent,
         uint128 creationTopup,
         uint128 minBidSubmissionFee,
-        uint128 auctionIncomePercent,
         uint128 bidCost,
         string  name,
         string  symbol,
@@ -43,7 +41,6 @@ contract ArtRoot is Root, RootManaged, RootManagedCreationFee, RootManagedWithdr
         RootManaged(manager)
         RootManagedCreationFee(minCreationFee, creationTopup)
     {
-        _auctionIncomePercent = auctionIncomePercent;
         _creationTopup = creationTopup;
         _minBidSubmissionFee = minBidSubmissionFee;
         _auctionIncomePercent = auctionIncomePercent;

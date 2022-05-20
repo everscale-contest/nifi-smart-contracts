@@ -163,8 +163,8 @@ contract DirectAuction is Accept {
 
     function onReceiveTradeInfoForCreation(
             address owner,
-            address creator,
-            uint32  creatorPercent,
+            address,
+            uint32,
             address,
             uint32
     ) public onlyToken {
