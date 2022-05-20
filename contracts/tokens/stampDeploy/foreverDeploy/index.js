@@ -1,7 +1,7 @@
-const {TonClient} = require("@tonclient/core")
-const {libNode} = require("@tonclient/lib-node")
-const {ForeverRootContract} = require ('../../forever/ForeverRootContract')
-const {ForeverTokenContract} = require ('../../forever/ForeverTokenContract')
+const {TonClient} = require("@eversdk/core")
+const {libNode} = require("@eversdk/lib-node")
+const {ForeverRootContract} = require ('../../forever/1/ForeverRootContract')
+const {ForeverTokenContract} = require ('../../forever/1/ForeverTokenContract')
 const {transfer} = require('../utils/transfer')
 const {config} = require('../config')
 const fs = require('fs');
@@ -25,10 +25,10 @@ async function deployForeverRoot (client,rootKeys) {
             function_name: 'constructor',
             input: {
                 manager: config.msgiManager,
-                creationMinValue: config.creationMinValue,
-                creationFee : config.creationFee,
-                name : "ForeverRoot1",
-                symbol: "FOR1",
+                minCreationFee: config.foreverRoot.minCreationFee,
+                creationTopup: config.foreverRoot.creationTopup,
+                name : config.foreverRoot.name,
+                symbol: config.foreverRoot.symbol,
                 tokenCode: ForeverTokenContract.code,
             }
         },
@@ -40,7 +40,7 @@ async function deployForeverRoot (client,rootKeys) {
 
     const { address } = await client.abi.encode_message(deployOptions);
     console.log(`Future address of the contract will be: ${address}`);
-    await transfer(client,address,100_000_000,"");
+    await transfer(client,address,100000000,"");
 
     await client.processing.process_message({
         send_events: false,
@@ -62,6 +62,7 @@ async function deployForeverRoot (client,rootKeys) {
     });
     try {
 
+        //generated in seal deploy
         let root_json = JSON.parse(fs.readFileSync("../root.json").toString());
 
         const foreverRoot = await deployForeverRoot(client,root_json.keys)

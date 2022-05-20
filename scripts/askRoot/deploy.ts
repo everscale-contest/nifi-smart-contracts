@@ -65,7 +65,7 @@ async function run(): Promise<void> {
     await askRoot.deploy(
         askRootConfig.manager,
         askRootConfig.creationMinValue,
-        askRootConfig.creationFee,
+        askRootConfig.creationFixIncome,
         Ton.hex.string(askRootConfig.name),
         Ton.hex.string(askRootConfig.symbol)
     )

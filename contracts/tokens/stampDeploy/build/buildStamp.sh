@@ -3,11 +3,11 @@ set -e
 
 cd ..
 cd ..
-cd stamp
-tondev sol compile StampToken.sol
-tondev sol compile StampRoot.sol
+cd stamp/1
+everdev sol compile StampToken.sol
+everdev sol compile StampRoot.sol
 
-tondev js wrap StampToken.sol
-tondev js wrap StampRoot.sol
+everdev js wrap StampToken.sol
+everdev js wrap StampRoot.sol
 
 echo stamp built

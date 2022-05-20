@@ -1,4 +1,4 @@
-pragma ton-solidity ^0.47.0;
+pragma ton-solidity >= 0.47.0;
 
 import "../../abstract/TokenAddress.sol";
 import "./interfaces/ITicketToken.sol";

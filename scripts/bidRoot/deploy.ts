@@ -59,7 +59,7 @@ async function run(): Promise<void> {
     await offerRoot.deploy(
         offerRootConfig.manager,
         offerRootConfig.creationMinValue,
-        offerRootConfig.creationFee,
+        offerRootConfig.creationFixIncome,
         Ton.hex.string(offerRootConfig.name),
         Ton.hex.string(offerRootConfig.symbol)
     )

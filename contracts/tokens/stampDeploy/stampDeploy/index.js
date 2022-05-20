@@ -1,7 +1,7 @@
-const {TonClient} = require("@tonclient/core")
-const {libNode} = require("@tonclient/lib-node")
-const {StampRootContract} = require ('../../stamp/StampRootContract')
-const {StampTokenContract} = require ('../../stamp/StampTokenContract')
+const {TonClient} = require("@eversdk/core")
+const {libNode} = require("@eversdk/lib-node")
+const {StampRootContract} = require ('../../stamp/1/StampRootContract')
+const {StampTokenContract} = require ('../../stamp/1/StampTokenContract')
 const {transfer} = require('../utils/transfer')
 const {config} = require('../config')
 const fs = require('fs');
@@ -24,10 +24,10 @@ async function deployStampRoot (client,rootKeys) {
             function_name: 'constructor',
             input: {
                 manager: config.msgiManager,
-                creationMinValue: config.creationMinValue,
-                creationFee : config.creationFee,
-                name : "StampRoot1",
-                symbol: "STAMP1",
+                minCreationFee: config.stampRoot.minCreationFee,
+                creationTopup: config.stampRoot.creationTopup,
+                name : config.stampRoot.name,
+                symbol: config.stampRoot.symbol,
                 tokenCode: StampTokenContract.code,
             }
         },
@@ -39,7 +39,7 @@ async function deployStampRoot (client,rootKeys) {
 
     const { address } = await client.abi.encode_message(deployOptions);
     console.log(`Future address of the contract will be: ${address}`);
-    await transfer(client,address,100_000_000,"");
+    await transfer(client,address,100000000,"");
 
     await client.processing.process_message({
         send_events: false,
@@ -52,7 +52,7 @@ async function deployStampRoot (client,rootKeys) {
 
 async function writeStampContractInfo (sealRoot, pubkey, sealTockenCodeHash, sealTokenCodeDepth) {
     let res = sealRoot.substring(2);
-    const path = "../../forever/StampContractInfoLib.sol";
+    const path = "../../forever/1/StampContractInfoLib.sol";
     const content= `pragma ton-solidity >=0.47.0; \n\n\
     library StampContractInfo {\n\
         function STAMP_ROOT() internal inline returns(address){\n\
@@ -75,8 +75,8 @@ async function writeStampContractInfo (sealRoot, pubkey, sealTockenCodeHash, sea
     });
     try {
 
+        //generated in seal deploy
         let root_json = JSON.parse(fs.readFileSync("../root.json").toString());
-
 
         const stampRoot = await deployStampRoot(client,root_json.keys)
         root_json.stamp = stampRoot;

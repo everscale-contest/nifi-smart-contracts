@@ -22,14 +22,14 @@ export default class AskRoot extends Contract {
     public async deploy(
         manager: string,
         creationMinValue: number,
-        creationFee: number,
+        creationFixIncome: number,
         name: string,
         symbol: string
     ): Promise<boolean> {
         return await this._deploy({
             manager: manager,
             creationMinValue: creationMinValue,
-            creationFee: creationFee,
+            creationFixIncome: creationFixIncome,
             name: name,
             symbol: symbol,
             tokenCode: AskContract.code
